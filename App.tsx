@@ -26,7 +26,7 @@ import Svg, {
 } from 'react-native-svg';
 
 type RouteKey = 'checkout' | 'saLogin' | 'saOtp' | 'saAddCard' | 'superHome' | 'appHome' | 'detail' | 'insights' | 'insightsCategory' | 'insightsEmpty' | 'purchases' | 'dues' | 'nextUp' | 'paymentMethod' | 'paymentSelected' | 'addCard' | 'cardAdded' | 'otp' | 'processing' | 'insufficient' | 'declined' | 'success'
-  | 'wcMobile' | 'wcOtp' | 'wcIdentity' | 'wcNafath' | 'wcQuickCall' | 'wcTenure' | 'wcPlans' | 'wcPayment' | 'wcProcessing' | 'wcSuccess' | 'wcNotification';
+  | 'wcMobile' | 'wcOtp' | 'wcIdentity' | 'wcNafath' | 'wcQuickCall' | 'wcTenure' | 'wcPlans' | 'wcDemo' | 'wcPayment' | 'wcProcessing' | 'wcSuccess' | 'wcNotification';
 type PayMethod = 'card' | 'apple';
 type Merchant = 'extra' | 'jarir' | 'noon';
 
@@ -355,6 +355,7 @@ const routeFromPath = (path: string): RouteKey => {
   if (path.includes('/checkout/onboarding/quick-call')) return 'wcQuickCall';
   if (path.includes('/checkout/onboarding/tenure')) return 'wcTenure';
   if (path.includes('/checkout/onboarding/plans')) return 'wcPlans';
+  if (path.includes('/demos')) return 'wcDemo';
   if (path.includes('/checkout/onboarding/payment')) return 'wcPayment';
   if (path.includes('/checkout/onboarding/processing')) return 'wcProcessing';
   if (path.includes('/checkout/onboarding/success')) return 'wcSuccess';
@@ -1640,7 +1641,7 @@ function WcTenure({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) => 
             </View>
           </View>
           <View style={styles.wcObBottom}>
-            <SafariCompactBar url="extrastores.com" onBack={() => setRoute('wcQuickCall')} />
+            <SafariCompactBar url="extrastores.com" onBack={() => setRoute('wcDemo')} />
           </View>
         </ScreenFade>
         {sheet === 'details' ? <WcPlanDetailsSheet months={months} onClose={() => setSheet(null)} onViewSchedule={() => setSheet('schedule')} onContinue={() => setRoute('wcPayment')} /> : null}
@@ -1648,6 +1649,53 @@ function WcTenure({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) => 
         {sheet === 'cart' ? <WcCartSheet onClose={() => setSheet(null)} /> : null}
         {sheet === 'fee' ? <WcFourMonthFeeSheet onClose={() => setSheet(null)} /> : null}
         {sheet === 'discounts' ? <WcDiscountsSheet months={months} onClose={() => setSheet(null)} onSelect={(m) => { bump(m); setSheet(null); }} /> : null}
+        <View style={styles.wcStatusOverlay} pointerEvents="none"><StatusStrip pointerEvents="none" /></View>
+      </View>
+    </AppShell>
+  );
+}
+
+// Demo hub — one screen linking both plan-selection experiences. Each demo's
+// browser-back arrow returns here, so reviewers can bounce between them.
+function WcDemoHub({ setRoute }: { setRoute: (r: RouteKey) => void }) {
+  const demos: Array<{ key: RouteKey; n: number; title: string; sub: string; testID: string }> = [
+    { key: 'wcPlans', n: 1, title: 'Plan list', sub: 'Every plan on one screen, compared side by side', testID: 'wc-demo-1' },
+    { key: 'wcTenure', n: 2, title: 'Tenure stepper', sub: 'One plan in view, stepped with − and +', testID: 'wc-demo-2' },
+  ];
+  return (
+    <AppShell>
+      <View testID="wc-demo-hub" style={styles.wcObScreen}>
+        <ScreenFade>
+          <View style={styles.wcDemoWrap}>
+            <TasheelMark size={44} />
+            <View style={{ gap: 6, alignItems: 'center' }}>
+              <Text style={styles.wcDemoTitle}>Plan selection</Text>
+              <Text style={styles.wcDemoSub}>Two ways to choose a BNPL plan. Open a demo; the browser back arrow returns here.</Text>
+            </View>
+            <View style={{ gap: 14, alignSelf: 'stretch' }}>
+              {demos.map((demo) => (
+                <Pressable
+                  key={demo.key}
+                  testID={demo.testID}
+                  onPress={() => setRoute(demo.key)}
+                  accessibilityRole="button"
+                  accessibilityLabel={`Open demo ${demo.n}: ${demo.title}`}
+                  style={({ pressed }) => [styles.wcDemoCard, pressed && { transform: [{ scale: 0.99 }], opacity: 0.92 }]}
+                >
+                  <View style={styles.wcDemoNum}><Text style={styles.wcDemoNumText}>{demo.n}</Text></View>
+                  <View style={{ flex: 1, gap: 3 }}>
+                    <Text style={styles.wcDemoCardTitle}>Demo {demo.n} · {demo.title}</Text>
+                    <Text style={styles.wcDemoCardSub}>{demo.sub}</Text>
+                  </View>
+                  <Text style={styles.wcDemoChevron}>›</Text>
+                </Pressable>
+              ))}
+            </View>
+          </View>
+          <View style={styles.wcObBottom}>
+            <SafariCompactBar url="extrastores.com" />
+          </View>
+        </ScreenFade>
         <View style={styles.wcStatusOverlay} pointerEvents="none"><StatusStrip pointerEvents="none" /></View>
       </View>
     </AppShell>
@@ -1720,11 +1768,13 @@ function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) =
   const maxTenure = WC_TENURES[WC_TENURES.length - 1];
   const chosen = months;
   return (
-    <AppShell>
+    // Fixed frame + internal scroll: the plan list scrolls under a pinned
+    // Continue, so the commit action never leaves the viewport.
+    <AppShell scroll={false}>
       <View testID="wc-plans-3615-73832" style={styles.wcObScreen}>
         <ScreenFade>
           <WcOnboardHeader onClose={() => setRoute('checkout')} />
-          <View style={styles.wcPlansContent}>
+          <ScrollView style={{ flex: 1 }} contentContainerStyle={styles.wcPlansContent} showsVerticalScrollIndicator={false}>
             <WcCartPill onPress={() => setSheet('cart')} months={chosen} />
             <View style={styles.wcPlansHead}>
               <Text style={styles.wcPlansEyebrow}>Choose how to split</Text>
@@ -1751,7 +1801,7 @@ function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) =
             >
               <Text style={styles.wcSavingLink}>View discount tiers ›</Text>
             </Pressable>
-          </View>
+          </ScrollView>
           <View style={styles.wcPlansFooter}>
             <Pressable
               testID="wc-plans-continue"
@@ -1764,7 +1814,7 @@ function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) =
             >
               <Text style={[styles.wcGreenCtaText, chosen === null && styles.wcCtaDisabledText]}>Continue</Text>
             </Pressable>
-            <SafariCompactBar url="extrastores.com" onBack={() => setRoute('wcQuickCall')} />
+            <SafariCompactBar url="extrastores.com" onBack={() => setRoute('wcDemo')} />
           </View>
         </ScreenFade>
         {sheet === 'cart' ? <WcCartSheet onClose={() => setSheet(null)} /> : null}
@@ -4368,7 +4418,7 @@ export default function App() {
     setRouteState(r);
     const map: Record<RouteKey, string> = {
       checkout: '/checkout', appHome: '/checkout/app-home', detail: '/checkout/detail', insights: '/checkout/insights', insightsCategory: '/checkout/insights/category', insightsEmpty: '/checkout/insights/empty', purchases: '/checkout/purchases', dues: '/checkout/dues', nextUp: '/checkout/next-up', paymentMethod: '/checkout/payment-method', paymentSelected: '/checkout/payment-method/selected', addCard: '/checkout/payment-method/add-card', cardAdded: '/checkout/payment-method/added', otp: '/checkout/otp', processing: '/checkout/processing', insufficient: '/checkout/insufficient', declined: '/checkout/declined', success: '/checkout/success',
-      wcMobile: '/checkout/onboarding/mobile', wcOtp: '/checkout/onboarding/otp', wcIdentity: '/checkout/onboarding/identity', wcNafath: '/checkout/onboarding/nafath', wcQuickCall: '/checkout/onboarding/quick-call', wcTenure: '/checkout/onboarding/tenure', wcPlans: '/checkout/onboarding/plans', wcPayment: '/checkout/onboarding/payment', wcProcessing: '/checkout/onboarding/processing', wcSuccess: '/checkout/onboarding/success', wcNotification: '/checkout/notification', saLogin: '/checkout/login', saOtp: '/checkout/otp-login', saAddCard: '/checkout/add-card-home', superHome: '/checkout/superhome'
+      wcMobile: '/checkout/onboarding/mobile', wcOtp: '/checkout/onboarding/otp', wcIdentity: '/checkout/onboarding/identity', wcNafath: '/checkout/onboarding/nafath', wcQuickCall: '/checkout/onboarding/quick-call', wcTenure: '/checkout/onboarding/tenure', wcPlans: '/checkout/onboarding/plans', wcDemo: '/demos', wcPayment: '/checkout/onboarding/payment', wcProcessing: '/checkout/onboarding/processing', wcSuccess: '/checkout/onboarding/success', wcNotification: '/checkout/notification', saLogin: '/checkout/login', saOtp: '/checkout/otp-login', saAddCard: '/checkout/add-card-home', superHome: '/checkout/superhome'
     };
     pushPath(map[r]);
   };
@@ -4379,6 +4429,7 @@ export default function App() {
   if (route === 'wcQuickCall') return <WcQuickCall setRoute={setRoute} />;
   if (route === 'wcTenure') return <WcTenure setRoute={setRoute} months={wcMonths} setMonths={setWcMonths} />;
   if (route === 'wcPlans') return <WcPlanList setRoute={setRoute} months={wcChosen} setMonths={(m) => { setWcChosen(m); setWcMonths(m); }} />;
+  if (route === 'wcDemo') return <WcDemoHub setRoute={setRoute} />;
   if (route === 'wcPayment') return <WcPayment setRoute={setRoute} months={wcMonths} setMonths={setWcMonths} />;
   if (route === 'wcProcessing') return <WcProcessing setRoute={setRoute} />;
   if (route === 'wcSuccess') return <WcSuccess months={wcMonths} />;
@@ -4612,8 +4663,18 @@ const styles = StyleSheet.create({
   wcDiscountRowActive: { backgroundColor: '#f0fdf4' },
   wcDiscountRowRight: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   wcDiscountPct: { fontSize: 13, lineHeight: 18, fontWeight: '600', color: greenBrand },
+  // ── Demo hub ──────────────────────────────────────────────────────────────────
+  wcDemoWrap: { flex: 1, paddingHorizontal: 24, paddingTop: 96, gap: 28, alignItems: 'center' },
+  wcDemoTitle: { fontSize: 28, lineHeight: 34, fontWeight: '700', color: text, letterSpacing: 0.36, textAlign: 'center' },
+  wcDemoSub: { fontSize: 14, lineHeight: 19, color: muted, textAlign: 'center', maxWidth: 300 },
+  wcDemoCard: { flexDirection: 'row', alignItems: 'center', gap: 14, backgroundColor: '#fff', borderRadius: 24, padding: 18, shadowColor: '#000', shadowOpacity: 0.08, shadowRadius: 24, shadowOffset: { width: 0, height: 10 } },
+  wcDemoNum: { width: 40, height: 40, borderRadius: 20, backgroundColor: green, alignItems: 'center', justifyContent: 'center' },
+  wcDemoNumText: { fontSize: 17, lineHeight: 22, fontWeight: '700', color: neon },
+  wcDemoCardTitle: { fontSize: 16, lineHeight: 21, fontWeight: '600', color: text },
+  wcDemoCardSub: { fontSize: 13, lineHeight: 17, color: muted },
+  wcDemoChevron: { fontSize: 22, lineHeight: 26, color: '#9ca3af', fontWeight: '400' },
   // ── Experience A — Figma 3615:73832 ───────────────────────────────────────────
-  wcPlansContent: { paddingHorizontal: 16, marginTop: 16, gap: 16 },
+  wcPlansContent: { paddingHorizontal: 16, paddingTop: 16, paddingBottom: 20, gap: 16 },
   wcPlansHead: { paddingHorizontal: 16, paddingTop: 4, alignItems: 'center', gap: 8 },
   wcPlansEyebrow: { fontSize: 14, lineHeight: 18, color: muted, letterSpacing: 0.36 },
   wcPlansTotalRow: { flexDirection: 'row', alignItems: 'center' },
@@ -4621,12 +4682,14 @@ const styles = StyleSheet.create({
   wcPlansSub: { fontSize: 14, lineHeight: 18, color: muted, letterSpacing: -0.08, textAlign: 'center' },
   wcPlansSubStrong: { fontWeight: '600', color: '#15803d' },
   wcPlansList: { gap: 16 },
-  wcPlansFooter: { marginTop: 'auto', paddingTop: 24, gap: 16, alignItems: 'center' },
+  wcPlansFooter: { paddingTop: 12, gap: 14, alignItems: 'center', backgroundColor: canvas },
   wcPlansCta: { width: '100%', maxWidth: 358, alignSelf: 'center' },
   wcPlanRow: { backgroundColor: '#fff', borderRadius: 24, overflow: 'hidden', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 16, borderWidth: 2, borderColor: 'transparent', shadowColor: '#000', shadowOpacity: 0.12, shadowRadius: 40, shadowOffset: { width: 0, height: 16 } },
   wcPlanRowOffer: { height: 87 },
   wcPlanRowPlain: { minHeight: 82, paddingRight: 16, paddingVertical: 16 },
-  wcPlanRowSelected: { borderColor: green },
+  // Selection reads in the brand's bright green with a whisper of tint — the
+  // dark ring looked like an error state next to the badges.
+  wcPlanRowSelected: { borderColor: '#3eff00', backgroundColor: '#fbfffa' },
   wcPlanRowLeft: { gap: 6 },
   wcPlanRowTitle: { fontSize: 15, lineHeight: 20, fontWeight: '600', color: text, letterSpacing: 0.38 },
   wcPlanRowFree: { fontSize: 13, lineHeight: 16, fontWeight: '500', color: greenBrand },

@@ -71,7 +71,7 @@ const routeAliases = [
   'checkout/otp', 'checkout/processing', 'checkout/insufficient', 'checkout/declined', 'checkout/success',
   'checkout/onboarding/mobile', 'checkout/onboarding/otp', 'checkout/onboarding/identity', 'checkout/onboarding/nafath',
   'checkout/onboarding/quick-call',
-  'checkout/onboarding/tenure', 'checkout/onboarding/plans',
+  'checkout/onboarding/tenure', 'checkout/onboarding/plans', 'demos',
   'checkout/onboarding/payment', 'checkout/onboarding/processing', 'checkout/onboarding/success',
   'checkout/notification'
 ];
