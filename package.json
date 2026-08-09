@@ -1,0 +1,38 @@
+{
+  "name": "tasheel-bnpl-browser-prototype",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "dependencies": {
+    "@expo/metro-runtime": "~56.0.13",
+    "expo": "~56.0.8",
+    "expo-status-bar": "~56.0.4",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-native": "0.85.3",
+    "react-native-svg": "15.15.4",
+    "react-native-web": "^0.21.2"
+  },
+  "devDependencies": {
+    "@types/react": "~19.2.2",
+    "@types/react-dom": "^19.2.3",
+    "playwright": "^1.60.0",
+    "typescript": "~6.0.3"
+  },
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "typecheck": "tsc --noEmit",
+    "export:web": "expo export --platform web --output-dir dist",
+    "build": "npm run typecheck && npm run export:web",
+    "serve:dist": "python3 -m http.server 4173 --bind 127.0.0.1 --directory dist",
+    "postexport:web": "node scripts/patch-gh-pages-export.cjs",
+    "qa:browser": "node scripts/browser-qa.cjs",
+    "qa:capture": "node scripts/capture-evidence.cjs",
+    "qa:in-app": "node scripts/in-app-qa.cjs",
+    "qa:typography": "node scripts/typography-probe.cjs",
+    "figma:preflight": "python3 scripts/figma_golden_preflight.py --project ."
+  },
+  "private": true
+}

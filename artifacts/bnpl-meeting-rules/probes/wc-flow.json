@@ -1,0 +1,4 @@
+{
+  "ok": true,
+  "flow": "merchant -> cart -> mobile -> otp -> ivr -> tenure -> murabaha/payment -> processing -> success -> notification -> detail"
+}

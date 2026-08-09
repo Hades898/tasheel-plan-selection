@@ -1,0 +1,41 @@
+{
+  "source": {
+    "figmaUrl": "https://www.figma.com/design/geEFxJ11n2KySAZB6zsjEh/BNPL?node-id=355-48766",
+    "nodeIds": ["355:58228", "1878:13247", "1741:78226", "1691:67680", "1691:67703"],
+    "capturedAt": "2026-07-22"
+  },
+  "modes": ["web-checkout", "native-app"],
+  "tokens": {
+    "colors": {
+      "canvas": "#f9fafb",
+      "surface": "#ffffff",
+      "text": "#030712",
+      "muted": "#4b5563",
+      "border": "#e5e7eb",
+      "brand": "#022b10",
+      "brandBright": "#3eff00",
+      "success": "#166534"
+    },
+    "typography": {
+      "webFamily": "Inter",
+      "nativeFamily": "SF Pro / system",
+      "title": {"size": 28, "lineHeight": 34, "weight": 700},
+      "body": {"size": 13, "lineHeight": 18, "weight": 400},
+      "cta": {"size": 15, "lineHeight": 20, "weight": 600}
+    },
+    "spacing": {"xs": 8, "sm": 12, "md": 16, "lg": 24},
+    "radii": {"control": 12, "card": 16, "sheet": 20, "pill": 38},
+    "shadows": {
+      "plan": "0 16px 20px rgba(0,0,0,0.12)",
+      "sheet": "0 -15px 38px rgba(0,0,0,0.18)"
+    }
+  },
+  "components": {
+    "primaryButton": {"height": 56, "radius": 28},
+    "checkoutFrame": {"width": 390, "height": 844},
+    "paymentGate": ["paymentMethodSelected", "murabahaAccepted"]
+  },
+  "rawFigmaValues": ["390x844 checkout frame", "40px legacy card radius"],
+  "codeConnectMappings": [],
+  "notes": "Meeting decisions extend the Figma payment frame for discount, product limits, down payment, and Murabaha acceptance."
+}

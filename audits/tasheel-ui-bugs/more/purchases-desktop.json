@@ -1,0 +1,80 @@
+{
+  "status": 200,
+  "errors": [],
+  "viewport": {
+    "width": 1280,
+    "height": 720
+  },
+  "metrics": {
+    "href": "https://hades898.github.io/tasheel-bnpl-prototype/checkout/purchases?audit2=1780868939453",
+    "title": "",
+    "text": "‹ My Purchases View all your purchases All Active Completed اكسترا extra Extrastores Samsung Galaxy S26 Active 1 of 3 installments paid 450.00 /mo اكسترا extra Extrastores Samsung Galaxy S26 Active 2 of 3 installments paid 450.00 /mo ج Jarir Bookstore MacBook Air M4 Active 1 of 2 installments paid 720.00 /mo noon Noon Multiple products Active 1 of 4 installments paid 320.00 /mo اكسترا extra Extrastores AirPods Pro 3 Completed 3 of 3 installments paid 210.00 /mo",
+    "scrollWidth": 1280,
+    "clientWidth": 1280,
+    "scrollHeight": 720,
+    "clientHeight": 720,
+    "maxElementBottom": 908,
+    "buttons": [
+      {
+        "i": 0,
+        "text": "‹",
+        "x": 445,
+        "y": 10,
+        "w": 44,
+        "h": 44,
+        "bottom": 54,
+        "visible": true
+      },
+      {
+        "i": 1,
+        "text": "اكسترا extra Extrastores Samsung Galaxy S26 Active 1 of 3 installments paid 450.00 /mo",
+        "x": 445,
+        "y": 208,
+        "w": 390,
+        "h": 124,
+        "bottom": 332,
+        "visible": true
+      },
+      {
+        "i": 2,
+        "text": "اكسترا extra Extrastores Samsung Galaxy S26 Active 2 of 3 installments paid 450.00 /mo",
+        "x": 445,
+        "y": 346,
+        "w": 390,
+        "h": 124,
+        "bottom": 470,
+        "visible": true
+      },
+      {
+        "i": 3,
+        "text": "ج Jarir Bookstore MacBook Air M4 Active 1 of 2 installments paid 720.00 /mo",
+        "x": 445,
+        "y": 484,
+        "w": 390,
+        "h": 124,
+        "bottom": 608,
+        "visible": true
+      },
+      {
+        "i": 4,
+        "text": "noon Noon Multiple products Active 1 of 4 installments paid 320.00 /mo",
+        "x": 445,
+        "y": 622,
+        "w": 390,
+        "h": 124,
+        "bottom": 746,
+        "visible": true
+      },
+      {
+        "i": 5,
+        "text": "اكسترا extra Extrastores AirPods Pro 3 Completed 3 of 3 installments paid 210.00 /mo",
+        "x": 445,
+        "y": 760,
+        "w": 390,
+        "h": 124,
+        "bottom": 884,
+        "visible": false
+      }
+    ]
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "status": 200,
+  "errors": [],
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "metrics": {
+    "href": "https://hades898.github.io/tasheel-bnpl-prototype/checkout/insights?audit2=1780868924419",
+    "title": "",
+    "text": "‹ Insights ⌄ April Spent in April 4,300 Nov Dec Jan Feb Mar 4.3k Apr Transactions Categories اكسترا extra Extrastores Apr 15th · Paid 600 ج Jarir Apr 20th · Paid 600 ج Jarir Apr 20th · Paid 600 noon Noon Apr 15th · Paid 600",
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "scrollHeight": 844,
+    "clientHeight": 844,
+    "maxElementBottom": 844,
+    "buttons": [
+      {
+        "i": 0,
+        "text": "‹",
+        "x": 20,
+        "y": 10,
+        "w": 44,
+        "h": 44,
+        "bottom": 54,
+        "visible": true
+      }
+    ]
+  }
+}

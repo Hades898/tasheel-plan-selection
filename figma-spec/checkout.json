@@ -1,0 +1,195 @@
+{
+  "_status": "measured_from_figma_mcp",
+  "source": {
+    "fileKey": "geEFxJ11n2KySAZB6zsjEh",
+    "nodeId": "355:58228",
+    "name": "6.0 \u2014 Extrastores Checkout",
+    "screenshot": "/Users/hadysoliman/.hermes/image_cache/img_38605019b652.png"
+  },
+  "frame": {
+    "width": 390,
+    "height": 844
+  },
+  "tokens": {
+    "bg": "#ffffff",
+    "text_primary": "#121212",
+    "text_secondary": "#666666",
+    "border": "#dfe5e5",
+    "selected_fill": "#f7f7f7",
+    "cta_fill": "#121212",
+    "cta_text": "#ffffff",
+    "font": "Inter",
+    "browser_blur": "rgba(250,250,250,0.7)",
+    "interactive_dark": "#030712"
+  },
+  "nodes": [
+    {
+      "id": "355:58228",
+      "name": "6.0 \u2014 Extrastores Checkout",
+      "role": "screen",
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844
+      },
+      "style": {
+        "fill": "#ffffff"
+      },
+      "testId": "checkout-screen"
+    },
+    {
+      "id": "355:58229",
+      "name": "Status row",
+      "role": "statusbar",
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 44
+      },
+      "style": {
+        "paddingHorizontal": 24,
+        "paddingVertical": 12,
+        "font": "Inter",
+        "fontSize": 14
+      },
+      "testId": "checkout-statusbar"
+    },
+    {
+      "id": "355:58238",
+      "name": "Merchant header",
+      "role": "header",
+      "bounds": {
+        "x": 0,
+        "y": 44,
+        "width": 390,
+        "height": 58
+      },
+      "style": {
+        "padding": 16,
+        "gap": 2,
+        "titleSize": 18,
+        "subtitleSize": 13
+      },
+      "testId": "checkout-merchant-header"
+    },
+    {
+      "id": "355:58242",
+      "name": "Product card",
+      "role": "card",
+      "bounds": {
+        "width": 342,
+        "height": 104
+      },
+      "style": {
+        "border": "#dfe5e5",
+        "radius": 12,
+        "padding": 14,
+        "gap": 14
+      },
+      "testId": "checkout-product-card"
+    },
+    {
+      "id": "355:58250",
+      "name": "Credit / Debit Card",
+      "role": "radio",
+      "bounds": {
+        "width": 342,
+        "height": 54
+      },
+      "style": {
+        "border": "#dfe5e5",
+        "radius": 12,
+        "padding": 16
+      },
+      "testId": "checkout-option-card"
+    },
+    {
+      "id": "355:58253",
+      "name": "Apple Pay",
+      "role": "radio",
+      "bounds": {
+        "width": 342,
+        "height": 54
+      },
+      "style": {
+        "border": "#dfe5e5",
+        "radius": 12,
+        "padding": 16
+      },
+      "testId": "checkout-option-apple"
+    },
+    {
+      "id": "355:58256",
+      "name": "Cash on Delivery",
+      "role": "radio",
+      "bounds": {
+        "width": 342,
+        "height": 54
+      },
+      "style": {
+        "border": "#dfe5e5",
+        "radius": 12,
+        "padding": 16
+      },
+      "testId": "checkout-option-cod"
+    },
+    {
+      "id": "355:58259",
+      "name": "Tasheel BNPL selected",
+      "role": "radio",
+      "bounds": {
+        "width": 342,
+        "height": 70
+      },
+      "style": {
+        "fill": "#f7f7f7",
+        "border": "#121212",
+        "borderWidth": 2,
+        "radius": 12,
+        "padding": 16
+      },
+      "testId": "checkout-option-bnpl"
+    },
+    {
+      "id": "355:58266",
+      "name": "Proceed with Tasheel BNPL",
+      "role": "button",
+      "bounds": {
+        "width": 342,
+        "height": 58
+      },
+      "style": {
+        "fill": "#121212",
+        "radius": 14,
+        "fontSize": 16,
+        "fontWeight": 600,
+        "color": "#ffffff"
+      },
+      "testId": "checkout-cta"
+    },
+    {
+      "id": "1613:21850",
+      "name": "Compact browser/search bar",
+      "role": "browser-bar",
+      "bounds": {
+        "width": 218,
+        "height": 48
+      },
+      "style": {
+        "fill": "rgba(250,250,250,0.7)",
+        "radius": 24,
+        "blur": 12
+      },
+      "testId": "checkout-compact-browser-bar"
+    }
+  ],
+  "assets": [
+    "checkoutReload",
+    "checkoutSiteSettings"
+  ],
+  "waivers": [
+    "Checkout includes browser-style compact controls in Figma; do not invent additional Safari chrome beyond these frame-owned controls."
+  ]
+}

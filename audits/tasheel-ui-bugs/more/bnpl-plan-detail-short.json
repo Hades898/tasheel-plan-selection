@@ -1,0 +1,150 @@
+{
+  "status": 200,
+  "errors": [],
+  "viewport": {
+    "width": 390,
+    "height": 640
+  },
+  "metrics": {
+    "href": "https://hades898.github.io/tasheel-bnpl-prototype/bnpl",
+    "title": "",
+    "text": "Hello, Abdullah You're 10% done paying off 4 purchases 3,175 Paid 10,243 Left Pay Statement My Purchases Active plans view all 50% Samsung 65QLED31A123 3 of 6 SAR 2,700/5,400 50% Macbook pro M4 3 of 6 SAR 2,700/5,400 50% Macbook Pro M4 6 of 12 SAR 2,700/5,400 50% Samsung S24 LTE 2TB SSD BLAA 3 of 6 SAR 2,700/5,400 Next up view all Samsung Galaxy S24 Tomorrow 543 MacBook Pro M3 In 6 days - April 20th 543 iPhone 17 Pro In 17 days - May 15th 543",
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "scrollHeight": 640,
+    "clientHeight": 640,
+    "maxElementBottom": 667,
+    "buttons": [
+      {
+        "i": 0,
+        "text": "Pay Next Installment",
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0,
+        "bottom": 0,
+        "visible": false
+      },
+      {
+        "i": 1,
+        "text": "Pay",
+        "x": 16,
+        "y": 184,
+        "w": 112.65625,
+        "h": 39,
+        "bottom": 223,
+        "visible": true
+      },
+      {
+        "i": 2,
+        "text": "Statement",
+        "x": 136.65625,
+        "y": 184,
+        "w": 114.671875,
+        "h": 39,
+        "bottom": 223,
+        "visible": true
+      },
+      {
+        "i": 3,
+        "text": "My Purchases",
+        "x": 259.328125,
+        "y": 184,
+        "w": 114.671875,
+        "h": 39,
+        "bottom": 223,
+        "visible": true
+      },
+      {
+        "i": 4,
+        "text": "view all",
+        "x": 331.21875,
+        "y": 249.5,
+        "w": 42.78125,
+        "h": 16,
+        "bottom": 265.5,
+        "visible": true
+      },
+      {
+        "i": 5,
+        "text": "50% Samsung 65QLED31A123 3 of 6 SAR 2,700/5,400",
+        "x": 16,
+        "y": 280,
+        "w": 195,
+        "h": 114,
+        "bottom": 394,
+        "visible": true
+      },
+      {
+        "i": 6,
+        "text": "50% Macbook pro M4 3 of 6 SAR 2,700/5,400",
+        "x": 219,
+        "y": 280,
+        "w": 195,
+        "h": 114,
+        "bottom": 394,
+        "visible": true
+      },
+      {
+        "i": 7,
+        "text": "50% Macbook Pro M4 6 of 12 SAR 2,700/5,400",
+        "x": 422,
+        "y": 280,
+        "w": 195,
+        "h": 114,
+        "bottom": 394,
+        "visible": true
+      },
+      {
+        "i": 8,
+        "text": "50% Samsung S24 LTE 2TB SSD BLAA 3 of 6 SAR 2,700/5,400",
+        "x": 625,
+        "y": 280,
+        "w": 195,
+        "h": 114,
+        "bottom": 394,
+        "visible": true
+      },
+      {
+        "i": 9,
+        "text": "view all",
+        "x": 331.21875,
+        "y": 420.5,
+        "w": 42.78125,
+        "h": 16,
+        "bottom": 436.5,
+        "visible": true
+      },
+      {
+        "i": 10,
+        "text": "Samsung Galaxy S24 Tomorrow 543",
+        "x": 32,
+        "y": 471,
+        "w": 326,
+        "h": 38,
+        "bottom": 509,
+        "visible": true
+      },
+      {
+        "i": 11,
+        "text": "MacBook Pro M3 In 6 days - April 20th 543",
+        "x": 32,
+        "y": 526,
+        "w": 326,
+        "h": 38,
+        "bottom": 564,
+        "visible": true
+      },
+      {
+        "i": 12,
+        "text": "iPhone 17 Pro In 17 days - May 15th 543",
+        "x": 32,
+        "y": 581,
+        "w": 326,
+        "h": 38,
+        "bottom": 619,
+        "visible": true
+      }
+    ]
+  }
+}

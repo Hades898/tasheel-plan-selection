@@ -1,0 +1,168 @@
+{
+  "source": {
+    "figmaUrl": "https://www.figma.com/design/geEFxJ11n2KySAZB6zsjEh/BNPL?node-id=1843-17915&t=j4iGP56XKrdloEVc-4",
+    "nodeId": "1843:17915",
+    "frameName": "My dues",
+    "width": 402,
+    "height": 890,
+    "screenshot": "/Users/hadysoliman/.hermes/image_cache/img_dcff101f5dbf.png"
+  },
+  "tokens": {
+    "canvas": "#f9fafb",
+    "surface": "#ffffff",
+    "textPrimary": "#030712",
+    "textSecondary": "#4b5563",
+    "brand": "#16720b",
+    "ctaBg": "#022b10",
+    "ctaText": "#3eff00",
+    "selectedBg": "#edf3ef",
+    "border": "#e5e7eb",
+    "selectedBorder": "#16720b",
+    "font": "SF Pro"
+  },
+  "layout": {
+    "statusBar": {
+      "x": 0,
+      "y": 0,
+      "w": 402,
+      "h": 62,
+      "time": "9:41"
+    },
+    "header": {
+      "x": 0,
+      "y": 62,
+      "w": 402,
+      "h": 66,
+      "back": {
+        "x": 16,
+        "y": 70,
+        "w": 50,
+        "h": 50
+      },
+      "close": "not visible in screenshot/context hidden or omitted for this target"
+    },
+    "ring": {
+      "x": 41,
+      "y": 128,
+      "w": 320,
+      "h": 251,
+      "center": {
+        "x": 92,
+        "y": 91,
+        "w": 137,
+        "h": 97,
+        "caption": "4 Dues Selected",
+        "amount": "1,800",
+        "secondary": "Remaining 1200"
+      },
+      "assets": [
+        "duesLeadingHaloV3",
+        "duesTrackEmptyV4",
+        "duesFilledV4",
+        "duesDot*"
+      ],
+      "dotPositions": [
+        [
+          147,
+          -2
+        ],
+        [
+          38,
+          187
+        ],
+        [
+          256,
+          61
+        ],
+        [
+          256,
+          188
+        ],
+        [
+          147,
+          251
+        ],
+        [
+          38,
+          61
+        ]
+      ]
+    },
+    "list": {
+      "x": 16,
+      "y": 429,
+      "w": 370,
+      "rowH": 72,
+      "gap": 10,
+      "rows": [
+        {
+          "merchant": "Extra Stores",
+          "logo": "extra",
+          "amount": "1,800",
+          "caption": "In 2 days  - April 20th",
+          "progress": "2 of 4",
+          "selected": true
+        },
+        {
+          "merchant": "Jarir",
+          "logo": "jarir",
+          "amount": "600",
+          "caption": "In 7 days  - April 27th",
+          "progress": "2 of 4",
+          "selected": true
+        },
+        {
+          "merchant": "Jarir",
+          "logo": "extra",
+          "amount": "600",
+          "caption": "In 7 days  - April 27th",
+          "progress": "2 of 4",
+          "selected": true
+        },
+        {
+          "merchant": "Jarir",
+          "logo": "extra",
+          "amount": "600",
+          "caption": "In 7 days  - April 27th",
+          "progress": "2 of 4",
+          "selected": false
+        }
+      ]
+    },
+    "moreRow": {
+      "x": 16,
+      "y": 757,
+      "w": 370,
+      "h": 35,
+      "left": "+5 More next up payments",
+      "right": "View all \u203a"
+    },
+    "cta": {
+      "x": 16,
+      "y": 807,
+      "w": 370,
+      "h": 50,
+      "label": "Pay selected \ufdfc 3,000"
+    },
+    "homeIndicator": {
+      "x": 129,
+      "y": 878,
+      "w": 144,
+      "h": 5
+    }
+  },
+  "typography": {
+    "cardTitle": "16px/21 semibold tracking -0.32",
+    "caption": "11px/13 regular tracking 0.06",
+    "amount": "17px/18 semibold tracking -0.2",
+    "ringAmount": "34px/41 bold tracking 0.38",
+    "cta": "17px/22 medium tracking -0.41"
+  },
+  "implementationAcceptance": [
+    "Route /checkout/dues renders node 1843:17915, not older 876:17923 state.",
+    "Ring says 4 Dues Selected, amount 1,800, Remaining 1200.",
+    "CTA remains Pay selected 3,000; selected list rows total visually still indicate four selected dues in Figma copy despite list containing one unselected row.",
+    "Frame is 402x890 fixed inside existing prototype shell; no generic dashboard redesign.",
+    "Use exported Figma ring/vector assets from node 1843:17915 or local manifest equivalents; no emoji icons."
+  ]
+}

@@ -1,0 +1,432 @@
+{
+  "extraLogo": {
+    "file": "assets/figma/extraLogo.png",
+    "bytes": 35191,
+    "source": "http://localhost:3845/assets/4feda7cec0bdb64f83cb838e6c75e31c0534ecc5.png",
+    "sha256": "2b5b49d33df6545cb1416bf4174890a22e2cd91d67ef9afd4f6b22b9b1be0ee8",
+    "intrinsic": {
+      "width": 799,
+      "height": 548
+    },
+    "figmaNodeIds": [
+      "649:4788",
+      "779:22980"
+    ],
+    "usage": [
+      "MerchantBadge extra",
+      "NextRow extra",
+      "CardTop extra"
+    ],
+    "status": "ready",
+    "waiver": null
+  },
+  "jarirLogo": {
+    "file": "assets/figma/jarirLogo.png",
+    "bytes": 14624,
+    "source": "http://localhost:3845/assets/0864763f0ee69e79bcafb9811889c81c4c93a059.png",
+    "sha256": "88b580481ef0b408b1951e40082b7a4476f5086898b0499e0662d1d978f82ea7",
+    "intrinsic": {
+      "width": 416,
+      "height": 203
+    },
+    "figmaNodeIds": [
+      "649:4790"
+    ],
+    "usage": [
+      "MerchantBadge jarir",
+      "NextRow jarir"
+    ],
+    "status": "ready",
+    "waiver": null
+  },
+  "noonLogo": {
+    "file": "assets/figma/noonLogo.png",
+    "bytes": 56030,
+    "source": "http://localhost:3845/assets/23f0338ce646e4bb03034e2a565ec2c64afbe170.png",
+    "sha256": "7d9377cea3a6119c3d39537fd857f5d0d189aa41c80206eaf9413128d146560f",
+    "intrinsic": {
+      "width": 300,
+      "height": 300
+    },
+    "figmaNodeIds": [
+      "649:4792"
+    ],
+    "usage": [
+      "MerchantBadge noon",
+      "NextRow noon"
+    ],
+    "status": "ready",
+    "waiver": null
+  },
+  "levels": {
+    "file": "assets/figma/levels.svg",
+    "bytes": 3104,
+    "source": "http://localhost:3845/assets/703188eb5a005a91b293a4ce61c3dc207e894204.svg",
+    "sha256": "e98e9863df1fb82424274f97166ac7fd70e122be10f2054c25dbbcbb5365a8e9",
+    "intrinsic": {
+      "viewBox": "0 0 103 22",
+      "width": 103.0,
+      "height": 22.0
+    },
+    "figmaNodeIds": [
+      "I1843:18085;218:5595"
+    ],
+    "usage": [
+      "iOS status levels"
+    ],
+    "status": "ready",
+    "waiver": null
+  },
+  "checkoutReload": {
+    "file": "assets/figma/checkoutReload.svg",
+    "bytes": 1210,
+    "source": "http://localhost:3845/assets/5792b06c787f165b78367a11c1a0ea112f9ad074.svg",
+    "sha256": "f9b9fcb32d58aeae28fdde3b1031dabcdd3c17908dc16605ff7253af1ba4f3d3",
+    "intrinsic": {
+      "viewBox": "0 0 14.9568 18.1824",
+      "width": 14.9568,
+      "height": 18.1824
+    },
+    "figmaNodeIds": [
+      "I1613:21850;402:3219"
+    ],
+    "usage": [
+      "Checkout compact browser bar if included"
+    ],
+    "status": "ready",
+    "waiver": null
+  },
+  "checkoutSiteSettings": {
+    "file": "assets/figma/checkoutSiteSettings.svg",
+    "bytes": 2714,
+    "source": "http://localhost:3845/assets/6a87d0a8ac769cf40def6b28f14d1daee0f6d371.svg",
+    "sha256": "c657b7ca88e06cac79b5ddd371de948d392ada6e5af6c7ed52e9826da16334ee",
+    "intrinsic": {
+      "viewBox": "0 0 15.2 18.2",
+      "width": 15.2,
+      "height": 18.2
+    },
+    "figmaNodeIds": [
+      "I1613:21850;1741:3517"
+    ],
+    "usage": [
+      "Checkout compact browser bar if included"
+    ],
+    "status": "ready",
+    "waiver": null
+  },
+  "homeElementA": {
+    "file": "assets/figma/homeElementA.svg",
+    "bytes": 1161,
+    "source": "http://localhost:3845/assets/200dd4027161dbeaedfcbfc481a383c5155de1c0.svg",
+    "sha256": "ec58494f5bf193b8b2f5e89ecb92ee95712fe87c2562aa73959a375eb624b722",
+    "intrinsic": {
+      "viewBox": "0 0 930.42 973.366",
+      "width": 930.42,
+      "height": 973.366
+    },
+    "figmaNodeIds": [
+      "1843:18082"
+    ],
+    "usage": [
+      "Home decorative element"
+    ],
+    "status": "ready",
+    "waiver": null
+  },
+  "homeElementB": {
+    "file": "assets/figma/homeElementB.svg",
+    "bytes": 1134,
+    "source": "http://localhost:3845/assets/036af41bf7072602b76cbe1966dc01bb55a1a468.svg",
+    "sha256": "84ccf93df11955d6f5d92d05628bd0da153e9da12b85b522ebb786042d700b59",
+    "intrinsic": {
+      "viewBox": "0 0 1086 961",
+      "width": 1086.0,
+      "height": 961.0
+    },
+    "figmaNodeIds": [
+      "1843:18083"
+    ],
+    "usage": [
+      "Home decorative element"
+    ],
+    "status": "ready",
+    "waiver": null
+  },
+  "homeDuesIcon": {
+    "file": "assets/figma/homeDuesIcon.png",
+    "bytes": 800449,
+    "source": "http://localhost:3845/assets/5f6a9f6fde8468c7a0db57b6acf21825c960206b.png",
+    "sha256": "4fdb46441730ab776474f4d227fee648eee1155de0339cc0126d6f335786ff49",
+    "intrinsic": {
+      "width": 767,
+      "height": 728
+    },
+    "figmaNodeIds": [
+      "1843:18102"
+    ],
+    "usage": [
+      "ActionTile My Dues"
+    ],
+    "status": "ready",
+    "waiver": null
+  },
+  "homePurchasesIcon": {
+    "file": "assets/figma/homePurchasesIcon.png",
+    "bytes": 1160791,
+    "source": "http://localhost:3845/assets/bc5bfefaf50e1f09d4dd142c2d9a766e66bc09f6.png",
+    "sha256": "2f59895f0a6ea1fc31c7db0b18b4ceb1f4b712baaf6c464f22ff50ef04db41c6",
+    "intrinsic": {
+      "width": 1254,
+      "height": 1254
+    },
+    "figmaNodeIds": [
+      "1843:18106"
+    ],
+    "usage": [
+      "ActionTile My Purchases"
+    ],
+    "status": "ready",
+    "waiver": null
+  },
+  "homeInsightsIcon": {
+    "file": "assets/figma/homeInsightsIcon.png",
+    "bytes": 357832,
+    "source": "http://localhost:3845/assets/16f27ba386defda1228a56aeb8d1337ac06c170e.png",
+    "sha256": "2cd6301a6817a344f46c0a8e8ca75f2598274fe012ea9b27012a4d487676726e",
+    "intrinsic": {
+      "width": 1254,
+      "height": 1254
+    },
+    "figmaNodeIds": [
+      "1867:13074"
+    ],
+    "usage": [
+      "ActionTile My Insights"
+    ],
+    "status": "ready",
+    "waiver": null
+  },
+  "duesTrack": {
+    "file": "assets/figma/duesTrack.svg",
+    "bytes": 1254,
+    "source": "http://localhost:3845/assets/f891757e210ef107e7614a84ab3bd88967215563.svg",
+    "sha256": "7a6a7ab793f333df077faac2f026577f4431b24093fa97ad5913438824fa90da",
+    "intrinsic": {
+      "viewBox": "0 0 288 288",
+      "width": 288.0,
+      "height": 288.0
+    },
+    "figmaNodeIds": [],
+    "usage": [
+      "DuesRing track"
+    ],
+    "status": "ready",
+    "waiver": null
+  },
+  "duesFilled": {
+    "file": "assets/figma/duesFilled.png",
+    "bytes": 55561,
+    "source": "http://localhost:3845/assets/d4e11464ee001174d07a767f8882df3345d38a49.png",
+    "sha256": "53ecb7d88626771431003e744dd6e43d7c7a1510e7d298e417398b3d9a56015a",
+    "intrinsic": {
+      "width": 280,
+      "height": 557
+    },
+    "figmaNodeIds": [],
+    "usage": [
+      "DuesRing filled arc"
+    ],
+    "status": "ready",
+    "waiver": null
+  },
+  "duesDot": {
+    "file": "assets/figma/duesDot.svg",
+    "bytes": 263,
+    "source": "http://localhost:3845/assets/e9c33e9084bd8c56dac3f4346ebb28db6c4f0d51.svg",
+    "sha256": "0e0113782832617e8e45d606af148706034436b69de61e2b2cfa83fa8ef57aa3",
+    "intrinsic": {
+      "viewBox": "0 0 26 26",
+      "width": 26.0,
+      "height": 26.0
+    },
+    "figmaNodeIds": [],
+    "usage": [
+      "DuesRing dot"
+    ],
+    "status": "ready",
+    "waiver": null
+  },
+  "progressThumb": {
+    "file": "assets/figma/progressThumb.svg",
+    "bytes": 252,
+    "source": "http://localhost:3845/assets/820f49730100a85a5719e80d8bc37786cab07b7b.svg",
+    "sha256": "6a36e1d770fb24ad25ca84c9e3e37df2302758e395deb0e4de4cb5dee14d49a1",
+    "intrinsic": {
+      "viewBox": "0 0 13 13",
+      "width": 13.0,
+      "height": 13.0
+    },
+    "figmaNodeIds": [],
+    "usage": [
+      "DuesRing/progress thumb"
+    ],
+    "status": "ready",
+    "waiver": null
+  },
+  "paymentLineTall": {
+    "file": "assets/figma/paymentLineTall.svg",
+    "bytes": 494,
+    "source": "http://localhost:3845/assets/17b5deb2842736923c91b07766d8011fe7bdbae9.svg",
+    "sha256": "f51d9f103853c4ce01a6aa7dac9ce15c72c11b5d84a18c4d24c1ea34e5acd2e7",
+    "intrinsic": {
+      "viewBox": "0 0 36 59",
+      "width": 36.0,
+      "height": 59.0
+    },
+    "figmaNodeIds": [],
+    "usage": [
+      "Payment timeline tall segment"
+    ],
+    "status": "ready",
+    "waiver": null
+  },
+  "paymentLineShort": {
+    "file": "assets/figma/paymentLineShort.svg",
+    "bytes": 392,
+    "source": "http://localhost:3845/assets/dc1940b7278829eb1c30fcd74b33faab6028fa1c.svg",
+    "sha256": "a3b184339d8f81880dcb0b014c5fc180202ec895271426057a4776d90fb33892",
+    "intrinsic": {
+      "viewBox": "0 0 36 37",
+      "width": 36.0,
+      "height": 37.0
+    },
+    "figmaNodeIds": [],
+    "usage": [
+      "Payment timeline short segment"
+    ],
+    "status": "ready",
+    "waiver": null
+  },
+  "riyalMark": {
+    "file": null,
+    "bytes": 0,
+    "source": null,
+    "sha256": null,
+    "intrinsic": null,
+    "figmaNodeIds": [
+      "264:10129",
+      "264:10130",
+      "I569:11330;5469:2"
+    ],
+    "usage": [
+      "Money/Riyal mark"
+    ],
+    "status": "blocked_export_required",
+    "waiver": "Temporary text glyph only. Must export the real Figma Riyal vector before fidelity claim."
+  },
+  "tasheelLogoPartA": {
+    "file": "assets/figma/tasheelLogoPartA.svg",
+    "bytes": 306,
+    "source": "http://localhost:3845/assets/7bfcccee50622d795e3c7157c24a3c093bc3adfa.svg",
+    "sha256": "a4a5241acddac76db816086e7d11bc8e3aad630642bfbfce085fc78aa4bebb4c",
+    "intrinsic": null,
+    "figmaNodeIds": [],
+    "usage": [
+      "Dues header/logo/icon fidelity"
+    ],
+    "status": "ready",
+    "waiver": null
+  },
+  "tasheelLogoPartB": {
+    "file": "assets/figma/tasheelLogoPartB.svg",
+    "bytes": 309,
+    "source": "http://localhost:3845/assets/dcec2711d148210fffcbb62b21c28a0c0c83dbc8.svg",
+    "sha256": "c418a527cafc165c4fa09a73826b60d751b0676dc6f81dfca93225441048624b",
+    "intrinsic": null,
+    "figmaNodeIds": [],
+    "usage": [
+      "Dues header/logo/icon fidelity"
+    ],
+    "status": "ready",
+    "waiver": null
+  },
+  "tasheelLogoPartC": {
+    "file": "assets/figma/tasheelLogoPartC.svg",
+    "bytes": 404,
+    "source": "http://localhost:3845/assets/9626347713b2e2045cee022f4e8545a1b9de7f48.svg",
+    "sha256": "53afa7ea07a6ff184eb2791c9069f69a15d06580de1f2a8ae88751c6e2cd6bdb",
+    "intrinsic": null,
+    "figmaNodeIds": [],
+    "usage": [
+      "Dues header/logo/icon fidelity"
+    ],
+    "status": "ready",
+    "waiver": null
+  },
+  "iconChevronLeft": {
+    "file": "assets/figma/iconChevronLeft.svg",
+    "bytes": 579,
+    "source": "http://localhost:3845/assets/638fb77efa156a2e1a627416a6ef55d37544d7ef.svg",
+    "sha256": "a00f217b3b921fb31c6d143f842a473806f3d54b74ea9e67305cb8e038d5709f",
+    "intrinsic": null,
+    "figmaNodeIds": [],
+    "usage": [
+      "Dues header/logo/icon fidelity"
+    ],
+    "status": "ready",
+    "waiver": null
+  },
+  "iconClose": {
+    "file": "assets/figma/iconClose.svg",
+    "bytes": 800,
+    "source": "http://localhost:3845/assets/19748dff74463e09b71cd206382ae95a93ae75fa.svg",
+    "sha256": "5c0a1bba5ed3969a47375caf52b0064efaf2a2e46c2910db58db138d0178912c",
+    "intrinsic": null,
+    "figmaNodeIds": [],
+    "usage": [
+      "Dues header/logo/icon fidelity"
+    ],
+    "status": "ready",
+    "waiver": null
+  },
+  "iconChevronRight": {
+    "file": "assets/figma/iconChevronRight.svg",
+    "bytes": 595,
+    "source": "http://localhost:3845/assets/94b9a5c4f93c804552683e0b5dcba18e7f2e4e09.svg",
+    "sha256": "f092d2e86062f0aacef36d559e2ae108453a258c503d0267cee4cd2a8dea284d",
+    "intrinsic": null,
+    "figmaNodeIds": [],
+    "usage": [
+      "Dues header/logo/icon fidelity"
+    ],
+    "status": "ready",
+    "waiver": null
+  },
+  "riyalDark": {
+    "file": "assets/figma/riyalDark.svg",
+    "bytes": 1040,
+    "source": "http://localhost:3845/assets/80e291c63fecce0f42d504f6ba17a6d71df2f84a.svg",
+    "sha256": "cc18c483ed7fb111dd28fdfdef092f1a1bbe84008ab11fc798481c0342be0df9",
+    "intrinsic": null,
+    "figmaNodeIds": [],
+    "usage": [
+      "Dues header/logo/icon fidelity"
+    ],
+    "status": "ready",
+    "waiver": null
+  },
+  "riyalOnPrimary": {
+    "file": "assets/figma/riyalOnPrimary.svg",
+    "bytes": 1066,
+    "source": "http://localhost:3845/assets/7a26233d1213b53b158c1274e64d28717d28d209.svg",
+    "sha256": "75aa1e1479bc961dc7674710bbe63121193d28291904da7c2b177c21777fef3a",
+    "intrinsic": null,
+    "figmaNodeIds": [],
+    "usage": [
+      "Dues header/logo/icon fidelity"
+    ],
+    "status": "ready",
+    "waiver": null
+  }
+}

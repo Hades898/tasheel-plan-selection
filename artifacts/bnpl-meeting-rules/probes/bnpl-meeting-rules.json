@@ -1,0 +1,6 @@
+{
+  "ok": true,
+  "pricing": "SAR 7,000 - 10% = SAR 6,300; SAR 5,000 financed; SAR 1,300 down payment",
+  "gating": "payment method AND Murabaha acceptance",
+  "unresolvedRates": [6, 9, 12, 24, 36]
+}

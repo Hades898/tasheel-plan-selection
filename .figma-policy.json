@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "createdAt": "2026-07-22T16:45:08",
+  "artifactRoot": "figma",
+  "taskArtifactRoot": "artifacts/bnpl-meeting-rules",
+  "tier": "T3",
+  "figmaUrl": "https://www.figma.com/design/geEFxJ11n2KySAZB6zsjEh/BNPL?node-id=355-48766",
+  "nodeIds": [
+    "355:58228",
+    "1878:13247",
+    "1741:78226",
+    "1691:67680",
+    "1691:67703"
+  ],
+  "scope": "Update merchant web checkout with Harun discount, limit, down-payment, tenure, Murabaha document, payment gating, and return-flow rules while preserving routes and assets.",
+  "platforms": "Expo Go / RN Web / GitHub Pages",
+  "sourceOfTruthRule": "If it exists in Figma, implement it from Figma. Do not substitute AI/generic screens unless explicitly asked for redesign.",
+  "defaultTolerances": {
+    "primaryGeometryPx": 2,
+    "secondaryGeometryPx": 4,
+    "radiusPx": 1
+  },
+  "requiredDocs": [
+    "/Users/hadysoliman/refs/FIGMA_TO_CODE_AUTO_TRIGGER.md",
+    "/Users/hadysoliman/refs/FIGMA_TO_CODE_GOLDEN_WORKFLOW.md",
+    "/Users/hadysoliman/refs/FIGMA_GOLDEN_INTAKE_PLAN.md"
+  ]
+}

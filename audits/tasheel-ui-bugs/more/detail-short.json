@@ -1,0 +1,40 @@
+{
+  "status": 200,
+  "errors": [],
+  "viewport": {
+    "width": 390,
+    "height": 640
+  },
+  "metrics": {
+    "href": "https://hades898.github.io/tasheel-bnpl-prototype/checkout/detail?audit2=1780868931483",
+    "title": "",
+    "text": "‹ اكسترا extra Active Extrastores 25th of April, 2026 3,666.00 1 Paid 916.50 3 Remaining 2,750 Payment Schedule Next May 15th 916.50 Due in 8 days June 15th 916.50 Due in 35 days July 15th 916.50 Due in 35 days August 15th 916.50 Due in 35 days Purchase Details Total Amount 3,666 Monthly Payment 916.50 Installments 4 Installments Next Due Date May 15th Monthly Payment 916.50 Total Paid 916.50 Remaining 2,750 Reference TXN-2026-04152 Pay Next Installment",
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "scrollHeight": 640,
+    "clientHeight": 640,
+    "maxElementBottom": 1074,
+    "buttons": [
+      {
+        "i": 0,
+        "text": "‹",
+        "x": 20,
+        "y": 10,
+        "w": 44,
+        "h": 44,
+        "bottom": 54,
+        "visible": true
+      },
+      {
+        "i": 1,
+        "text": "Pay Next Installment",
+        "x": 20,
+        "y": 570,
+        "w": 350,
+        "h": 54,
+        "bottom": 624,
+        "visible": true
+      }
+    ]
+  }
+}

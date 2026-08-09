@@ -1,0 +1,1594 @@
+diff --git a/App.tsx b/App.tsx
+index dc85d3a..29813dd 100644
+--- a/App.tsx
++++ b/App.tsx
+@@ -1,6 +1,7 @@
+ import { StatusBar } from 'expo-status-bar';
+-import { useMemo, useState } from 'react';
++import { useEffect, useMemo, useState } from 'react';
+ import {
++  Image,
+   Pressable,
+   SafeAreaView,
+   ScrollView,
+@@ -9,16 +10,56 @@ import {
+   View,
+   useWindowDimensions,
+ } from 'react-native';
++import Svg, {
++  Circle,
++  Defs,
++  G,
++  LinearGradient as SvgLinearGradient,
++  Path,
++  Rect,
++  Stop,
++} from 'react-native-svg';
+ 
+ type RouteKey = 'checkout' | 'appHome' | 'detail' | 'insights' | 'purchases' | 'dues';
+ type Merchant = 'extra' | 'jarir' | 'noon';
+ 
+-const green = '#003f1f';
+-const neon = '#39ef14';
+-const canvas = '#f7f8f8';
+-const text = '#111827';
+-const muted = '#6b7280';
++const green = '#022b10';
++const neon = '#3eff00';
++const canvas = '#f9fafb';
++const surface = '#ffffff';
++const text = '#030712';
++const muted = '#4b5563';
+ const border = '#e5e7eb';
++const borderSubtle = '#f3f4f6';
++const greenMid = '#166534';
++
++const figmaAssets = {
++  extraLogo: '/figma/extraLogo.png',
++  jarirLogo: '/figma/jarirLogo.png',
++  noonLogo: '/figma/noonLogo.png',
++  homeDuesIcon: '/figma/homeDuesIcon.png',
++  homePurchasesIcon: '/figma/homePurchasesIcon.png',
++  homeInsightsIcon: '/figma/homeInsightsIcon.png',
++  duesTrack: '/figma/duesTrack.svg',
++  duesFilled: '/figma/duesFilled.png',
++  duesDot: '/figma/duesDot.svg',
++} as const;
++
++type FigmaImageKey = keyof typeof figmaAssets;
++
++function publicAssetPath(path: string) {
++  if (typeof window !== 'undefined') {
++    const currentPath = window.location.pathname;
++    if (currentPath === githubPagesBase || currentPath.startsWith(`${githubPagesBase}/`)) {
++      return `${githubPagesBase}${path}`;
++    }
++  }
++  return path;
++}
++
++function figmaImageSource(asset: FigmaImageKey) {
++  return { uri: publicAssetPath(figmaAssets[asset]) };
++}
+ 
+ const routeFromPath = (path: string): RouteKey => {
+   if (path.includes('/checkout/app-home') || path.includes('/checkout/home')) return 'appHome';
+@@ -50,7 +91,7 @@ function pushPath(path: string) {
+ }
+ 
+ function Riyal({ size = 14, color = text }: { size?: number; color?: string }) {
+-  return <Text style={{ fontSize: size, fontWeight: '900', color, marginRight: 2 }}>﷼</Text>;
++  return <Text style={{ fontSize: size, fontWeight: '900', color, marginRight: 3 }}>﷼</Text>;
+ }
+ 
+ function Money({ amount, decimals, size = 16, color = text }: { amount: string; decimals?: string; size?: number; color?: string }) {
+@@ -58,28 +99,60 @@ function Money({ amount, decimals, size = 16, color = text }: { amount: string;
+     <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
+       <Riyal size={Math.max(12, size - 3)} color={color} />
+       <Text style={{ fontSize: size, fontWeight: '900', color, letterSpacing: -0.4 }}>{amount}</Text>
+-      {decimals ? <Text style={{ fontSize: Math.max(11, size - 6), fontWeight: '800', color }}>{decimals}</Text> : null}
++      {decimals ? <Text style={{ fontSize: Math.max(11, size - 8), fontWeight: '800', color }}>{decimals}</Text> : null}
+     </View>
+   );
+ }
+ 
+ function TasheelMark({ size = 30 }: { size?: number }) {
++  // Two slanted green bars (Tasheel "tick" mark)
++  return (
++    <Svg width={size} height={size} viewBox="0 0 30 30">
++      <Path d="M11 4 L19 4 L11 26 L3 26 Z" fill="#6cc24a" />
++      <Path d="M21 4 L27 4 L19 26 L13 26 Z" fill="#2f9e44" />
++    </Svg>
++  );
++}
++
++function SignalBars() {
+   return (
+-    <View style={{ width: size, height: size, flexDirection: 'row', gap: size * 0.12, transform: [{ skewY: '-22deg' }] }}>
+-      <View style={{ flex: 1, backgroundColor: '#69c54a', borderRadius: 2 }} />
+-      <View style={{ flex: 1, backgroundColor: '#42a737', borderRadius: 2, marginTop: -size * 0.18 }} />
++    <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 2, height: 11 }}>
++      {[4, 6.5, 9, 11].map((h, i) => (
++        <View key={i} style={{ width: 3, height: h, borderRadius: 1, backgroundColor: '#0a0a0a' }} />
++      ))}
+     </View>
+   );
+ }
+ 
+-function StatusStrip() {
++function WifiGlyph() {
++  return (
++    <Svg width={16} height={12} viewBox="0 0 16 12">
++      <Path d="M8 11.2 L10 8.6 C8.8 7.7 7.2 7.7 6 8.6 Z" fill="#0a0a0a" />
++      <Path d="M2.6 5.2 C5.7 2.4 10.3 2.4 13.4 5.2" stroke="#0a0a0a" strokeWidth={1.6} fill="none" strokeLinecap="round" />
++      <Path d="M4.6 7.3 C6.6 5.6 9.4 5.6 11.4 7.3" stroke="#0a0a0a" strokeWidth={1.6} fill="none" strokeLinecap="round" />
++    </Svg>
++  );
++}
++
++function BatteryGlyph() {
++  return (
++    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 1.5 }}>
++      <View style={{ width: 22, height: 11, borderRadius: 3, borderWidth: 1, borderColor: 'rgba(0,0,0,0.35)', padding: 1.5, justifyContent: 'center' }}>
++        <View style={{ height: '100%', width: '82%', borderRadius: 1.5, backgroundColor: '#0a0a0a' }} />
++      </View>
++      <View style={{ width: 1.5, height: 4, borderRadius: 1, backgroundColor: 'rgba(0,0,0,0.35)' }} />
++    </View>
++  );
++}
++
++function StatusStrip({ dark = true }: { dark?: boolean }) {
+   return (
+     <View style={styles.statusStrip}>
+       <Text style={styles.statusTime}>9:41</Text>
+       <View style={styles.statusIcons}>
+-        <Text style={styles.statusIcon}>▮▮▮</Text>
+-        <Text style={styles.statusIcon}>⌁</Text>
+-        <View style={styles.battery} />
++        <SignalBars />
++        <WifiGlyph />
++        <BatteryGlyph />
+       </View>
+     </View>
+   );
+@@ -97,21 +170,74 @@ function RoundButton({ glyph, label, onPress }: { glyph: string; label: string;
+   );
+ }
+ 
+-function MerchantBadge({ kind, size = 36 }: { kind: Merchant; size?: number }) {
+-  const color = kind === 'noon' ? '#ffe500' : kind === 'jarir' ? '#e41e2b' : '#ffffff';
+-  const fg = kind === 'jarir' ? '#fff' : kind === 'noon' ? '#111827' : '#0b75bd';
+-  const label = kind === 'extra' ? 'extra' : kind === 'jarir' ? 'ج' : 'noon';
++// --- Merchant marks sourced from Figma exports ---
++function MerchantBadge({ kind, size = 36, testID }: { kind: Merchant; size?: number; testID?: string }) {
++  const asset: FigmaImageKey = kind === 'extra' ? 'extraLogo' : kind === 'jarir' ? 'jarirLogo' : 'noonLogo';
+   return (
+-    <View style={[styles.merchantBadge, { width: size, height: size, borderRadius: kind === 'jarir' ? size / 2 : 9, backgroundColor: color }]}> 
+-      <Text style={{ color: fg, fontWeight: '900', fontSize: kind === 'noon' ? size * 0.22 : size * 0.28, lineHeight: size * 0.32 }}>{label}</Text>
++    <View testID={testID || `merchant-${kind}`} style={[styles.merchantBadge, { width: size, height: size, borderRadius: kind === 'jarir' ? size / 2 : size * 0.24, backgroundColor: '#ffffff' }]}>
++      <Image
++        source={figmaImageSource(asset)}
++        resizeMode="contain"
++        accessibilityIgnoresInvertColors
++        style={{ width: size * 0.72, height: size * 0.72 }}
++      />
+     </View>
+   );
+ }
+ 
++// --- Figma-exported home action-tile icons ---
++function FigmaActionIcon({ asset, testID }: { asset: FigmaImageKey; testID?: string }) {
++  return <Image testID={testID} source={figmaImageSource(asset)} resizeMode="contain" accessibilityIgnoresInvertColors style={styles.figmaActionIcon} />;
++}
++
++function IconCoins({ size = 34 }: { size?: number }) {
++  return (
++    <Svg width={size} height={size} viewBox="0 0 40 40">
++      <G>
++        <Path d="M8 24 C8 21 12 19.5 17 19.5 C22 19.5 26 21 26 24 L26 28 C26 31 22 32.5 17 32.5 C12 32.5 8 31 8 28 Z" fill="#e9a23b" />
++        <Path d="M8 24 C8 27 12 28.5 17 28.5 C22 28.5 26 27 26 24 C26 21 22 19.5 17 19.5 C12 19.5 8 21 8 24 Z" fill="#f5c451" />
++        <Path d="M14 11 C14 8.2 18 7 22.5 7 C27 7 31 8.2 31 11 L31 16 C31 18.8 27 20 22.5 20 C18 20 14 18.8 14 16 Z" fill="#d98e2b" />
++        <Path d="M14 11 C14 13.8 18 15 22.5 15 C27 15 31 13.8 31 11 C31 8.2 27 7 22.5 7 C18 7 14 8.2 14 11 Z" fill="#f5c451" />
++      </G>
++    </Svg>
++  );
++}
++
++function IconBag({ size = 34 }: { size?: number }) {
++  return (
++    <Svg width={size} height={size} viewBox="0 0 40 40">
++      <Path d="M11 14 L29 14 L31 33 C31 34.1 30.1 35 29 35 L11 35 C9.9 35 9 34.1 9 33 Z" fill="#0a5a2a" />
++      <Path d="M14 16 L14 12 C14 8.7 16.7 6 20 6 C23.3 6 26 8.7 26 12 L26 16" stroke="#0a5a2a" strokeWidth={2.6} fill="none" strokeLinecap="round" />
++      <Circle cx="27.5" cy="27.5" r="6.5" fill="#39d353" />
++      <Path d="M24.6 27.6 L26.6 29.6 L30.6 25.2" stroke="#063417" strokeWidth={2.2} fill="none" strokeLinecap="round" strokeLinejoin="round" />
++    </Svg>
++  );
++}
++
++function IconChart({ size = 34 }: { size?: number }) {
++  return (
++    <Svg width={size} height={size} viewBox="0 0 40 40">
++      <Rect x="8" y="22" width="5" height="10" rx="1.6" fill="#9fd9a8" />
++      <Rect x="16" y="16" width="5" height="16" rx="1.6" fill="#3aa64a" />
++      <Rect x="24" y="11" width="5" height="21" rx="1.6" fill="#0a5a2a" />
++      <Circle cx="28" cy="13" r="7" fill="none" stroke="#0a5a2a" strokeWidth={2.4} />
++      <Path d="M33 18 L37 22" stroke="#0a5a2a" strokeWidth={2.8} strokeLinecap="round" />
++    </Svg>
++  );
++}
++
+ function Progress({ value }: { value: number }) {
+   return (
+     <View style={styles.progressTrackSmall}>
+-      <View style={[styles.progressFillSmall, { width: `${Math.max(4, Math.min(100, value * 100))}%` }]} />
++      <View style={[styles.progressFillSmall, { width: `${Math.max(5, Math.min(100, value * 100))}%` }]} />
++    </View>
++  );
++}
++
++function Radio({ selected, color = green }: { selected?: boolean; color?: string }) {
++  return (
++    <View style={[styles.radioOuter, { borderColor: selected ? color : '#cbd5e1' }]}>
++      {selected ? <View style={[styles.radioInner, { backgroundColor: color }]} /> : null}
+     </View>
+   );
+ }
+@@ -128,14 +254,20 @@ function SegTabs({ value, onChange }: { value: string; onChange: (value: string)
+   );
+ }
+ 
+-function AppShell({ children, route, setRoute, scroll = true }: { children: React.ReactNode; route: RouteKey; setRoute: (r: RouteKey) => void; scroll?: boolean }) {
++function AppShell({ children, scroll = true }: { children: React.ReactNode; scroll?: boolean }) {
+   const { width } = useWindowDimensions();
+-  const maxWidth = Math.min(430, width);
++  const maxWidth = Math.min(402, width);
+   const content = <View style={[styles.phone, { maxWidth }]}>{children}</View>;
+   return (
+     <SafeAreaView style={styles.outer}>
+       <StatusBar style="dark" />
+-      {scroll ? <ScrollView style={{ width: '100%', flex: 1 }} contentContainerStyle={styles.outerScroll} showsVerticalScrollIndicator={false}>{content}</ScrollView> : <View style={styles.outerScroll}>{content}</View>}
++      {scroll ? (
++        <ScrollView style={{ width: '100%', flex: 1 }} contentContainerStyle={styles.outerScroll} showsVerticalScrollIndicator={false}>
++          {content}
++        </ScrollView>
++      ) : (
++        <View style={[styles.outerScroll, { flex: 1 }]}>{content}</View>
++      )}
+     </SafeAreaView>
+   );
+ }
+@@ -154,57 +286,121 @@ function Header({ title, subtitle, showLogo, rightClose, onBack, onClose }: { ti
+   );
+ }
+ 
++// ---------------------------------------------------------------------------
++// Checkout — neutral merchant web checkout (Figma 355:58228)
++// ---------------------------------------------------------------------------
++function CheckoutOption({ label, sub, selected, onPress }: { label: string; sub?: string; selected?: boolean; onPress?: () => void }) {
++  return (
++    <Pressable onPress={onPress} style={[styles.coRow, selected && styles.coRowSelected]} accessibilityRole="radio">
++      <Radio selected={selected} color="#111827" />
++      <View style={{ flex: 1 }}>
++        <Text style={styles.coLabel}>{label}</Text>
++        {sub ? <Text style={styles.coSub}>{sub}</Text> : null}
++      </View>
++    </Pressable>
++  );
++}
++
+ function Checkout({ setRoute }: { setRoute: (r: RouteKey) => void }) {
++  const [selected, setSelected] = useState('bnpl');
+   return (
+-    <AppShell route="checkout" setRoute={setRoute}>
++    <AppShell>
++      <StatusStrip />
+       <View style={styles.checkoutPage}>
+         <Text style={styles.checkoutMerchant}>Extrastores</Text>
+         <Text style={styles.checkoutSub}>Complete your purchase</Text>
++
+         <View style={styles.productCard}>
+-          <Text style={styles.productIcon}>▣</Text>
++          <View style={styles.productThumb}>
++            <Svg width={26} height={38} viewBox="0 0 26 38">
++              <Rect x="1" y="1" width="24" height="36" rx="5" fill="#1f2937" />
++              <Rect x="4" y="5" width="18" height="26" rx="2" fill="#374151" />
++              <Rect x="9.5" y="33.5" width="7" height="1.6" rx="0.8" fill="#9ca3af" />
++            </Svg>
++          </View>
+           <View style={{ flex: 1 }}>
+             <Text style={styles.productTitle}>iPhone 16 Pro Max</Text>
+             <Text style={styles.productMeta}>256GB — Natural Titanium</Text>
++            <Text style={styles.productPrice}>SAR 6,553.85</Text>
+           </View>
+-          <Money amount="6,553" size={18} />
+         </View>
+-        <Text style={styles.sectionTitle}>Payment Method</Text>
+-        {['Credit / Debit Card', 'Apple Pay', 'Cash on Delivery'].map((item) => <View key={item} style={styles.optionRow}><Text style={styles.radio}>○</Text><Text style={styles.optionText}>{item}</Text></View>)}
+-        <View style={[styles.optionRow, styles.optionSelected]}><Text style={styles.radioSelected}>●</Text><View style={{ flex: 1 }}><Text style={styles.optionText}>Tasheel BNPL</Text><Text style={styles.optionSub}>Pay in flexible installments</Text></View></View>
+-        <Pressable style={styles.cta} onPress={() => setRoute('appHome')} accessibilityRole="button"><Text style={styles.ctaText}>Proceed with Tasheel BNPL</Text></Pressable>
++
++        <Text style={styles.coHeading}>Payment Method</Text>
++        <View style={{ gap: 12 }}>
++          <CheckoutOption label="Credit / Debit Card" selected={selected === 'card'} onPress={() => setSelected('card')} />
++          <CheckoutOption label="Apple Pay" selected={selected === 'apple'} onPress={() => setSelected('apple')} />
++          <CheckoutOption label="Cash on Delivery" selected={selected === 'cod'} onPress={() => setSelected('cod')} />
++          <CheckoutOption label="Tasheel BNPL" sub="Split into 3–12 monthly installments" selected={selected === 'bnpl'} onPress={() => setSelected('bnpl')} />
++        </View>
++
++        <View style={{ flex: 1, minHeight: 24 }} />
++
++        <Pressable style={styles.checkoutCta} onPress={() => setRoute('appHome')} accessibilityRole="button">
++          <Text style={styles.checkoutCtaText}>Proceed with Tasheel BNPL</Text>
++        </Pressable>
++        <View style={styles.browserChrome}>
++          <View style={styles.browserCircle}><Text style={styles.browserIcon}>‹</Text></View>
++          <View style={styles.browserCircle}><Text style={styles.browserIcon}>↻</Text></View>
++          <View style={styles.addressBar}><Text style={styles.addressText}>extrastores.com</Text></View>
++        </View>
++        <HomeIndicator />
+       </View>
+     </AppShell>
+   );
+ }
+ 
+-function ActionTile({ label, kind, onPress }: { label: string; kind: Merchant; onPress: () => void }) {
++// ---------------------------------------------------------------------------
++// App Home (Figma 1843:18080)
++// ---------------------------------------------------------------------------
++function ActionTile({ label, asset, onPress, testID }: { label: string; asset: FigmaImageKey; onPress: () => void; testID: string }) {
+   return (
+-    <Pressable accessibilityRole="button" onPress={onPress} style={({ pressed }) => [styles.actionTile, pressed && styles.pressed]}>
+-      <View style={styles.actionIcon}><MerchantBadge kind={kind} size={34} /></View>
++    <Pressable testID={testID} accessibilityRole="button" accessibilityLabel={label} onPress={onPress} style={({ pressed }) => [styles.actionTile, pressed && styles.pressed]}>
++      <View style={styles.actionIcon}><FigmaActionIcon asset={asset} testID={`${testID}-asset`} /></View>
+       <Text style={styles.actionLabel}>{label}</Text>
+     </Pressable>
+   );
+ }
+ 
++function HomeGradient() {
++  return (
++    <Svg style={StyleSheet.absoluteFill} width="100%" height="300">
++      <Defs>
++        <SvgLinearGradient id="homeGrad" x1="0" y1="0" x2="0.55" y2="1">
++          <Stop offset="0" stopColor="#cfe9d2" />
++          <Stop offset="0.55" stopColor="#e3f0e5" />
++          <Stop offset="1" stopColor={canvas} />
++        </SvgLinearGradient>
++      </Defs>
++      <Rect x="0" y="0" width="100%" height="300" fill="url(#homeGrad)" />
++    </Svg>
++  );
++}
++
+ function AppHome({ setRoute }: { setRoute: (r: RouteKey) => void }) {
+   return (
+-    <AppShell route="appHome" setRoute={setRoute} scroll={false}>
++    <AppShell>
++      <View testID="app-home" style={{ flex: 1 }}>
++      <View style={{ height: 300, position: 'absolute', top: 0, left: 0, right: 0 }}>
++        <HomeGradient />
++      </View>
+       <StatusStrip />
+-      <View style={styles.homeTopGradient} />
+       <View style={styles.appContentNoScroll}>
+         <TasheelMark size={30} />
+         <Text style={styles.nextPaymentLabel}>Your Next Payment</Text>
+-        <View style={styles.payRow}><Money amount="4,250" decimals=".00" size={31} /><Pressable style={styles.payNow} onPress={() => setRoute('detail')}><Text style={styles.payNowText}>Pay now</Text></Pressable></View>
++        <View style={styles.payRow}>
++          <Money amount="4,250" decimals=".00" size={32} />
++          <Pressable style={styles.payNow} onPress={() => setRoute('detail')}><Text style={styles.payNowText}>Pay now</Text></Pressable>
++        </View>
+         <Text style={styles.dueText}>Jarir Store · due Apr 21</Text>
+         <View style={styles.actionsRow}>
+-          <ActionTile label="My Dues" kind="extra" onPress={() => setRoute('dues')} />
+-          <ActionTile label="My Purchases" kind="extra" onPress={() => setRoute('purchases')} />
+-          <ActionTile label="My Insights" kind="extra" onPress={() => setRoute('insights')} />
++          <ActionTile label="My Dues" asset="homeDuesIcon" testID="home-action-dues" onPress={() => setRoute('dues')} />
++          <ActionTile label="My Purchases" asset="homePurchasesIcon" testID="home-action-purchases" onPress={() => setRoute('purchases')} />
++          <ActionTile label="My Insights" asset="homeInsightsIcon" testID="home-action-insights" onPress={() => setRoute('insights')} />
+         </View>
+         <SectionHeader title="Active Purchases" onPress={() => setRoute('purchases')} />
+         <Pressable style={styles.homeCard} onPress={() => setRoute('detail')}>
+           <CardTop kind="extra" title="Extrastores" sub="Feb 5" status="Active" />
+-          <Installment amount="450" text="1 of 3 installments paid" value={1/3} />
++          <Installment amount="450" text="1 of 3 installments paid" value={1 / 3} />
+         </Pressable>
+         <SectionHeader title="Next up" onPress={() => setRoute('dues')} />
+         <View style={styles.nextCard}>
+@@ -215,49 +411,144 @@ function AppHome({ setRoute }: { setRoute: (r: RouteKey) => void }) {
+           <NextRow kind="noon" name="Noon" when="In 17 days · May 15th" amount="123.24" />
+         </View>
+       </View>
+-      <BottomNav active="bnpl" setRoute={setRoute} />
++      <BottomNav setRoute={setRoute} />
+       <HomeIndicator />
++      </View>
+     </AppShell>
+   );
+ }
+ 
+ function SectionHeader({ title, onPress }: { title: string; onPress: () => void }) {
+-  return <View style={styles.sectionRow}><Text style={styles.sectionTitleSmall}>{title}</Text><Pressable onPress={onPress}><Text style={styles.viewMore}>View More ›</Text></Pressable></View>;
++  return (
++    <View style={styles.sectionRow}>
++      <Text style={styles.sectionTitleSmall}>{title}</Text>
++      <Pressable onPress={onPress}><Text style={styles.viewMore}>View More ›</Text></Pressable>
++    </View>
++  );
+ }
+ 
+ function CardTop({ kind, title, sub, status }: { kind: Merchant; title: string; sub: string; status?: string }) {
+-  return <View style={styles.cardTop}><MerchantBadge kind={kind} size={38}/><View style={{ flex: 1 }}><Text style={styles.cardTitle}>{title}</Text><Text style={styles.cardSub}>{sub}</Text></View>{status ? <Text style={styles.statusText}>{status}</Text> : null}</View>;
++  return (
++    <View style={styles.cardTop}>
++      <MerchantBadge kind={kind} size={38} />
++      <View style={{ flex: 1 }}>
++        <Text style={styles.cardTitle}>{title}</Text>
++        <Text style={styles.cardSub}>{sub}</Text>
++      </View>
++      {status ? <Text style={styles.statusText}>{status}</Text> : null}
++    </View>
++  );
+ }
+ 
+ function Installment({ text: label, amount, value }: { text: string; amount: string; value: number }) {
+-  return <><View style={styles.installmentRow}><Text style={styles.installText}>{label}</Text><View style={styles.amountMonthly}><Money amount={amount} decimals=".00" size={16}/><Text style={styles.mo}>/mo</Text></View></View><Progress value={value}/></>;
++  return (
++    <>
++      <View style={styles.installmentRow}>
++        <Text style={styles.installText}>{label}</Text>
++        <View style={styles.amountMonthly}>
++          <Money amount={amount} decimals=".00" size={16} />
++          <Text style={styles.mo}>/mo</Text>
++        </View>
++      </View>
++      <Progress value={value} />
++    </>
++  );
+ }
+ 
+ function NextRow({ kind, name, when, amount, live }: { kind: Merchant; name: string; when: string; amount: string; live?: boolean }) {
+-  return <View style={styles.nextRow}><View><MerchantBadge kind={kind} size={34}/>{live ? <View style={styles.liveDot}/> : null}</View><View style={{ flex: 1 }}><Text style={styles.nextName}>{name}</Text><Text style={[styles.nextWhen, live && { color: '#139b34', fontWeight: '700' }]}>{when}</Text></View><Money amount={amount} size={16}/></View>;
++  return (
++    <View style={styles.nextRow}>
++      <View>
++        <MerchantBadge kind={kind} size={34} />
++        {live ? <View style={styles.liveDot} /> : null}
++      </View>
++      <View style={{ flex: 1 }}>
++        <Text style={styles.nextName}>{name}</Text>
++        <Text style={[styles.nextWhen, live && { color: '#139b34', fontWeight: '700' }]}>{when}</Text>
++      </View>
++      <Money amount={amount} size={16} />
++    </View>
++  );
+ }
+ 
+-function Divider() { return <View style={styles.divider} />; }
++function Divider() {
++  return <View style={styles.divider} />;
++}
+ 
++// ---------------------------------------------------------------------------
++// Transaction detail (Figma 814:24410)
++// ---------------------------------------------------------------------------
+ function Detail({ setRoute }: { setRoute: (r: RouteKey) => void }) {
+-  const rows = [
+-    ['Total Amount', '3,666'], ['Monthly Payment', '916.50'], ['Installments', '4 Installments'], ['Next Due Date', 'May 15th'], ['Monthly Payment', '916.50'], ['Total Paid', '916.50'], ['Remaining', '2,750'], ['Reference', 'TXN-2026-04152'],
++  const rows: Array<[string, string, 'plain' | 'paid' | 'remaining']> = [
++    ['Total Amount', '﷼ 3,666', 'plain'],
++    ['Monthly Payment', '﷼ 916.50', 'plain'],
++    ['Installments', '4 Installments', 'plain'],
++    ['Next Due Date', 'May 15th', 'plain'],
++    ['Monthly Payment', '﷼ 916.50', 'plain'],
++    ['Total Paid', '﷼ 916.50', 'paid'],
++    ['Remaining', '﷼ 2,750', 'remaining'],
++    ['Reference', 'TXN-2026-04152', 'plain'],
+   ];
++  const schedule = [
++    ['May 15th', 'Due in 8 days', '916.50', true],
++    ['June 15th', 'Due in 35 days', '916.50', false],
++    ['July 15th', 'Due in 35 days', '916.50', false],
++    ['August 15', 'Due in 35 days', '916.50', false],
++  ] as const;
+   return (
+-    <AppShell route="detail" setRoute={setRoute}>
++    <AppShell>
+       <StatusStrip />
+       <View style={styles.appContent}>
+         <Header onBack={() => setRoute('appHome')} />
+         <View style={styles.detailHero}>
+-          <CardTop kind="extra" title="Extrastores" sub="25th of April, 2026" status="Active" />
+-          <View style={styles.detailAmount}><View/><Money amount="3,666" decimals=".00" size={20}/></View>
+-          <Progress value={0.25}/>
+-          <View style={styles.detailPaidRow}><View><Text style={styles.cardSub}>1 Paid</Text><Money amount="916.50" size={14}/></View><View style={{ alignItems: 'flex-end' }}><Text style={styles.cardSub}>3 Remaining</Text><Money amount="2,750" size={14}/></View></View>
++          <View style={styles.detailHeroTop}>
++            <MerchantBadge kind="extra" size={40} />
++            <View style={{ flex: 1 }} />
++            <Text style={styles.statusText}>Active</Text>
++          </View>
++          <View style={styles.detailTitleRow}>
++            <Text style={styles.detailMerchant}>Extrastores</Text>
++            <Money amount="3,666" decimals=".00" size={20} />
++          </View>
++          <Text style={styles.cardSub}>25th of April, 2026</Text>
++          <View style={{ marginTop: 12 }}><Progress value={0.25} /></View>
++          <View style={styles.detailPaidRow}>
++            <View><Text style={styles.cardSub}>1 Paid</Text><Money amount="916.50" size={14} /></View>
++            <View style={{ alignItems: 'flex-end' }}><Text style={styles.cardSub}>3 Remaining</Text><Money amount="2,750" size={14} /></View>
++          </View>
+         </View>
++
+         <Text style={styles.blockTitle}>Payment Schedule</Text>
+-        <View style={styles.scheduleCard}>{['May 15th|Due in 8 days|916.50|1','June 15th|Due in 35 days|916.50|0','July 15th|Due in 35 days|916.50|0','August 15th|Due in 35 days|916.50|0'].map((s, i) => { const [date,note,amt,next]=s.split('|'); return <View key={date} style={styles.scheduleRow}><View style={styles.timeline}><View style={[styles.timelineDot, next==='1' && styles.timelineDotActive]} />{i<3 && <View style={styles.timelineLine}/>}</View><View style={{ flex: 1, paddingBottom: i<3 ? 14 : 0 }}><View style={styles.scheduleTop}>{next==='1' && <Text style={styles.nextPill}>Next</Text>}<Text style={[styles.scheduleDate, next==='1' && { color: '#139b34' }]}>{date}</Text><View style={{ flex: 1 }}/><Money amount={amt} size={14}/></View><Text style={styles.cardSub}>{note}</Text></View></View> })}</View>
++        <View style={styles.scheduleCard}>
++          {schedule.map(([date, note, amt, isNext], i) => (
++            <View key={`${date}-${i}`} style={styles.scheduleRow}>
++              <View style={styles.timeline}>
++                <View style={[styles.timelineDot, isNext && styles.timelineDotActive]} />
++                {i < schedule.length - 1 && <View style={styles.timelineLine} />}
++              </View>
++              <View style={{ flex: 1, paddingBottom: i < schedule.length - 1 ? 16 : 0 }}>
++                <View style={styles.scheduleTop}>
++                  {isNext && <Text style={styles.nextPill}>Next</Text>}
++                  <Text style={[styles.scheduleDate, isNext && { color: greenMid }]}>{date}</Text>
++                  <View style={{ flex: 1 }} />
++                  <Money amount={amt} size={14} />
++                </View>
++                <Text style={[styles.cardSub, { marginTop: 2 }]}>{note}</Text>
++              </View>
++            </View>
++          ))}
++        </View>
++
+         <Text style={styles.blockTitle}>Purchase Details</Text>
+-        <View style={styles.detailsTable}>{rows.map(([label, value], i) => <View key={`${label}-${i}`} style={styles.tableRow}><Text style={styles.tableLabel}>{label}</Text><Text style={[styles.tableValue, label==='Remaining' && { color: '#c8212d' }, label==='Total Paid' && { color: '#14983a' }]}>{['3,666','916.50','2,750'].includes(value) ? '﷼ ' : ''}{value}</Text></View>)}</View>
++        <View style={styles.detailsTable}>
++          {rows.map(([label, value, kind], i) => (
++            <View key={`${label}-${i}`} style={[styles.tableRow, i === rows.length - 1 && { borderBottomWidth: 0 }]}>
++              <Text style={styles.tableLabel}>{label}</Text>
++              <Text style={[styles.tableValue, kind === 'remaining' && { color: '#c8212d' }, kind === 'paid' && { color: '#14983a' }]}>{value}</Text>
++            </View>
++          ))}
++        </View>
++
+         <Pressable style={styles.cta} onPress={() => setRoute('appHome')}><Text style={styles.ctaText}>Pay Next Installment</Text></Pressable>
+         <HomeIndicator />
+       </View>
+@@ -265,17 +556,55 @@ function Detail({ setRoute }: { setRoute: (r: RouteKey) => void }) {
+   );
+ }
+ 
++// ---------------------------------------------------------------------------
++// Insights (Figma 1579:11144)
++// ---------------------------------------------------------------------------
++function InsightsBar({ label, value, active }: { label: string; value: number; active?: boolean }) {
++  const h = Math.round(value);
++  return (
++    <View style={styles.barCol}>
++      {active ? <Text style={styles.barValue}>4.3k</Text> : null}
++      {active ? (
++        <Svg width={18} height={h} style={{ marginTop: active ? 0 : 0 }}>
++          <Defs>
++            <SvgLinearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
++              <Stop offset="0" stopColor="#5ef03a" />
++              <Stop offset="1" stopColor="#0a5a2a" />
++            </SvgLinearGradient>
++          </Defs>
++          <Rect x="0" y="0" width="18" height={h} rx="9" fill="url(#barGrad)" />
++        </Svg>
++      ) : (
++        <View style={[styles.bar, { height: h }]} />
++      )}
++      <Text style={[styles.barLabel, active && { color: text, fontWeight: '800' }]}>{label}</Text>
++      {active ? <View style={styles.barUnderline} /> : null}
++    </View>
++  );
++}
++
+ function Insights({ setRoute }: { setRoute: (r: RouteKey) => void }) {
+-  const bars = [0.35, 0.52, 0.42, 0.62, 0.49, 0.92];
++  const bars: Array<[string, number]> = [
++    ['Nov', 38], ['Dec', 66], ['Jan', 48], ['Feb', 78], ['Mar', 62], ['Apr', 90],
++  ];
+   return (
+-    <AppShell route="insights" setRoute={setRoute} scroll={false}>
++    <AppShell>
+       <StatusStrip />
+-      <View style={styles.appContentNoScroll}>
+-        <View style={styles.headerRow}><RoundButton glyph="‹" label="Back" onPress={() => setRoute('appHome')} /><Text style={styles.centerTitle}>Insights</Text><Pressable style={styles.monthPill}><Text style={styles.monthText}>⌄ April</Text></Pressable></View>
++      <View style={styles.appContent}>
++        <View style={styles.headerRow}>
++          <RoundButton glyph="‹" label="Back" onPress={() => setRoute('appHome')} />
++          <Text style={styles.centerTitle}>Insights</Text>
++          <Pressable style={styles.monthPill}><Text style={styles.monthText}>⌄ April</Text></Pressable>
++        </View>
+         <Text style={styles.insightLabel}>Spent in April</Text>
+-        <Money amount="4,300" size={32}/>
+-        <View style={styles.chart}>{['Nov','Dec','Jan','Feb','Mar','Apr'].map((m, i) => <View key={m} style={styles.barCol}>{i===5 && <Text style={styles.barValue}>4.3k</Text>}<View style={[styles.bar, { height: 70 * bars[i] }, i===5 && styles.barActive]} /><Text style={[styles.barLabel, i===5 && { color: text, fontWeight: '800' }]}>{m}</Text>{i===5 && <View style={styles.barUnderline}/>}</View>)}</View>
+-        <View style={styles.insightTabs}><Text style={styles.insightTabActive}>Transactions</Text><Text style={styles.insightTab}>Categories</Text></View>
++        <Money amount="4,300" size={32} />
++        <View style={styles.chart}>
++          {bars.map(([m, v], i) => <InsightsBar key={m} label={m} value={v} active={i === bars.length - 1} />)}
++        </View>
++        <View style={styles.insightTabs}>
++          <View style={styles.insightTabActiveWrap}><Text style={styles.insightTabActive}>Transactions</Text></View>
++          <Text style={styles.insightTab}>Categories</Text>
++        </View>
+         <View style={styles.transactionList}>
+           <Tx kind="extra" name="Extrastores" date="Apr 15th · Paid" />
+           <Tx kind="jarir" name="Jarir" date="Apr 20th · Paid" />
+@@ -289,74 +618,171 @@ function Insights({ setRoute }: { setRoute: (r: RouteKey) => void }) {
+ }
+ 
+ function Tx({ kind, name, date }: { kind: Merchant; name: string; date: string }) {
+-  return <View style={styles.txRow}><MerchantBadge kind={kind} size={38}/><View style={{ flex: 1 }}><Text style={styles.cardTitle}>{name}</Text><Text style={styles.cardSub}>{date}</Text></View><Money amount="600" size={16}/></View>;
++  return (
++    <View style={styles.txRow}>
++      <MerchantBadge kind={kind} size={38} />
++      <View style={{ flex: 1 }}>
++        <Text style={styles.cardTitle}>{name}</Text>
++        <Text style={styles.cardSub}>{date}</Text>
++      </View>
++      <Money amount="600" size={16} />
++    </View>
++  );
+ }
+ 
++// ---------------------------------------------------------------------------
++// My Purchases (Figma 814:24392)
++// ---------------------------------------------------------------------------
+ const purchases = [
+-  ['extra','Extrastores','Samsung Galaxy S26','1','3','450','Active'],
+-  ['extra','Extrastores','Samsung Galaxy S26','2','3','450','Active'],
+-  ['jarir','Jarir Bookstore','MacBook Air M4','1','2','720','Active'],
+-  ['noon','Noon','Multiple products','1','4','320','Active'],
+-  ['extra','Extrastores','AirPods Pro 3','3','3','210','Completed'],
++  ['extra', 'Extrastores', 'Samsung Galaxy S26', '1', '3', '450', 'Active'],
++  ['extra', 'Extrastores', 'Samsung Galaxy S26', '2', '3', '450', 'Active'],
++  ['jarir', 'Jarir Bookstore', 'MacBook Air M4', '1', '2', '720', 'Active'],
++  ['noon', 'Noon', 'Multiple products', '1', '4', '320', 'Active'],
+ ] as const;
+ 
+ function Purchases({ setRoute }: { setRoute: (r: RouteKey) => void }) {
+   const [tab, setTab] = useState('All');
+   const filtered = purchases.filter((p) => tab === 'All' || p[6] === tab);
+   return (
+-    <AppShell route="purchases" setRoute={setRoute}>
++    <AppShell>
+       <StatusStrip />
+       <View style={styles.appContent}>
+         <Header title="My Purchases" subtitle="View all your purchases" showLogo rightClose onBack={() => setRoute('appHome')} onClose={() => setRoute('appHome')} />
+         <SegTabs value={tab} onChange={setTab} />
+-        <View style={styles.purchaseList}>{filtered.map(([kind,name,product,paid,count,amount,status], i) => <Pressable key={`${name}-${product}-${i}`} style={styles.purchaseCard} onPress={() => setRoute('detail')}><CardTop kind={kind} title={name} sub={product} status={status}/><Installment text={`${paid} of ${count} installments paid`} amount={amount} value={Number(paid)/Number(count)} /></Pressable>)}</View>
++        <View style={styles.purchaseList}>
++          {filtered.map(([kind, name, product, paid, count, amount, status], i) => (
++            <Pressable key={`${name}-${product}-${i}`} style={styles.purchaseCard} onPress={() => setRoute('detail')}>
++              <CardTop kind={kind} title={name} sub={product} status={status} />
++              <Installment text={`${paid} of ${count} installments paid`} amount={amount} value={Number(paid) / Number(count)} />
++            </Pressable>
++          ))}
++        </View>
+         <HomeIndicator />
+       </View>
+     </AppShell>
+   );
+ }
+ 
++// ---------------------------------------------------------------------------
++// My Dues (Figma 1843:17915)
++// ---------------------------------------------------------------------------
++function DuesRing() {
++  const size = 320;
++  const dots = [
++    { left: 163, top: 22.4 },
++    { left: 254.91, top: 84.7 },
++    { left: 254.91, top: 209.3 },
++    { left: 163, top: 271 },
++    { left: 39.09, top: 209.3 },
++    { left: 39.09, top: 84.7 },
++  ];
++  return (
++    <View style={{ width: size, height: size }}>
++      <Image source={figmaImageSource('duesTrack')} resizeMode="stretch" style={styles.duesTrackAsset} />
++      <Image source={figmaImageSource('duesFilled')} resizeMode="stretch" style={styles.duesFilledAsset} />
++      {dots.map((dot, i) => (
++        <Image key={i} source={figmaImageSource('duesDot')} resizeMode="stretch" style={[styles.duesDotAsset, { left: dot.left, top: dot.top }]} />
++      ))}
++      <View style={styles.ringCenter}>
++        <Text style={styles.ringLabel}>3 Dues Selected</Text>
++        <Money amount="3,000" size={34} />
++        <Text style={styles.ringSub}>Remaining 1800</Text>
++      </View>
++    </View>
++  );
++}
++
+ function Dues({ setRoute }: { setRoute: (r: RouteKey) => void }) {
+   const dues = [
+-    { kind: 'extra' as Merchant, name: 'Extra Stores', amount: 1800, when: 'In 2 days · April 20th', of: '2 of 4', selected: true },
+-    { kind: 'jarir' as Merchant, name: 'Jarir', amount: 600, when: 'In 7 days · April 27th', of: '2 of 4', selected: true },
+-    { kind: 'jarir' as Merchant, name: 'Jarir', amount: 600, when: 'In 7 days · April 27th', of: '2 of 4', selected: true },
+-    { kind: 'jarir' as Merchant, name: 'Jarir', amount: 600, when: 'In 7 days · April 27th', of: '2 of 4', selected: false },
++    { kind: 'extra' as Merchant, name: 'Extra Stores', amount: '1,800', when: 'In 2 days  - April 20th', of: '2 of 4', selected: true },
++    { kind: 'jarir' as Merchant, name: 'Jarir', amount: '600', when: 'In 7 days  - April 27th', of: '2 of 4', selected: true },
++    { kind: 'jarir' as Merchant, name: 'Jarir', amount: '600', when: 'In 7 days  - April 27th', of: '2 of 4', selected: true },
++    { kind: 'jarir' as Merchant, name: 'Jarir', amount: '600', when: 'In 7 days  - April 27th', of: '2 of 4', selected: false },
+   ];
+   return (
+-    <AppShell route="dues" setRoute={setRoute}>
++    <AppShell>
+       <StatusStrip />
+       <View style={styles.appContent}>
+-        <Header onBack={() => setRoute('appHome')} />
+-        <View style={styles.ringWrap}><SegmentRing /><Text style={styles.ringLabel}>4 Dues Selected</Text><Money amount="1,800" size={32}/><Text style={styles.ringSub}>Remaining 1200</Text></View>
+-        <View style={styles.duesList}>{dues.map((d, i) => <Pressable key={i} style={[styles.dueRow, d.selected && styles.dueRowSelected]}><MerchantBadge kind={d.kind} size={40}/><View style={{ flex: 1 }}><Text style={styles.cardTitle}>{d.name}</Text><Text style={styles.cardSub}>{d.when}</Text></View><View style={{ alignItems: 'flex-end' }}><Money amount={String(d.amount)} size={16}/><Text style={styles.cardSub}>{d.of}</Text></View></Pressable>)}</View>
+-        <View style={styles.moreRow}><Text style={styles.cardSub}>+5 More next up payments</Text><Pressable onPress={() => setRoute('purchases')}><Text style={styles.viewAllDark}>View all ›</Text></Pressable></View>
+-        <Pressable style={styles.cta} onPress={() => setRoute('appHome')}><Text style={styles.ctaText}>Pay selected <Text>﷼ 3,000</Text></Text></Pressable>
++        <View style={styles.headerRow}>
++          <RoundButton glyph="‹" label="Back" onPress={() => setRoute('appHome')} />
++          <TasheelMark size={50} />
++          <RoundButton glyph="×" label="Close" onPress={() => setRoute('appHome')} />
++        </View>
++        <View style={styles.ringWrap}><DuesRing /></View>
++        <View style={styles.duesList}>
++          {dues.map((d, i) => (
++            <Pressable key={i} style={[styles.dueRow, d.selected && styles.dueRowSelected]}>
++              <MerchantBadge kind={d.kind} size={40} />
++              <View style={{ flex: 1 }}>
++                <Text style={styles.cardTitle}>{d.name}</Text>
++                <Text style={styles.cardSub}>{d.when}</Text>
++              </View>
++              <View style={{ alignItems: 'flex-end' }}>
++                <Money amount={d.amount} size={16} />
++                <Text style={[styles.cardSub, { marginTop: 3 }]}>{d.of}</Text>
++              </View>
++            </Pressable>
++          ))}
++        </View>
++        <View style={styles.moreRow}>
++          <Text style={styles.cardSub}>+5 More next up payments</Text>
++          <Pressable onPress={() => setRoute('purchases')}><Text style={styles.viewAllDark}>View all ›</Text></Pressable>
++        </View>
++        <Pressable style={styles.cta} onPress={() => setRoute('appHome')}>
++          <Text style={styles.ctaText}>Pay selected  <Text style={styles.ctaText}>﷼ 3,000</Text></Text>
++        </Pressable>
+         <HomeIndicator />
+       </View>
+     </AppShell>
+   );
+ }
+ 
+-function SegmentRing() {
+-  const dots: Array<{ x: number; y: number; c: string }> = [
+-    { x: 14, y: 132, c: '#78ff22' },
+-    { x: 65, y: 32, c: '#1d7c2b' },
+-    { x: 164, y: 46, c: '#8fbf83' },
+-    { x: 154, y: 158, c: '#b4e875' },
+-    { x: 68, y: 182, c: '#b4e875' },
+-    { x: 18, y: 76, c: '#eff2ef' },
++function BottomNav({ setRoute }: { setRoute: (r: RouteKey) => void }) {
++  const items: Array<[string, React.ReactNode, RouteKey, boolean]> = [
++    ['Home', <NavGlyph kind="home" />, 'appHome', false],
++    ['Flash Cash', <NavGlyph kind="flash" />, 'checkout', false],
++    ['BNPL', <NavGlyph kind="bnpl" active />, 'appHome', true],
++    ['Profile', <NavGlyph kind="profile" />, 'appHome', false],
+   ];
+-  return <View style={styles.ringBase}><View style={styles.ringArc} /><View style={styles.ringArcTwo} />{dots.map((dot, i) => <View key={i} style={[styles.ringDot, { left: dot.x, top: dot.y, backgroundColor: dot.c }]} />)}</View>;
++  return (
++    <View style={styles.bottomNav}>
++      {items.map(([label, icon, route, active]) => (
++        <Pressable key={label} onPress={() => setRoute(route)} style={[styles.navItem, active && styles.navActive]}>
++          {icon}
++          <Text style={[styles.navText, active && { color: green }]}>{label}</Text>
++        </Pressable>
++      ))}
++    </View>
++  );
+ }
+ 
+-function BottomNav({ active, setRoute }: { active: string; setRoute: (r: RouteKey) => void }) {
+-  return <View style={styles.bottomNav}>{[['Home','⌂','appHome'],['Flash Cash','ϟ','checkout'],['BNPL','▣','appHome'],['Profile','◉','appHome']].map(([label, icon, route]) => <Pressable key={label} onPress={() => setRoute(route as RouteKey)} style={[styles.navItem, label==='BNPL' && styles.navActive]}><Text style={styles.navIcon}>{icon}</Text><Text style={styles.navText}>{label}</Text></Pressable>)}</View>;
++function NavGlyph({ kind, active }: { kind: 'home' | 'flash' | 'bnpl' | 'profile'; active?: boolean }) {
++  const col = active ? green : '#6b7280';
++  if (kind === 'home') {
++    return (
++      <Svg width={22} height={22} viewBox="0 0 24 24"><Path d="M4 11 L12 4 L20 11 L20 20 L14 20 L14 14 L10 14 L10 20 L4 20 Z" fill="none" stroke={col} strokeWidth={1.9} strokeLinejoin="round" /></Svg>
++    );
++  }
++  if (kind === 'flash') {
++    return <Svg width={22} height={22} viewBox="0 0 24 24"><Path d="M13 2 L4 14 L11 14 L10 22 L20 9 L13 9 Z" fill={col} /></Svg>;
++  }
++  if (kind === 'bnpl') {
++    return <Svg width={22} height={22} viewBox="0 0 24 24"><Rect x="4" y="5" width="16" height="14" rx="3" fill="none" stroke={col} strokeWidth={1.9} /><Path d="M4 9 L20 9" stroke={col} strokeWidth={1.9} /></Svg>;
++  }
++  return <Svg width={22} height={22} viewBox="0 0 24 24"><Circle cx="12" cy="8.5" r="3.6" fill="none" stroke={col} strokeWidth={1.9} /><Path d="M5 20 C5 16 8.5 14 12 14 C15.5 14 19 16 19 20" fill="none" stroke={col} strokeWidth={1.9} strokeLinecap="round" /></Svg>;
+ }
+ 
+ export default function App() {
+   const initial = useMemo(() => routeFromPath(currentPath()), []);
+   const [route, setRouteState] = useState<RouteKey>(initial);
++
++  useEffect(() => {
++    if (typeof window === 'undefined') return;
++    const onPopState = () => setRouteState(routeFromPath(window.location.pathname));
++    window.addEventListener('popstate', onPopState);
++    return () => window.removeEventListener('popstate', onPopState);
++  }, []);
++
+   const setRoute = (r: RouteKey) => {
+     setRouteState(r);
+     const map: Record<RouteKey, string> = { checkout: '/checkout', appHome: '/checkout/app-home', detail: '/checkout/detail', insights: '/checkout/insights', purchases: '/checkout/purchases', dues: '/checkout/dues' };
+@@ -371,126 +797,150 @@ export default function App() {
+ }
+ 
+ const styles = StyleSheet.create({
+-  outer: { flex: 1, backgroundColor: '#e5e7eb', alignItems: 'center' },
++  outer: { flex: 1, backgroundColor: '#dfe3e1', alignItems: 'center' },
+   outerScroll: { flexGrow: 1, width: '100%', alignItems: 'center', justifyContent: 'flex-start' },
+-  phone: { width: '100%', minHeight: '100%', backgroundColor: canvas, overflow: 'hidden' },
+-  statusStrip: { height: 32, paddingHorizontal: 26, paddingTop: 8, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+-  statusTime: { fontSize: 13, fontWeight: '800', color: '#000' },
+-  statusIcons: { flexDirection: 'row', alignItems: 'center', gap: 5 },
+-  statusIcon: { fontSize: 10, color: '#000', fontWeight: '900' },
+-  battery: { width: 18, height: 8, borderRadius: 2, backgroundColor: '#111' },
+-  homeIndicator: { alignSelf: 'center', width: 134, height: 5, borderRadius: 4, backgroundColor: '#000', marginTop: 10, marginBottom: 8 },
++  phone: { width: '100%', minHeight: '100%', flex: 1, backgroundColor: canvas, overflow: 'hidden' },
++
++  statusStrip: { height: 44, paddingHorizontal: 24, paddingTop: 14, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
++  statusTime: { fontSize: 15, fontWeight: '800', color: '#0a0a0a', letterSpacing: 0.2 },
++  statusIcons: { flexDirection: 'row', alignItems: 'center', gap: 6 },
++  homeIndicator: { alignSelf: 'center', width: 134, height: 5, borderRadius: 4, backgroundColor: '#0a0a0a', marginTop: 10, marginBottom: 8, opacity: 0.85 },
++
+   appContent: { paddingHorizontal: 20, paddingBottom: 12 },
+-  appContentNoScroll: { paddingHorizontal: 20, paddingBottom: 12, flex: 1 },
++  appContentNoScroll: { paddingHorizontal: 20, paddingBottom: 8, flex: 1 },
++
+   headerBlock: { marginBottom: 14 },
+   headerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+   roundButton: { width: 44, height: 44, borderRadius: 22, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', shadowColor: '#0b3d1e', shadowOpacity: 0.08, shadowRadius: 12, shadowOffset: { width: 0, height: 6 }, borderWidth: 0.5, borderColor: border },
+-  roundButtonText: { fontSize: 28, lineHeight: 30, fontWeight: '700', color: text },
++  roundButtonText: { fontSize: 26, lineHeight: 28, fontWeight: '700', color: text },
+   pressed: { opacity: 0.78 },
+   centerTitle: { fontSize: 16, fontWeight: '700', color: text },
+-  pageTitle: { fontSize: 30, lineHeight: 34, fontWeight: '900', color: text, marginTop: 16, letterSpacing: -0.8 },
+-  pageSubtitle: { color: muted, fontSize: 14, marginTop: 3 },
+-  checkoutPage: { padding: 22, gap: 14 },
+-  checkoutMerchant: { fontSize: 28, fontWeight: '900', color: text },
+-  checkoutSub: { color: muted, fontSize: 15 },
+-  productCard: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: '#fff', padding: 16, borderRadius: 20, borderColor: border, borderWidth: 1 },
+-  productIcon: { fontSize: 24 },
++  pageTitle: { fontSize: 32, lineHeight: 36, fontWeight: '900', color: text, marginTop: 16, letterSpacing: -1 },
++  pageSubtitle: { color: muted, fontSize: 14, marginTop: 4 },
++
++  // Checkout (neutral merchant)
++  checkoutPage: { paddingHorizontal: 24, paddingTop: 8, paddingBottom: 4, flex: 1 },
++  checkoutMerchant: { fontSize: 26, fontWeight: '800', color: text, letterSpacing: -0.5 },
++  checkoutSub: { color: muted, fontSize: 15, marginTop: 4 },
++  productCard: { flexDirection: 'row', alignItems: 'center', gap: 14, backgroundColor: '#fff', padding: 16, borderRadius: 16, borderColor: border, borderWidth: 1, marginTop: 22 },
++  productThumb: { width: 64, height: 64, borderRadius: 12, backgroundColor: '#f1f3f5', alignItems: 'center', justifyContent: 'center' },
+   productTitle: { fontSize: 16, fontWeight: '800', color: text },
+-  productMeta: { fontSize: 13, color: muted, marginTop: 2 },
+-  sectionTitle: { fontSize: 18, fontWeight: '900', color: text, marginTop: 8 },
+-  optionRow: { flexDirection: 'row', alignItems: 'center', gap: 12, minHeight: 56, backgroundColor: '#fff', borderRadius: 16, paddingHorizontal: 16, borderWidth: 1, borderColor: border },
+-  optionSelected: { borderColor: green, backgroundColor: '#effaf1' },
+-  radio: { fontSize: 18, color: muted },
+-  radioSelected: { fontSize: 18, color: green },
+-  optionText: { fontSize: 15, fontWeight: '800', color: text },
+-  optionSub: { fontSize: 12, color: muted, marginTop: 2 },
+-  cta: { minHeight: 54, borderRadius: 18, backgroundColor: green, alignItems: 'center', justifyContent: 'center', marginTop: 14, paddingHorizontal: 18 },
+-  ctaText: { color: neon, fontSize: 15, fontWeight: '900' },
+-  homeTopGradient: { position: 'absolute', top: 0, left: 0, right: 0, height: 260, backgroundColor: '#e3f0e7' },
+-  nextPaymentLabel: { color: muted, fontSize: 13, marginTop: 18 },
++  productMeta: { fontSize: 13, color: muted, marginTop: 3 },
++  productPrice: { fontSize: 17, fontWeight: '900', color: text, marginTop: 6, letterSpacing: -0.3 },
++  coHeading: { fontSize: 17, fontWeight: '800', color: text, marginTop: 24, marginBottom: 14 },
++  coRow: { flexDirection: 'row', alignItems: 'center', gap: 14, minHeight: 60, backgroundColor: '#fff', borderRadius: 14, paddingHorizontal: 16, paddingVertical: 12, borderWidth: 1, borderColor: border },
++  coRowSelected: { borderColor: '#111827', borderWidth: 1.6, backgroundColor: '#fafafa' },
++  coLabel: { fontSize: 15, fontWeight: '700', color: text },
++  coSub: { fontSize: 12.5, color: muted, marginTop: 3 },
++  radioOuter: { width: 22, height: 22, borderRadius: 11, borderWidth: 2, alignItems: 'center', justifyContent: 'center' },
++  radioInner: { width: 11, height: 11, borderRadius: 6 },
++  checkoutCta: { minHeight: 56, borderRadius: 16, backgroundColor: '#111827', alignItems: 'center', justifyContent: 'center', marginTop: 16 },
++  checkoutCtaText: { color: '#fff', fontSize: 16, fontWeight: '800' },
++  browserChrome: { minHeight: 64, paddingTop: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 },
++  browserCircle: { width: 48, height: 48, borderRadius: 24, backgroundColor: 'rgba(243,244,246,0.92)', alignItems: 'center', justifyContent: 'center' },
++  browserIcon: { fontSize: 23, lineHeight: 26, color: '#121212', fontWeight: '700' },
++  addressBar: { width: 218, height: 48, borderRadius: 24, backgroundColor: 'rgba(243,244,246,0.92)', alignItems: 'center', justifyContent: 'center' },
++  addressText: { fontSize: 14, color: '#121212', fontWeight: '600' },
++
++  // Generic CTA (in-app, dark green / neon)
++  cta: { minHeight: 56, borderRadius: 28, backgroundColor: green, alignItems: 'center', justifyContent: 'center', marginTop: 18, paddingHorizontal: 18 },
++  ctaText: { color: neon, fontSize: 16, fontWeight: '900' },
++
++  // Home
++  nextPaymentLabel: { color: '#475467', fontSize: 13, marginTop: 18, fontWeight: '600' },
+   payRow: { flexDirection: 'row', alignItems: 'center', marginTop: 4 },
+-  payNow: { backgroundColor: green, borderRadius: 999, paddingVertical: 10, paddingHorizontal: 18, marginLeft: 'auto' },
+-  payNowText: { color: neon, fontWeight: '800', fontSize: 13 },
+-  dueText: { color: muted, fontSize: 13, marginTop: 3 },
+-  actionsRow: { flexDirection: 'row', justifyContent: 'center', gap: 22, marginTop: 22, marginBottom: 8 },
+-  actionTile: { alignItems: 'center', gap: 7 },
+-  actionIcon: { width: 58, height: 58, borderRadius: 29, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', shadowColor: '#0b3d1e', shadowOpacity: 0.08, shadowRadius: 14, shadowOffset: { width: 0, height: 6 } },
+-  actionLabel: { fontSize: 12, color: text, fontWeight: '700' },
+-  sectionRow: { marginTop: 18, marginBottom: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+-  sectionTitleSmall: { color: text, fontSize: 16, fontWeight: '900' },
+-  viewMore: { color: green, fontSize: 12, fontWeight: '900' },
+-  homeCard: { backgroundColor: '#fff', borderRadius: 20, padding: 14, borderWidth: 0.5, borderColor: border, shadowColor: '#0b3d1e', shadowOpacity: 0.05, shadowRadius: 14, shadowOffset: { width: 0, height: 6 } },
+-  cardTop: { flexDirection: 'row', alignItems: 'center', gap: 10 },
++  payNow: { backgroundColor: green, borderRadius: 999, paddingVertical: 11, paddingHorizontal: 20, marginLeft: 'auto' },
++  payNowText: { color: neon, fontWeight: '800', fontSize: 14 },
++  dueText: { color: '#475467', fontSize: 13, marginTop: 5 },
++  actionsRow: { flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 8, marginTop: 24, marginBottom: 6 },
++  actionTile: { alignItems: 'center', gap: 9, width: 92 },
++  actionIcon: { width: 70, height: 70, borderRadius: 35, backgroundColor: '#fff', borderWidth: 1, borderColor: borderSubtle, alignItems: 'center', justifyContent: 'center', overflow: 'hidden', shadowColor: '#0b3d1e', shadowOpacity: 0.08, shadowRadius: 12, shadowOffset: { width: 0, height: 5 } },
++  figmaActionIcon: { width: 46, height: 46 },
++  actionLabel: { fontSize: 13, color: text, fontWeight: '700' },
++  sectionRow: { marginTop: 22, marginBottom: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
++  sectionTitleSmall: { color: text, fontSize: 17, fontWeight: '900' },
++  viewMore: { color: green, fontSize: 13, fontWeight: '800' },
++  homeCard: { backgroundColor: '#fff', borderRadius: 20, padding: 16, borderWidth: 0.5, borderColor: border, shadowColor: '#0b3d1e', shadowOpacity: 0.05, shadowRadius: 14, shadowOffset: { width: 0, height: 6 } },
++
++  cardTop: { flexDirection: 'row', alignItems: 'center', gap: 11 },
+   merchantBadge: { alignItems: 'center', justifyContent: 'center', borderWidth: 0.5, borderColor: border, overflow: 'hidden' },
+-  cardTitle: { fontSize: 15, color: text, fontWeight: '900' },
++  cardTitle: { fontSize: 15.5, color: text, fontWeight: '900' },
+   cardSub: { fontSize: 12, color: muted, marginTop: 1 },
+-  statusText: { fontSize: 12, fontWeight: '900', color: '#087c2d' },
+-  installmentRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 12 },
+-  installText: { color: '#374151', fontSize: 12 },
++  statusText: { fontSize: 12.5, fontWeight: '900', color: '#087c2d' },
++  installmentRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 14 },
++  installText: { color: '#374151', fontSize: 12.5 },
+   amountMonthly: { flexDirection: 'row', alignItems: 'baseline' },
+   mo: { color: muted, fontSize: 12, marginLeft: 2 },
+-  progressTrackSmall: { height: 8, borderRadius: 999, backgroundColor: '#e6e8eb', overflow: 'hidden', marginTop: 8 },
++  progressTrackSmall: { height: 8, borderRadius: 999, backgroundColor: '#e6e8eb', overflow: 'hidden', marginTop: 10 },
+   progressFillSmall: { height: 8, borderRadius: 999, backgroundColor: '#27d552' },
+-  nextCard: { backgroundColor: '#fff', borderRadius: 20, padding: 14, borderWidth: 0.5, borderColor: border },
+-  nextRow: { flexDirection: 'row', alignItems: 'center', gap: 11 },
+-  nextName: { fontSize: 15, fontWeight: '900', color: text },
+-  nextWhen: { fontSize: 12, color: muted, marginTop: 1 },
+-  liveDot: { position: 'absolute', top: -2, right: -2, width: 10, height: 10, borderRadius: 5, backgroundColor: '#23c140', borderWidth: 2, borderColor: '#fff' },
+-  divider: { height: 1, backgroundColor: border, marginVertical: 12 },
+-  bottomNav: { marginHorizontal: 20, marginTop: 'auto', height: 64, borderRadius: 32, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', shadowColor: '#0b3d1e', shadowOpacity: 0.08, shadowRadius: 16, shadowOffset: { width: 0, height: 8 } },
+-  navItem: { width: 78, alignItems: 'center', justifyContent: 'center', gap: 2 },
+-  navActive: { backgroundColor: '#eaf4ec', borderRadius: 24, height: 48 },
+-  navIcon: { fontSize: 19, color: text, fontWeight: '900' },
+-  navText: { fontSize: 10, color: text, fontWeight: '700' },
+-  detailHero: { backgroundColor: '#fff', borderRadius: 20, padding: 14, borderWidth: 0.5, borderColor: border },
+-  detailAmount: { flexDirection: 'row', justifyContent: 'space-between', marginTop: -8 },
+-  detailPaidRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 },
+-  blockTitle: { marginTop: 18, marginBottom: 10, fontSize: 18, fontWeight: '900', color: text },
+-  scheduleCard: { backgroundColor: '#fff', borderRadius: 20, padding: 14, borderWidth: 0.5, borderColor: border },
++  nextCard: { backgroundColor: '#fff', borderRadius: 20, padding: 16, borderWidth: 0.5, borderColor: border, shadowColor: '#0b3d1e', shadowOpacity: 0.05, shadowRadius: 14, shadowOffset: { width: 0, height: 6 } },
++  nextRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
++  nextName: { fontSize: 15.5, fontWeight: '900', color: text },
++  nextWhen: { fontSize: 12, color: muted, marginTop: 2 },
++  liveDot: { position: 'absolute', top: -2, right: -2, width: 11, height: 11, borderRadius: 6, backgroundColor: '#23c140', borderWidth: 2, borderColor: '#fff' },
++  divider: { height: 1, backgroundColor: border, marginVertical: 13 },
++
++  bottomNav: { marginHorizontal: 20, marginTop: 'auto', height: 66, borderRadius: 33, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', paddingHorizontal: 6, shadowColor: '#0b3d1e', shadowOpacity: 0.1, shadowRadius: 18, shadowOffset: { width: 0, height: 8 } },
++  navItem: { flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 3, paddingHorizontal: 14, paddingVertical: 8, borderRadius: 22 },
++  navActive: { backgroundColor: '#e7f3ea' },
++  navText: { fontSize: 10.5, color: '#6b7280', fontWeight: '700' },
++
++  // Detail
++  detailHero: { backgroundColor: '#fff', borderRadius: 20, padding: 16, borderWidth: 0.5, borderColor: border, shadowColor: '#0b3d1e', shadowOpacity: 0.05, shadowRadius: 14, shadowOffset: { width: 0, height: 6 } },
++  detailHeroTop: { flexDirection: 'row', alignItems: 'center' },
++  detailTitleRow: { flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', marginTop: 10 },
++  detailMerchant: { fontSize: 22, fontWeight: '900', color: text, letterSpacing: -0.5 },
++  detailPaidRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 12 },
++  blockTitle: { marginTop: 22, marginBottom: 12, fontSize: 18, fontWeight: '900', color: text },
++  scheduleCard: { backgroundColor: '#fff', borderRadius: 20, padding: 16, borderWidth: 0.5, borderColor: border },
+   scheduleRow: { flexDirection: 'row', gap: 12 },
+   timeline: { alignItems: 'center', width: 16 },
+   timelineDot: { width: 13, height: 13, borderRadius: 7, borderWidth: 2, borderColor: '#d1d5db', backgroundColor: '#fff' },
+   timelineDotActive: { backgroundColor: '#169c39', borderColor: '#169c39' },
+   timelineLine: { flex: 1, width: 2, backgroundColor: '#e5e7eb', marginVertical: 2 },
+-  scheduleTop: { flexDirection: 'row', alignItems: 'center', gap: 7 },
+-  nextPill: { backgroundColor: '#e5f8e9', color: '#15963a', fontSize: 11, fontWeight: '900', borderRadius: 99, paddingHorizontal: 8, paddingVertical: 2 },
++  scheduleTop: { flexDirection: 'row', alignItems: 'center', gap: 8 },
++  nextPill: { backgroundColor: '#e5f8e9', color: '#15963a', fontSize: 11, fontWeight: '900', borderRadius: 99, paddingHorizontal: 9, paddingVertical: 3, overflow: 'hidden' },
+   scheduleDate: { fontSize: 15, fontWeight: '900', color: text },
+   detailsTable: { backgroundColor: '#fff', borderRadius: 20, borderWidth: 0.5, borderColor: border, overflow: 'hidden' },
+-  tableRow: { minHeight: 42, paddingHorizontal: 14, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderBottomWidth: 0.5, borderBottomColor: border },
+-  tableLabel: { color: muted, fontSize: 13 },
+-  tableValue: { color: text, fontSize: 13, fontWeight: '900' },
+-  monthPill: { height: 36, borderRadius: 18, paddingHorizontal: 15, backgroundColor: '#fff', justifyContent: 'center', borderWidth: 0.5, borderColor: border },
+-  monthText: { fontWeight: '700', color: text, fontSize: 13 },
+-  insightLabel: { marginTop: 18, color: muted, fontSize: 13 },
+-  chart: { height: 130, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-around', marginTop: 12, marginBottom: 14 },
+-  barCol: { alignItems: 'center', justifyContent: 'flex-end', width: 42 },
+-  bar: { width: 16, borderRadius: 9, backgroundColor: '#d5dbe1' },
++  tableRow: { minHeight: 46, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderBottomWidth: 0.5, borderBottomColor: border },
++  tableLabel: { color: muted, fontSize: 13.5 },
++  tableValue: { color: text, fontSize: 13.5, fontWeight: '900' },
++
++  // Insights
++  monthPill: { height: 38, borderRadius: 19, paddingHorizontal: 16, backgroundColor: '#fff', justifyContent: 'center', borderWidth: 0.5, borderColor: border },
++  monthText: { fontWeight: '800', color: text, fontSize: 13 },
++  insightLabel: { marginTop: 20, color: muted, fontSize: 13 },
++  chart: { height: 130, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', paddingHorizontal: 6, marginTop: 16, marginBottom: 18 },
++  barCol: { alignItems: 'center', justifyContent: 'flex-end', width: 44 },
++  bar: { width: 18, borderRadius: 9, backgroundColor: '#d5dbe1' },
+   barActive: { backgroundColor: '#22db3f' },
+-  barValue: { color: '#087c2d', fontSize: 10, fontWeight: '900', marginBottom: 5 },
+-  barLabel: { marginTop: 8, fontSize: 11, color: muted },
+-  barUnderline: { width: 24, height: 2, backgroundColor: text, marginTop: 5 },
+-  insightTabs: { height: 44, borderRadius: 22, backgroundColor: '#eceff1', flexDirection: 'row', alignItems: 'center', padding: 3, marginBottom: 14 },
+-  insightTabActive: { flex: 1, height: 38, borderRadius: 19, backgroundColor: '#fff', textAlign: 'center', textAlignVertical: 'center', lineHeight: 38, color: '#087c2d', fontWeight: '900' },
+-  insightTab: { flex: 1, textAlign: 'center', color: muted, fontWeight: '700' },
+-  transactionList: { gap: 10 },
+-  txRow: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: '#fff', borderRadius: 17, padding: 12, borderWidth: 0.5, borderColor: border },
+-  tabs: { height: 44, borderRadius: 22, backgroundColor: '#eceff1', flexDirection: 'row', alignItems: 'center', padding: 3, marginBottom: 14 },
++  barValue: { color: '#087c2d', fontSize: 11, fontWeight: '900', marginBottom: 6 },
++  barLabel: { marginTop: 9, fontSize: 11, color: muted },
++  barUnderline: { width: 26, height: 2, backgroundColor: text, marginTop: 6 },
++  insightTabs: { height: 46, borderRadius: 23, backgroundColor: '#eceff1', flexDirection: 'row', alignItems: 'center', padding: 4, marginBottom: 16 },
++  insightTabActiveWrap: { flex: 1, height: 38, borderRadius: 19, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', shadowColor: '#000', shadowOpacity: 0.06, shadowRadius: 6, shadowOffset: { width: 0, height: 2 } },
++  insightTabActive: { color: '#087c2d', fontWeight: '900', fontSize: 14 },
++  insightTab: { flex: 1, textAlign: 'center', color: muted, fontWeight: '700', fontSize: 14 },
++  transactionList: { gap: 11 },
++  txRow: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: '#fff', borderRadius: 16, padding: 13, borderWidth: 0.5, borderColor: border },
++
++  // Purchases tabs
++  tabs: { height: 46, borderRadius: 23, backgroundColor: '#eceff1', flexDirection: 'row', alignItems: 'center', padding: 4, marginBottom: 16 },
+   tab: { flex: 1, height: 38, borderRadius: 19, alignItems: 'center', justifyContent: 'center' },
+-  tabActive: { backgroundColor: '#fff', shadowColor: '#000', shadowOpacity: 0.08, shadowRadius: 6, shadowOffset: { width: 0, height: 2 } },
+-  tabText: { color: muted, fontWeight: '800', fontSize: 13 },
++  tabActive: { backgroundColor: '#fff', shadowColor: '#000', shadowOpacity: 0.07, shadowRadius: 6, shadowOffset: { width: 0, height: 2 } },
++  tabText: { color: muted, fontWeight: '800', fontSize: 14 },
+   tabTextActive: { color: '#087c2d' },
+-  purchaseList: { gap: 12 },
+-  purchaseCard: { backgroundColor: '#fff', borderRadius: 20, borderWidth: 0.5, borderColor: border, padding: 14, shadowColor: '#0b3d1e', shadowOpacity: 0.05, shadowRadius: 12, shadowOffset: { width: 0, height: 6 } },
+-  ringWrap: { alignItems: 'center', marginTop: 4, marginBottom: 18 },
+-  ringBase: { width: 214, height: 214, borderRadius: 107, backgroundColor: '#e5e7eb', alignItems: 'center', justifyContent: 'center', shadowColor: '#0b3d1e', shadowOpacity: 0.12, shadowRadius: 20, shadowOffset: { width: 0, height: 8 } },
+-  ringArc: { position: 'absolute', width: 214, height: 214, borderRadius: 107, borderWidth: 23, borderColor: '#51ef1a', borderLeftColor: 'transparent', transform: [{ rotate: '-28deg' }] },
+-  ringArcTwo: { position: 'absolute', width: 214, height: 214, borderRadius: 107, borderWidth: 23, borderColor: 'transparent', borderRightColor: '#2f8d2e', borderTopColor: '#1f7d2a', transform: [{ rotate: '18deg' }] },
+-  ringDot: { position: 'absolute', width: 22, height: 22, borderRadius: 11, borderWidth: 1, borderColor: 'rgba(0,0,0,0.12)' },
+-  ringLabel: { marginTop: -132, fontSize: 13, color: muted },
+-  ringSub: { fontSize: 13, color: muted, marginTop: 2 },
+-  duesList: { gap: 10 },
+-  dueRow: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: '#fff', borderRadius: 18, borderWidth: 0.5, borderColor: border, padding: 12 },
+-  dueRowSelected: { borderColor: '#2FB300', borderWidth: 1.3, backgroundColor: '#f8fff8' },
+-  moreRow: { marginTop: 14, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
++  purchaseList: { gap: 14 },
++  purchaseCard: { backgroundColor: '#fff', borderRadius: 20, borderWidth: 0.5, borderColor: border, padding: 16, shadowColor: '#0b3d1e', shadowOpacity: 0.05, shadowRadius: 12, shadowOffset: { width: 0, height: 6 } },
++
++  // Dues
++  ringWrap: { alignItems: 'center', marginTop: 8, marginBottom: 22 },
++  ringCenter: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' },
++  ringLabel: { fontSize: 13, color: muted, marginBottom: 2 },
++  ringSub: { fontSize: 13, color: muted, marginTop: 4 },
++  duesList: { gap: 12 },
++  dueRow: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: '#fff', borderRadius: 18, borderWidth: 1, borderColor: border, padding: 13 },
++  dueRowSelected: { borderColor: '#34c759', borderWidth: 1.6, backgroundColor: '#f4fcf5' },
++  moreRow: { marginTop: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+   viewAllDark: { color: text, fontWeight: '800', fontSize: 13 },
+ });
+diff --git a/audits/fix-verify/in-app-qa-summary.json b/audits/fix-verify/in-app-qa-summary.json
+index 9bafdfc..a6a2c96 100644
+--- a/audits/fix-verify/in-app-qa-summary.json
++++ b/audits/fix-verify/in-app-qa-summary.json
+@@ -5,7 +5,7 @@
+     "errors": 0,
+     "missing": [],
+     "scrollableCount": 0,
+-    "text": "Extrastores Complete your purchase ▣ iPhone 16 Pro Max 256GB — Natural Titanium ﷼ 6,553 Pa"
++    "text": "9:41 Extrastores Complete your purchase iPhone 16 Pro Max 256GB — Natural Titanium SAR 6,5"
+   },
+   {
+     "route": "checkout/app-home",
+@@ -13,7 +13,7 @@
+     "errors": 0,
+     "missing": [],
+     "scrollableCount": 0,
+-    "text": "9:41 ▮▮▮ ⌁ Your Next Payment ﷼ 4,250 .00 Pay now Jarir Store · due Apr 21 extra My Dues ex"
++    "text": "9:41 Your Next Payment ﷼ 4,250 .00 Pay now Jarir Store · due Apr 21 My Dues My Purchases M"
+   },
+   {
+     "route": "checkout/home",
+@@ -21,7 +21,7 @@
+     "errors": 0,
+     "missing": [],
+     "scrollableCount": 0,
+-    "text": "9:41 ▮▮▮ ⌁ Your Next Payment ﷼ 4,250 .00 Pay now Jarir Store · due Apr 21 extra My Dues ex"
++    "text": "9:41 Your Next Payment ﷼ 4,250 .00 Pay now Jarir Store · due Apr 21 My Dues My Purchases M"
+   },
+   {
+     "route": "checkout/detail",
+@@ -29,7 +29,7 @@
+     "errors": 0,
+     "missing": [],
+     "scrollableCount": 1,
+-    "text": "9:41 ▮▮▮ ⌁ ‹ extra Extrastores 25th of April, 2026 Active ﷼ 3,666 .00 1 Paid ﷼ 916.50 3 Re"
++    "text": "9:41 ‹ Active Extrastores ﷼ 3,666 .00 25th of April, 2026 1 Paid ﷼ 916.50 3 Remaining ﷼ 2,"
+   },
+   {
+     "route": "checkout/details",
+@@ -37,7 +37,7 @@
+     "errors": 0,
+     "missing": [],
+     "scrollableCount": 1,
+-    "text": "9:41 ▮▮▮ ⌁ ‹ extra Extrastores 25th of April, 2026 Active ﷼ 3,666 .00 1 Paid ﷼ 916.50 3 Re"
++    "text": "9:41 ‹ Active Extrastores ﷼ 3,666 .00 25th of April, 2026 1 Paid ﷼ 916.50 3 Remaining ﷼ 2,"
+   },
+   {
+     "route": "checkout/insights",
+@@ -45,7 +45,7 @@
+     "errors": 0,
+     "missing": [],
+     "scrollableCount": 0,
+-    "text": "9:41 ▮▮▮ ⌁ ‹ Insights ⌄ April Spent in April ﷼ 4,300 Nov Dec Jan Feb Mar 4.3k Apr Transact"
++    "text": "9:41 ‹ Insights ⌄ April Spent in April ﷼ 4,300 Nov Dec Jan Feb Mar 4.3k Apr Transactions C"
+   },
+   {
+     "route": "checkout/purchases",
+@@ -53,39 +53,39 @@
+     "errors": 0,
+     "missing": [],
+     "scrollableCount": 1,
+-    "text": "9:41 ▮▮▮ ⌁ ‹ × My Purchases View all your purchases All Active Completed extra Extrastores"
++    "text": "9:41 ‹ × My Purchases View all your purchases All Active Completed Extrastores Samsung Gal"
+   },
+   {
+     "route": "checkout/dues",
+     "viewportName": "mobile",
+     "errors": 0,
+     "missing": [],
+-    "scrollableCount": 2,
+-    "text": "9:41 ▮▮▮ ⌁ ‹ 4 Dues Selected ﷼ 1,800 Remaining 1200 extra Extra Stores In 2 days · April 2"
++    "scrollableCount": 1,
++    "text": "9:41 ‹ × 3 Dues Selected ﷼ 3,000 Remaining 1800 Extra Stores In 2 days - April 20th ﷼ 1,80"
+   },
+   {
+     "route": "checkout",
+     "viewportName": "short",
+     "errors": 0,
+     "missing": [],
+-    "scrollableCount": 0,
+-    "text": "Extrastores Complete your purchase ▣ iPhone 16 Pro Max 256GB — Natural Titanium ﷼ 6,553 Pa"
++    "scrollableCount": 1,
++    "text": "9:41 Extrastores Complete your purchase iPhone 16 Pro Max 256GB — Natural Titanium SAR 6,5"
+   },
+   {
+     "route": "checkout/app-home",
+     "viewportName": "short",
+     "errors": 0,
+     "missing": [],
+-    "scrollableCount": 4,
+-    "text": "9:41 ▮▮▮ ⌁ Your Next Payment ﷼ 4,250 .00 Pay now Jarir Store · due Apr 21 extra My Dues ex"
++    "scrollableCount": 1,
++    "text": "9:41 Your Next Payment ﷼ 4,250 .00 Pay now Jarir Store · due Apr 21 My Dues My Purchases M"
+   },
+   {
+     "route": "checkout/home",
+     "viewportName": "short",
+     "errors": 0,
+     "missing": [],
+-    "scrollableCount": 4,
+-    "text": "9:41 ▮▮▮ ⌁ Your Next Payment ﷼ 4,250 .00 Pay now Jarir Store · due Apr 21 extra My Dues ex"
++    "scrollableCount": 1,
++    "text": "9:41 Your Next Payment ﷼ 4,250 .00 Pay now Jarir Store · due Apr 21 My Dues My Purchases M"
+   },
+   {
+     "route": "checkout/detail",
+@@ -93,7 +93,7 @@
+     "errors": 0,
+     "missing": [],
+     "scrollableCount": 1,
+-    "text": "9:41 ▮▮▮ ⌁ ‹ extra Extrastores 25th of April, 2026 Active ﷼ 3,666 .00 1 Paid ﷼ 916.50 3 Re"
++    "text": "9:41 ‹ Active Extrastores ﷼ 3,666 .00 25th of April, 2026 1 Paid ﷼ 916.50 3 Remaining ﷼ 2,"
+   },
+   {
+     "route": "checkout/details",
+@@ -101,15 +101,15 @@
+     "errors": 0,
+     "missing": [],
+     "scrollableCount": 1,
+-    "text": "9:41 ▮▮▮ ⌁ ‹ extra Extrastores 25th of April, 2026 Active ﷼ 3,666 .00 1 Paid ﷼ 916.50 3 Re"
++    "text": "9:41 ‹ Active Extrastores ﷼ 3,666 .00 25th of April, 2026 1 Paid ﷼ 916.50 3 Remaining ﷼ 2,"
+   },
+   {
+     "route": "checkout/insights",
+     "viewportName": "short",
+     "errors": 0,
+     "missing": [],
+-    "scrollableCount": 4,
+-    "text": "9:41 ▮▮▮ ⌁ ‹ Insights ⌄ April Spent in April ﷼ 4,300 Nov Dec Jan Feb Mar 4.3k Apr Transact"
++    "scrollableCount": 1,
++    "text": "9:41 ‹ Insights ⌄ April Spent in April ﷼ 4,300 Nov Dec Jan Feb Mar 4.3k Apr Transactions C"
+   },
+   {
+     "route": "checkout/purchases",
+@@ -117,39 +117,39 @@
+     "errors": 0,
+     "missing": [],
+     "scrollableCount": 1,
+-    "text": "9:41 ▮▮▮ ⌁ ‹ × My Purchases View all your purchases All Active Completed extra Extrastores"
++    "text": "9:41 ‹ × My Purchases View all your purchases All Active Completed Extrastores Samsung Gal"
+   },
+   {
+     "route": "checkout/dues",
+     "viewportName": "short",
+     "errors": 0,
+     "missing": [],
+-    "scrollableCount": 3,
+-    "text": "9:41 ▮▮▮ ⌁ ‹ 4 Dues Selected ﷼ 1,800 Remaining 1200 extra Extra Stores In 2 days · April 2"
++    "scrollableCount": 1,
++    "text": "9:41 ‹ × 3 Dues Selected ﷼ 3,000 Remaining 1800 Extra Stores In 2 days - April 20th ﷼ 1,80"
+   },
+   {
+     "route": "checkout",
+     "viewportName": "desktop",
+     "errors": 0,
+     "missing": [],
+-    "scrollableCount": 0,
+-    "text": "Extrastores Complete your purchase ▣ iPhone 16 Pro Max 256GB — Natural Titanium ﷼ 6,553 Pa"
++    "scrollableCount": 1,
++    "text": "9:41 Extrastores Complete your purchase iPhone 16 Pro Max 256GB — Natural Titanium SAR 6,5"
+   },
+   {
+     "route": "checkout/app-home",
+     "viewportName": "desktop",
+     "errors": 0,
+     "missing": [],
+-    "scrollableCount": 4,
+-    "text": "9:41 ▮▮▮ ⌁ Your Next Payment ﷼ 4,250 .00 Pay now Jarir Store · due Apr 21 extra My Dues ex"
++    "scrollableCount": 1,
++    "text": "9:41 Your Next Payment ﷼ 4,250 .00 Pay now Jarir Store · due Apr 21 My Dues My Purchases M"
+   },
+   {
+     "route": "checkout/home",
+     "viewportName": "desktop",
+     "errors": 0,
+     "missing": [],
+-    "scrollableCount": 4,
+-    "text": "9:41 ▮▮▮ ⌁ Your Next Payment ﷼ 4,250 .00 Pay now Jarir Store · due Apr 21 extra My Dues ex"
++    "scrollableCount": 1,
++    "text": "9:41 Your Next Payment ﷼ 4,250 .00 Pay now Jarir Store · due Apr 21 My Dues My Purchases M"
+   },
+   {
+     "route": "checkout/detail",
+@@ -157,7 +157,7 @@
+     "errors": 0,
+     "missing": [],
+     "scrollableCount": 1,
+-    "text": "9:41 ▮▮▮ ⌁ ‹ extra Extrastores 25th of April, 2026 Active ﷼ 3,666 .00 1 Paid ﷼ 916.50 3 Re"
++    "text": "9:41 ‹ Active Extrastores ﷼ 3,666 .00 25th of April, 2026 1 Paid ﷼ 916.50 3 Remaining ﷼ 2,"
+   },
+   {
+     "route": "checkout/details",
+@@ -165,7 +165,7 @@
+     "errors": 0,
+     "missing": [],
+     "scrollableCount": 1,
+-    "text": "9:41 ▮▮▮ ⌁ ‹ extra Extrastores 25th of April, 2026 Active ﷼ 3,666 .00 1 Paid ﷼ 916.50 3 Re"
++    "text": "9:41 ‹ Active Extrastores ﷼ 3,666 .00 25th of April, 2026 1 Paid ﷼ 916.50 3 Remaining ﷼ 2,"
+   },
+   {
+     "route": "checkout/insights",
+@@ -173,7 +173,7 @@
+     "errors": 0,
+     "missing": [],
+     "scrollableCount": 0,
+-    "text": "9:41 ▮▮▮ ⌁ ‹ Insights ⌄ April Spent in April ﷼ 4,300 Nov Dec Jan Feb Mar 4.3k Apr Transact"
++    "text": "9:41 ‹ Insights ⌄ April Spent in April ﷼ 4,300 Nov Dec Jan Feb Mar 4.3k Apr Transactions C"
+   },
+   {
+     "route": "checkout/purchases",
+@@ -181,14 +181,14 @@
+     "errors": 0,
+     "missing": [],
+     "scrollableCount": 1,
+-    "text": "9:41 ▮▮▮ ⌁ ‹ × My Purchases View all your purchases All Active Completed extra Extrastores"
++    "text": "9:41 ‹ × My Purchases View all your purchases All Active Completed Extrastores Samsung Gal"
+   },
+   {
+     "route": "checkout/dues",
+     "viewportName": "desktop",
+     "errors": 0,
+     "missing": [],
+-    "scrollableCount": 2,
+-    "text": "9:41 ▮▮▮ ⌁ ‹ 4 Dues Selected ﷼ 1,800 Remaining 1200 extra Extra Stores In 2 days · April 2"
++    "scrollableCount": 1,
++    "text": "9:41 ‹ × 3 Dues Selected ﷼ 3,000 Remaining 1800 Extra Stores In 2 days - April 20th ﷼ 1,80"
+   }
+ ]
+\ No newline at end of file
+diff --git a/package-lock.json b/package-lock.json
+index f89882b..114d1b5 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -14,6 +14,7 @@
+         "react": "19.2.3",
+         "react-dom": "19.2.3",
+         "react-native": "0.85.3",
++        "react-native-svg": "15.15.4",
+         "react-native-web": "^0.21.2"
+       },
+       "devDependencies": {
+@@ -2158,6 +2159,12 @@
+         "node": ">=0.6"
+       }
+     },
++    "node_modules/boolbase": {
++      "version": "1.0.0",
++      "resolved": "https://registry.npmjs.org/boolbase/-/boolbase-1.0.0.tgz",
++      "integrity": "sha512-JZOSA7Mo9sNGB8+UjSgzdLtokWAky1zbztM3WRLCbZ70/3cTANmQmOdR7y2g+J0e2WXywy1yS468tY+IruqEww==",
++      "license": "ISC"
++    },
+     "node_modules/bplist-creator": {
+       "version": "0.1.0",
+       "resolved": "https://registry.npmjs.org/bplist-creator/-/bplist-creator-0.1.0.tgz",
+@@ -2554,6 +2561,56 @@
+         "hyphenate-style-name": "^1.0.3"
+       }
+     },
++    "node_modules/css-select": {
++      "version": "5.2.2",
++      "resolved": "https://registry.npmjs.org/css-select/-/css-select-5.2.2.tgz",
++      "integrity": "sha512-TizTzUddG/xYLA3NXodFM0fSbNizXjOKhqiQQwvhlspadZokn1KDy0NZFS0wuEubIYAV5/c1/lAr0TaaFXEXzw==",
++      "license": "BSD-2-Clause",
++      "dependencies": {
++        "boolbase": "^1.0.0",
++        "css-what": "^6.1.0",
++        "domhandler": "^5.0.2",
++        "domutils": "^3.0.1",
++        "nth-check": "^2.0.1"
++      },
++      "funding": {
++        "url": "https://github.com/sponsors/fb55"
++      }
++    },
++    "node_modules/css-tree": {
++      "version": "1.1.3",
++      "resolved": "https://registry.npmjs.org/css-tree/-/css-tree-1.1.3.tgz",
++      "integrity": "sha512-tRpdppF7TRazZrjJ6v3stzv93qxRcSsFmW6cX0Zm2NVKpxE1WV1HblnghVv9TreireHkqI/VDEsfolRF1p6y7Q==",
++      "license": "MIT",
++      "dependencies": {
++        "mdn-data": "2.0.14",
++        "source-map": "^0.6.1"
++      },
++      "engines": {
++        "node": ">=8.0.0"
++      }
++    },
++    "node_modules/css-tree/node_modules/source-map": {
++      "version": "0.6.1",
++      "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.6.1.tgz",
++      "integrity": "sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==",
++      "license": "BSD-3-Clause",
++      "engines": {
++        "node": ">=0.10.0"
++      }
++    },
++    "node_modules/css-what": {
++      "version": "6.2.2",
++      "resolved": "https://registry.npmjs.org/css-what/-/css-what-6.2.2.tgz",
++      "integrity": "sha512-u/O3vwbptzhMs3L1fQE82ZSLHQQfto5gyZzwteVIEyeaY5Fc7R4dapF/BvRoSYFeqfBk4m0V1Vafq5Pjv25wvA==",
++      "license": "BSD-2-Clause",
++      "engines": {
++        "node": ">= 6"
++      },
++      "funding": {
++        "url": "https://github.com/sponsors/fb55"
++      }
++    },
+     "node_modules/csstype": {
+       "version": "3.2.3",
+       "resolved": "https://registry.npmjs.org/csstype/-/csstype-3.2.3.tgz",
+@@ -2633,6 +2690,61 @@
+       "integrity": "sha512-AmGyK9WpNf06WeP5TjHZq/wNzP76OuEeaiTlKr9E/EEelYLczywUKoqRz+DPRq/ErssjT4lU+/W7wzJW+7K/ZA==",
+       "license": "MIT"
+     },
++    "node_modules/dom-serializer": {
++      "version": "2.0.0",
++      "resolved": "https://registry.npmjs.org/dom-serializer/-/dom-serializer-2.0.0.tgz",
++      "integrity": "sha512-wIkAryiqt/nV5EQKqQpo3SToSOV9J0DnbJqwK7Wv/Trc92zIAYZ4FlMu+JPFW1DfGFt81ZTCGgDEabffXeLyJg==",
++      "license": "MIT",
++      "dependencies": {
++        "domelementtype": "^2.3.0",
++        "domhandler": "^5.0.2",
++        "entities": "^4.2.0"
++      },
++      "funding": {
++        "url": "https://github.com/cheeriojs/dom-serializer?sponsor=1"
++      }
++    },
++    "node_modules/domelementtype": {
++      "version": "2.3.0",
++      "resolved": "https://registry.npmjs.org/domelementtype/-/domelementtype-2.3.0.tgz",
++      "integrity": "sha512-OLETBj6w0OsagBwdXnPdN0cnMfF9opN69co+7ZrbfPGrdpPVNBUj02spi6B1N7wChLQiPn4CSH/zJvXw56gmHw==",
++      "funding": [
++        {
++          "type": "github",
++          "url": "https://github.com/sponsors/fb55"
++        }
++      ],
++      "license": "BSD-2-Clause"
++    },
++    "node_modules/domhandler": {
++      "version": "5.0.3",
++      "resolved": "https://registry.npmjs.org/domhandler/-/domhandler-5.0.3.tgz",
++      "integrity": "sha512-cgwlv/1iFQiFnU96XXgROh8xTeetsnJiDsTc7TYCLFd9+/WNkIqPTxiM/8pSd8VIrhXGTf1Ny1q1hquVqDJB5w==",
++      "license": "BSD-2-Clause",
++      "dependencies": {
++        "domelementtype": "^2.3.0"
++      },
++      "engines": {
++        "node": ">= 4"
++      },
++      "funding": {
++        "url": "https://github.com/fb55/domhandler?sponsor=1"
++      }
++    },
++    "node_modules/domutils": {
++      "version": "3.2.2",
++      "resolved": "https://registry.npmjs.org/domutils/-/domutils-3.2.2.tgz",
++      "integrity": "sha512-6kZKyUajlDuqlHKVX1w7gyslj9MPIXzIFiz/rGu35uC1wMi+kMhQwGhl4lt9unC9Vb9INnY9Z3/ZA3+FhASLaw==",
++      "license": "BSD-2-Clause",
++      "dependencies": {
++        "dom-serializer": "^2.0.0",
++        "domelementtype": "^2.3.0",
++        "domhandler": "^5.0.3"
++      },
++      "funding": {
++        "url": "https://github.com/fb55/domutils?sponsor=1"
++      }
++    },
+     "node_modules/ee-first": {
+       "version": "1.1.1",
+       "resolved": "https://registry.npmjs.org/ee-first/-/ee-first-1.1.1.tgz",
+@@ -2660,6 +2772,18 @@
+         "node": ">= 0.8"
+       }
+     },
++    "node_modules/entities": {
++      "version": "4.5.0",
++      "resolved": "https://registry.npmjs.org/entities/-/entities-4.5.0.tgz",
++      "integrity": "sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==",
++      "license": "BSD-2-Clause",
++      "engines": {
++        "node": ">=0.12"
++      },
++      "funding": {
++        "url": "https://github.com/fb55/entities?sponsor=1"
++      }
++    },
+     "node_modules/error-stack-parser": {
+       "version": "2.1.4",
+       "resolved": "https://registry.npmjs.org/error-stack-parser/-/error-stack-parser-2.1.4.tgz",
+@@ -4261,6 +4385,12 @@
+       "integrity": "sha512-ocnPZQLNpvbedwTy9kNrQEsknEfgvcLMvOtz3sFeWApDq1MXH1TqkCIx58xlpESsfwQOnuBO9beyQuNGzVvuhQ==",
+       "license": "Apache-2.0"
+     },
++    "node_modules/mdn-data": {
++      "version": "2.0.14",
++      "resolved": "https://registry.npmjs.org/mdn-data/-/mdn-data-2.0.14.tgz",
++      "integrity": "sha512-dn6wd0uw5GsdswPFfsgMp5NSB0/aDe6fK94YJV/AJDYXL6HVLWBsxeq7js7Ad+mU2K9LAlwpk6kN2D5mwCPVow==",
++      "license": "CC0-1.0"
++    },
+     "node_modules/memoize-one": {
+       "version": "5.2.1",
+       "resolved": "https://registry.npmjs.org/memoize-one/-/memoize-one-5.2.1.tgz",
+@@ -4780,6 +4910,18 @@
+         "node": "^16.14.0 || >=18.0.0"
+       }
+     },
++    "node_modules/nth-check": {
++      "version": "2.1.1",
++      "resolved": "https://registry.npmjs.org/nth-check/-/nth-check-2.1.1.tgz",
++      "integrity": "sha512-lqjrjmaOoAnWfMmBPL+XNnynZh2+swxiX3WUE0s4yEHI6m+AwrK2UZOimIRl3X/4QctVqS8AiZjFqyOGrMXb/w==",
++      "license": "BSD-2-Clause",
++      "dependencies": {
++        "boolbase": "^1.0.0"
++      },
++      "funding": {
++        "url": "https://github.com/fb55/nth-check?sponsor=1"
++      }
++    },
+     "node_modules/nullthrows": {
+       "version": "1.1.1",
+       "resolved": "https://registry.npmjs.org/nullthrows/-/nullthrows-1.1.1.tgz",
+@@ -5322,6 +5464,21 @@
+         }
+       }
+     },
++    "node_modules/react-native-svg": {
++      "version": "15.15.4",
++      "resolved": "https://registry.npmjs.org/react-native-svg/-/react-native-svg-15.15.4.tgz",
++      "integrity": "sha512-boT/vIRgj6zZKBpfTPJJiYWMbZE9duBMOwPK6kCSTgxsS947IFMOq9OgIFkpWZTB7t229H24pDRkh3W9ZK/J1A==",
++      "license": "MIT",
++      "dependencies": {
++        "css-select": "^5.1.0",
++        "css-tree": "^1.1.3",
++        "warn-once": "0.1.1"
++      },
++      "peerDependencies": {
++        "react": "*",
++        "react-native": "*"
++      }
++    },
+     "node_modules/react-native-web": {
+       "version": "0.21.2",
+       "resolved": "https://registry.npmjs.org/react-native-web/-/react-native-web-0.21.2.tgz",
+@@ -6179,6 +6336,12 @@
+         "makeerror": "1.0.12"
+       }
+     },
++    "node_modules/warn-once": {
++      "version": "0.1.1",
++      "resolved": "https://registry.npmjs.org/warn-once/-/warn-once-0.1.1.tgz",
++      "integrity": "sha512-VkQZJbO8zVImzYFteBXvBOZEl1qL175WH8VmZcxF2fZAoudNhNDvHi+doCaAEdU2l2vtcIwa2zn0QK5+I1HQ3Q==",
++      "license": "MIT"
++    },
+     "node_modules/wcwidth": {
+       "version": "1.0.1",
+       "resolved": "https://registry.npmjs.org/wcwidth/-/wcwidth-1.0.1.tgz",
+diff --git a/package.json b/package.json
+index 4b89bd2..ad511df 100644
+--- a/package.json
++++ b/package.json
+@@ -9,6 +9,7 @@
+     "react": "19.2.3",
+     "react-dom": "19.2.3",
+     "react-native": "0.85.3",
++    "react-native-svg": "15.15.4",
+     "react-native-web": "^0.21.2"
+   },
+   "devDependencies": {
+diff --git a/scripts/in-app-qa.cjs b/scripts/in-app-qa.cjs
+index ecef07b..8e12248 100644
+--- a/scripts/in-app-qa.cjs
++++ b/scripts/in-app-qa.cjs
+@@ -48,7 +48,7 @@ const viewports = [
+       await page.waitForTimeout(100);
+       await page.screenshot({ path: `screenshots/fix-verify/${route.replace('/', '-')}-${viewportName}-bottom.png`, fullPage: true });
+       const after = await page.evaluate(() => document.body.innerText.replace(/\s+/g, ' ').trim());
+-      const required = route.includes('detail') ? ['Reference', 'Pay Next Installment'] : route.includes('purchases') ? ['AirPods Pro 3', 'Completed'] : route.includes('dues') ? ['4 Dues Selected', 'Remaining 1200'] : [];
++      const required = route.includes('detail') ? ['Reference', 'Pay Next Installment'] : route.includes('purchases') ? ['Samsung Galaxy S26', '1 of 3 installments paid'] : route.includes('dues') ? ['3 Dues Selected', 'Remaining 1800'] : [];
+       const missing = required.filter((item) => !after.includes(item));
+       summary.push({ route, viewportName, errors: errors.length, missing, scrollableCount: before.scrollableCount, text: before.text.slice(0, 90) });
+       await page.close();
+diff --git a/scripts/patch-gh-pages-export.cjs b/scripts/patch-gh-pages-export.cjs
+index 1a8843d..2848e89 100644
+--- a/scripts/patch-gh-pages-export.cjs
++++ b/scripts/patch-gh-pages-export.cjs
+@@ -28,8 +28,10 @@ if (fs.existsSync(bundleDir)) {
+     const bundlePath = path.join(bundleDir, file);
+     let bundle = fs.readFileSync(bundlePath, 'utf8');
+     const next = bundle
+-      .replaceAll('uri:"/assets/', 'uri:"./assets/')
+-      .replaceAll("uri:'/assets/", "uri:'./assets/");
++      .replaceAll('uri:"/assets/', `uri:"${projectBase}/assets/`)
++      .replaceAll("uri:'/assets/", `uri:'${projectBase}/assets/`)
++      .replaceAll('uri:"./assets/', `uri:"${projectBase}/assets/`)
++      .replaceAll("uri:'./assets/", `uri:'${projectBase}/assets/`);
+     if (next !== bundle) {
+       fs.writeFileSync(bundlePath, next);
+       patchedBundles.push(bundlePath);
+@@ -37,5 +39,20 @@ if (fs.existsSync(bundleDir)) {
+   }
+ }
+ 
++const srcFigma = path.resolve(__dirname, '..', 'assets', 'figma');
++const dstFigma = path.join(dist, 'figma');
++let copiedFigmaAssets = 0;
++if (fs.existsSync(srcFigma)) {
++  fs.mkdirSync(dstFigma, { recursive: true });
++  for (const file of fs.readdirSync(srcFigma)) {
++    const src = path.join(srcFigma, file);
++    const dst = path.join(dstFigma, file);
++    if (fs.statSync(src).isFile()) {
++      fs.copyFileSync(src, dst);
++      copiedFigmaAssets += 1;
++    }
++  }
++}
++
+ fs.writeFileSync(path.join(dist, '.nojekyll'), '');
+-console.log('Patched Expo Web export for GitHub Pages project hosting:', { index, notFound, patchedBundles });
++console.log('Patched Expo Web export for GitHub Pages project hosting:', { index, notFound, patchedBundles, copiedFigmaAssets });

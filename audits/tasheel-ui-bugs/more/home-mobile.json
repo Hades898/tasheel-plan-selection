@@ -1,0 +1,34 @@
+{
+  "url": "https://hades898.github.io/tasheel-bnpl-prototype/checkout/home?audit=1780868847752",
+  "status": 404,
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "errors": [
+    "Failed to load resource: the server responded with a status of 404 ()",
+    "Error: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+  ],
+  "metrics": {
+    "href": "https://hades898.github.io/tasheel-bnpl-prototype/checkout/home?audit=1780868847752",
+    "title": "",
+    "bodyText": "Route not found This shell exposes four tabs: Home, Loans, BNPL, and Settings. Go to Home",
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "scrollHeight": 844,
+    "clientHeight": 844,
+    "canScrollY": false,
+    "buttons": [
+      {
+        "i": 0,
+        "text": "Go to Home",
+        "x": 16,
+        "y": 440,
+        "w": 133.953125,
+        "h": 50,
+        "visible": true
+      }
+    ],
+    "visibleButtons": 1
+  }
+}

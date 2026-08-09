@@ -1,0 +1,233 @@
+{
+  "_status": "measured_partial_from_figma_mcp",
+  "source": {
+    "fileKey": "geEFxJ11n2KySAZB6zsjEh",
+    "nodeId": "1843:18080",
+    "name": "BNPL Home",
+    "screenshot": "/Users/hadysoliman/.hermes/image_cache/img_730f0acc7113.png"
+  },
+  "frame": {
+    "width": 402,
+    "height": 1033
+  },
+  "tokens": {
+    "screenWidth": 402,
+    "bg_canvas": "#f9fafb",
+    "bg_surface": "#ffffff",
+    "interactive_primary": "#022b10",
+    "interactive_dark": "#030712",
+    "text_primary": "#030712",
+    "text_secondary": "#4b5563",
+    "text_success": "#166534",
+    "text_on_primary": "#3eff00",
+    "border_default": "#e5e7eb",
+    "border_subtle": "#f3f4f6",
+    "font_content": "SF Pro",
+    "font_title": "SF Pro",
+    "callout_size": 16,
+    "caption1_size": 12,
+    "footnote_size": 13,
+    "large_title_size": 34,
+    "callout_line_height": 21,
+    "caption1_line_height": 16,
+    "footnote_line_height": 18,
+    "tracking_callout": -0.32,
+    "tracking_caption1": 0,
+    "tracking_footnote": -0.08
+  },
+  "nodes": [
+    {
+      "id": "1843:18080",
+      "name": "BNPL Home",
+      "role": "screen",
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 402,
+        "height": 1033
+      },
+      "style": {
+        "fill": "token:bg_canvas"
+      },
+      "testId": "app-home"
+    },
+    {
+      "id": "1843:18085",
+      "name": "Status Bar",
+      "role": "statusbar",
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 402,
+        "height": 62
+      },
+      "style": {
+        "fontFamily": "SF Pro",
+        "fontSize": 17,
+        "lineHeight": 22
+      },
+      "testId": "status-strip"
+    },
+    {
+      "id": "1843:18088",
+      "name": "Next payment block",
+      "role": "summary",
+      "bounds": {
+        "x": 15.63,
+        "y": 140.5,
+        "width": 370,
+        "height": 94
+      },
+      "style": {
+        "fontFamily": "SF Pro"
+      },
+      "testId": "home-next-payment"
+    },
+    {
+      "id": "1843:18097",
+      "name": "Pay now",
+      "role": "button",
+      "bounds": {
+        "x": null,
+        "y": null,
+        "height": 32
+      },
+      "style": {
+        "fill": "token:interactive_primary",
+        "radius": 999,
+        "fontSize": 15,
+        "lineHeight": 18,
+        "color": "token:text_on_primary"
+      },
+      "testId": "home-pay-now"
+    },
+    {
+      "id": "1843:18100",
+      "name": "My Dues tile",
+      "role": "button",
+      "bounds": {
+        "width": 70,
+        "height": 94
+      },
+      "style": {
+        "iconAsset": "homeDuesIcon",
+        "labelSize": 13,
+        "labelLineHeight": 18
+      },
+      "asset": "homeDuesIcon",
+      "testId": "home-action-dues"
+    },
+    {
+      "id": "1843:18104",
+      "name": "My Purchases tile",
+      "role": "button",
+      "bounds": {
+        "width": 70,
+        "height": 94
+      },
+      "style": {
+        "iconAsset": "homePurchasesIcon",
+        "labelSize": 13,
+        "labelLineHeight": 18
+      },
+      "asset": "homePurchasesIcon",
+      "testId": "home-action-purchases"
+    },
+    {
+      "id": "1843:18108",
+      "name": "My Insights tile",
+      "role": "button",
+      "bounds": {
+        "width": 70,
+        "height": 94
+      },
+      "style": {
+        "iconAsset": "homeInsightsIcon",
+        "labelSize": 13,
+        "labelLineHeight": 18
+      },
+      "asset": "homeInsightsIcon",
+      "testId": "home-action-insights"
+    },
+    {
+      "id": "1843:18114",
+      "name": "Content sheet",
+      "role": "surface",
+      "bounds": {
+        "x": 0,
+        "y": 380,
+        "width": 402,
+        "height": 653
+      },
+      "style": {
+        "fill": "token:bg_canvas",
+        "radius": 32,
+        "padding": 16,
+        "gap": 24
+      },
+      "testId": "home-content-sheet"
+    },
+    {
+      "id": "1843:18120",
+      "name": "Active purchase card",
+      "role": "card",
+      "bounds": {
+        "width": 370
+      },
+      "style": {
+        "fill": "token:bg_surface",
+        "border": "token:border_subtle",
+        "radius": 24,
+        "padding": 16
+      },
+      "testId": "home-active-card"
+    },
+    {
+      "id": "611:13134",
+      "name": "Next up card",
+      "role": "card",
+      "bounds": {
+        "width": 370,
+        "height": 223
+      },
+      "style": {
+        "fill": "token:bg_surface",
+        "border": "token:border_subtle",
+        "radius": 24,
+        "padding": 16,
+        "gap": 17
+      },
+      "testId": "home-next-card"
+    },
+    {
+      "id": "I1843:18127;935:3930",
+      "name": "Bottom nav BNPL selected",
+      "role": "tab",
+      "bounds": {
+        "height": 55
+      },
+      "style": {
+        "selectedFill": "token:bg_canvas",
+        "selectedText": "token:text_success",
+        "fontSize": 11,
+        "lineHeight": 13
+      },
+      "testId": "nav-bnpl"
+    }
+  ],
+  "assets": [
+    "extraLogo",
+    "jarirLogo",
+    "noonLogo",
+    "homeDuesIcon",
+    "homePurchasesIcon",
+    "homeInsightsIcon",
+    "homeElementA",
+    "homeElementB",
+    "levels",
+    "riyalMark"
+  ],
+  "waivers": [
+    "Riyal mark still lacks exported source asset. Text glyph is temporary and blocks full fidelity claim."
+  ]
+}

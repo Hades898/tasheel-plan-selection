@@ -1,0 +1,194 @@
+[
+  {
+    "route": "checkout",
+    "viewportName": "mobile",
+    "errors": 0,
+    "missing": [],
+    "scrollableCount": 1,
+    "text": "9:41 SMEG 50's Retro Style Freestanding Refrigerator, Right Handle, Black ★★★★★ 4.8 (26) S"
+  },
+  {
+    "route": "checkout/app-home",
+    "viewportName": "mobile",
+    "errors": 0,
+    "missing": [],
+    "scrollableCount": 3,
+    "text": "9:41 Your Next Payment 4,250 .00 Pay now Jarir Store · due Apr 21 My Dues My Purchases My "
+  },
+  {
+    "route": "checkout/home",
+    "viewportName": "mobile",
+    "errors": 0,
+    "missing": [],
+    "scrollableCount": 3,
+    "text": "9:41 Your Next Payment 4,250 .00 Pay now Jarir Store · due Apr 21 My Dues My Purchases My "
+  },
+  {
+    "route": "checkout/detail",
+    "viewportName": "mobile",
+    "errors": 0,
+    "missing": [],
+    "scrollableCount": 3,
+    "text": "9:41 Extrastores 25th of April, 2026 Active 3,666 .00 1 Paid 916.50 3 Remaining 2,750 Paym"
+  },
+  {
+    "route": "checkout/details",
+    "viewportName": "mobile",
+    "errors": 0,
+    "missing": [],
+    "scrollableCount": 3,
+    "text": "9:41 Extrastores 25th of April, 2026 Active 3,666 .00 1 Paid 916.50 3 Remaining 2,750 Paym"
+  },
+  {
+    "route": "checkout/insights",
+    "viewportName": "mobile",
+    "errors": 0,
+    "missing": [],
+    "scrollableCount": 2,
+    "text": "9:41 Insights ⌄ April Spent in April 4,250 .00 1.79k Nov Nov 3.12k Dec Dec 2.27k Jan Jan 3"
+  },
+  {
+    "route": "checkout/purchases",
+    "viewportName": "mobile",
+    "errors": 0,
+    "missing": [],
+    "scrollableCount": 1,
+    "text": "9:41 My Purchases View all your purchases All Active Completed Extrastores Samsung Galaxy "
+  },
+  {
+    "route": "checkout/dues",
+    "viewportName": "mobile",
+    "errors": 0,
+    "missing": [],
+    "scrollableCount": 3,
+    "text": "9:41 1 Due Selected 1,800 Remaining 1,200 Extra Stores iPhone 16 Pro Max · In 2 days - Apr"
+  },
+  {
+    "route": "checkout",
+    "viewportName": "short",
+    "errors": 0,
+    "missing": [],
+    "scrollableCount": 1,
+    "text": "9:41 SMEG 50's Retro Style Freestanding Refrigerator, Right Handle, Black ★★★★★ 4.8 (26) S"
+  },
+  {
+    "route": "checkout/app-home",
+    "viewportName": "short",
+    "errors": 0,
+    "missing": [],
+    "scrollableCount": 4,
+    "text": "9:41 Your Next Payment 4,250 .00 Pay now Jarir Store · due Apr 21 My Dues My Purchases My "
+  },
+  {
+    "route": "checkout/home",
+    "viewportName": "short",
+    "errors": 0,
+    "missing": [],
+    "scrollableCount": 4,
+    "text": "9:41 Your Next Payment 4,250 .00 Pay now Jarir Store · due Apr 21 My Dues My Purchases My "
+  },
+  {
+    "route": "checkout/detail",
+    "viewportName": "short",
+    "errors": 0,
+    "missing": [],
+    "scrollableCount": 3,
+    "text": "9:41 Extrastores 25th of April, 2026 Active 3,666 .00 1 Paid 916.50 3 Remaining 2,750 Paym"
+  },
+  {
+    "route": "checkout/details",
+    "viewportName": "short",
+    "errors": 0,
+    "missing": [],
+    "scrollableCount": 3,
+    "text": "9:41 Extrastores 25th of April, 2026 Active 3,666 .00 1 Paid 916.50 3 Remaining 2,750 Paym"
+  },
+  {
+    "route": "checkout/insights",
+    "viewportName": "short",
+    "errors": 0,
+    "missing": [],
+    "scrollableCount": 3,
+    "text": "9:41 Insights ⌄ April Spent in April 4,250 .00 1.79k Nov Nov 3.12k Dec Dec 2.27k Jan Jan 3"
+  },
+  {
+    "route": "checkout/purchases",
+    "viewportName": "short",
+    "errors": 0,
+    "missing": [],
+    "scrollableCount": 2,
+    "text": "9:41 My Purchases View all your purchases All Active Completed Extrastores Samsung Galaxy "
+  },
+  {
+    "route": "checkout/dues",
+    "viewportName": "short",
+    "errors": 0,
+    "missing": [],
+    "scrollableCount": 3,
+    "text": "9:41 1 Due Selected 1,800 Remaining 1,200 Extra Stores iPhone 16 Pro Max · In 2 days - Apr"
+  },
+  {
+    "route": "checkout",
+    "viewportName": "desktop",
+    "errors": 0,
+    "missing": [],
+    "scrollableCount": 1,
+    "text": "9:41 SMEG 50's Retro Style Freestanding Refrigerator, Right Handle, Black ★★★★★ 4.8 (26) S"
+  },
+  {
+    "route": "checkout/app-home",
+    "viewportName": "desktop",
+    "errors": 0,
+    "missing": [],
+    "scrollableCount": 4,
+    "text": "9:41 Your Next Payment 4,250 .00 Pay now Jarir Store · due Apr 21 My Dues My Purchases My "
+  },
+  {
+    "route": "checkout/home",
+    "viewportName": "desktop",
+    "errors": 0,
+    "missing": [],
+    "scrollableCount": 4,
+    "text": "9:41 Your Next Payment 4,250 .00 Pay now Jarir Store · due Apr 21 My Dues My Purchases My "
+  },
+  {
+    "route": "checkout/detail",
+    "viewportName": "desktop",
+    "errors": 0,
+    "missing": [],
+    "scrollableCount": 3,
+    "text": "9:41 Extrastores 25th of April, 2026 Active 3,666 .00 1 Paid 916.50 3 Remaining 2,750 Paym"
+  },
+  {
+    "route": "checkout/details",
+    "viewportName": "desktop",
+    "errors": 0,
+    "missing": [],
+    "scrollableCount": 3,
+    "text": "9:41 Extrastores 25th of April, 2026 Active 3,666 .00 1 Paid 916.50 3 Remaining 2,750 Paym"
+  },
+  {
+    "route": "checkout/insights",
+    "viewportName": "desktop",
+    "errors": 0,
+    "missing": [],
+    "scrollableCount": 3,
+    "text": "9:41 Insights ⌄ April Spent in April 4,250 .00 1.79k Nov Nov 3.12k Dec Dec 2.27k Jan Jan 3"
+  },
+  {
+    "route": "checkout/purchases",
+    "viewportName": "desktop",
+    "errors": 0,
+    "missing": [],
+    "scrollableCount": 2,
+    "text": "9:41 My Purchases View all your purchases All Active Completed Extrastores Samsung Galaxy "
+  },
+  {
+    "route": "checkout/dues",
+    "viewportName": "desktop",
+    "errors": 0,
+    "missing": [],
+    "scrollableCount": 3,
+    "text": "9:41 1 Due Selected 1,800 Remaining 1,200 Extra Stores iPhone 16 Pro Max · In 2 days - Apr"
+  }
+]

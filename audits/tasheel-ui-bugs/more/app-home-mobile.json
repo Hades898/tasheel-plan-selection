@@ -1,0 +1,90 @@
+{
+  "status": 200,
+  "errors": [],
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "metrics": {
+    "href": "https://hades898.github.io/tasheel-bnpl-prototype/checkout/app-home?audit2=1780868921611",
+    "title": "",
+    "text": "Your Next Payment 4,250.00 Pay now Jarir Store · due Apr 21 My Dues My Purchases My Insights Active Purchases View More › اكسترا extra Extrastores Feb 5 Active 1 of 3 installments paid 450.00 /mo Next up View More › اكسترا extra Extrastores Tomorrow 343.12 ج Jarir Bookstore In 6 days · April 20th 250.50 noon Noon In 17 days · May 15th 123.24 Home Flash Cash BNPL Profile",
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "scrollHeight": 844,
+    "clientHeight": 844,
+    "maxElementBottom": 844,
+    "buttons": [
+      {
+        "i": 0,
+        "text": "Pay now",
+        "x": 269.28125,
+        "y": 88,
+        "w": 100.71875,
+        "h": 40,
+        "bottom": 128,
+        "visible": true
+      },
+      {
+        "i": 1,
+        "text": "My Dues",
+        "x": 57.0625,
+        "y": 178,
+        "w": 62,
+        "h": 86,
+        "bottom": 264,
+        "visible": true
+      },
+      {
+        "i": 2,
+        "text": "My Purchases",
+        "x": 147.0625,
+        "y": 178,
+        "w": 86.75,
+        "h": 86,
+        "bottom": 264,
+        "visible": true
+      },
+      {
+        "i": 3,
+        "text": "My Insights",
+        "x": 261.8125,
+        "y": 178,
+        "w": 71.109375,
+        "h": 86,
+        "bottom": 264,
+        "visible": true
+      },
+      {
+        "i": 4,
+        "text": "View More ›",
+        "x": 294.5,
+        "y": 309,
+        "w": 75.5,
+        "h": 16,
+        "bottom": 325,
+        "visible": true
+      },
+      {
+        "i": 5,
+        "text": "اكسترا extra Extrastores Feb 5 Active 1 of 3 installments paid 450.00 /mo",
+        "x": 20,
+        "y": 336,
+        "w": 350,
+        "h": 120,
+        "bottom": 456,
+        "visible": true
+      },
+      {
+        "i": 6,
+        "text": "View More ›",
+        "x": 294.5,
+        "y": 479,
+        "w": 75.5,
+        "h": 16,
+        "bottom": 495,
+        "visible": true
+      }
+    ]
+  }
+}

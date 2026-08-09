@@ -1,0 +1,18 @@
+ M App.tsx
+ M audits/fix-verify/in-app-qa-summary.json
+ M package-lock.json
+ M package.json
+ M scripts/in-app-qa.cjs
+ M scripts/patch-gh-pages-export.cjs
+?? .agent-artifacts/
+?? .claude/
+?? assets/figma/
+?? audits/figma-fidelity/
+?? audits/fix-verify/model-assessment-prompt.md
+?? audits/fix-verify/route-summary.json
+?? audits/preservation/
+?? audits/tasheel-ui-bugs/
+?? figma-spec/
+?? public/
+?? screenshots/
+?? scripts/figma-geometry-probe.cjs

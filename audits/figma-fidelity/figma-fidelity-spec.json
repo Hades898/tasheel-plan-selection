@@ -1,0 +1,48 @@
+{
+  "global": {
+    "appWidth": 402,
+    "checkoutWidth": 390,
+    "colors": {
+      "canvas": "#f9fafb",
+      "surface": "#ffffff",
+      "textPrimary": "#030712",
+      "textSecondary": "#4b5563",
+      "textSuccess": "#166534",
+      "textError": "#6e0f0d",
+      "brand": "#16720b",
+      "primaryBg": "#022b10",
+      "onPrimary": "#3eff00",
+      "borderDefault": "#e5e7eb",
+      "borderSubtle": "#f3f4f6"
+    },
+    "typography": {
+      "largeTitle": {"fontSize": 34, "lineHeight": 41, "fontWeight": "700", "letterSpacing": 0.38},
+      "titleM": {"fontSize": 22, "lineHeight": 28, "fontWeight": "600", "letterSpacing": -0.2},
+      "titleS": {"fontSize": 20, "lineHeight": 25, "fontWeight": "600", "letterSpacing": 0.38},
+      "headline": {"fontSize": 17, "lineHeight": 22, "fontWeight": "600", "letterSpacing": -0.41},
+      "body": {"fontSize": 16, "lineHeight": 21, "letterSpacing": -0.32},
+      "subhead": {"fontSize": 15, "lineHeight": 20, "letterSpacing": -0.24},
+      "footnote": {"fontSize": 13, "lineHeight": 18, "letterSpacing": -0.08},
+      "caption1": {"fontSize": 12, "lineHeight": 16, "letterSpacing": 0},
+      "caption2": {"fontSize": 11, "lineHeight": 13, "letterSpacing": 0.06},
+      "buttonLarge": {"fontSize": 17, "lineHeight": 22, "fontWeight": "500", "letterSpacing": -0.41}
+    }
+  },
+  "routes": {
+    "checkout": {"figmaNode": "355:58228", "width": 390, "height": 848, "requiredTexts": ["Extrastores", "Complete your purchase", "iPhone 16 Pro Max", "256GB — Natural Titanium", "SAR 6,553.85", "Payment Method", "Credit / Debit Card", "Apple Pay", "Cash on Delivery", "Tasheel BNPL", "Split into 3–12 monthly installments", "Proceed with Tasheel BNPL", "extrastores.com"]},
+    "appHome": {"figmaNode": "1843:18080", "width": 402, "height": 1033, "requiredTexts": ["Your Next Payment", "4,250", ".", "00", "Jarir Store · due Apr 21", "Pay now", "My Dues", "My Purchases", "My Insights", "Active Purchases", "View More", "Next up", "Home", "Flash Cash", "BNPL", "Profile"]},
+    "detail": {"figmaNode": "814:24410", "width": 402, "height": 1330, "requiredTexts": ["Extrastores", "25th of April, 2026 ", "Active", "3,666", "00", "1 Paid", "916.50", "3 Remaining", "2,750", "Payment Schedule", "May 15th", "Due in 8 days", "June 15th", "July 15th", "August 15", "Purchase Details", "Total Amount", "Monthly Payment", "Installments", "4 Installments", "Next Due Date", "Total Paid", "Remaining", "Reference", "TXN-2026-04152", "Pay Next Installment"]},
+    "dues": {"figmaNode": "876:17923", "width": 402, "height": 890, "requiredTexts": ["3 Dues Selected", "3,000", "Remaining 1800", "Extra Stores", "In 2 days  - April 20th", "Jarir", "In 7 days  - April 27th", "1,800", "600", "2 of 4", "+5 More next up payments", "View all", "Pay selected"]},
+    "purchases": {"figmaNode": "814:24392", "width": 402, "height": 918, "requiredTexts": ["My Purchases", "View all your purchases", "Extrastores", "Samsung Galaxy S26", "1 of 3 installments paid", "450.00/mo"]},
+    "insights": {"figmaNode": "1579:11144", "width": 402, "height": 870, "requiredTexts": ["Insights", "April", "Spent in April", "4,300", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "4.3k", "Transactions", "Categories", "Extrastores", "Apr 15th · Paid", "Jarir", "Apr 20th · Paid", "Noon", "600"]}
+  },
+  "geometryChecks": [
+    {"route": "checkout", "selectorText": "Proceed with Tasheel BNPL", "widthApprox": 342, "heightApprox": 56},
+    {"route": "appHome", "selectorText": "Your Next Payment", "topApprox": 140},
+    {"route": "appHome", "selectorText": "Active Purchases", "topApprox": 396},
+    {"route": "detail", "selectorText": "Payment Schedule", "topApprox": 0},
+    {"route": "dues", "selectorText": "3 Dues Selected", "topApprox": 216},
+    {"route": "purchases", "selectorText": "My Purchases", "topApprox": 144},
+    {"route": "insights", "selectorText": "Spent in April", "topApprox": 148}
+  ]
+}

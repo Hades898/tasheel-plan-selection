@@ -1,0 +1,12 @@
+<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display: block;" viewBox="0 0 66.8649 63.6558" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Leading Halo v3" opacity="0.55" filter="url(#filter0_f_1882_3138)">
+<path d="M14 14C27.1462 14 40.2279 15.8581 52.8648 19.5202L44.3146 49.6558C34.4577 46.7993 24.2541 45.35 14 45.35L14 14Z" fill="var(--fill-0, #8CFF33)"/>
+</g>
+<defs>
+<filter id="filter0_f_1882_3138" x="0" y="0" width="66.8649" height="63.6558" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="7" result="effect1_foregroundBlur_1882_3138"/>
+</filter>
+</defs>
+</svg>

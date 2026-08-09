@@ -1,0 +1,2 @@
+backup_branch=backup/in-app-fidelity-20260608-131012
+patch=audits/preservation/worktree-20260608-131012.patch

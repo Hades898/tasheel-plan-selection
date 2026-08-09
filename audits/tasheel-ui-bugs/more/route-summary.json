@@ -1,0 +1,200 @@
+[
+  {
+    "name": "checkout",
+    "path": "/checkout",
+    "vpName": "desktop",
+    "status": 200,
+    "errors": 0,
+    "text": "Extrastores Complete your purchase 📱 iPhone 16 Pro Max 256GB — Natural Titanium SAR 6,553",
+    "scroll": "720/720",
+    "buttons": 1,
+    "visibleButtons": 1
+  },
+  {
+    "name": "home",
+    "path": "/checkout/home",
+    "vpName": "desktop",
+    "status": 404,
+    "errors": 2,
+    "text": "Route not found This shell exposes four tabs: Home, Loans, BNPL, and Settings. Go to Home",
+    "scroll": "720/720",
+    "buttons": 1,
+    "visibleButtons": 1
+  },
+  {
+    "name": "details",
+    "path": "/checkout/details",
+    "vpName": "desktop",
+    "status": 404,
+    "errors": 2,
+    "text": "Route not found This shell exposes four tabs: Home, Loans, BNPL, and Settings. Go to Home",
+    "scroll": "720/720",
+    "buttons": 1,
+    "visibleButtons": 1
+  },
+  {
+    "name": "insights",
+    "path": "/checkout/insights",
+    "vpName": "desktop",
+    "status": 200,
+    "errors": 0,
+    "text": "‹ Insights ⌄ April Spent in April 4,300 Nov Dec Jan Feb Mar 4.3k Apr Transactions Categori",
+    "scroll": "720/720",
+    "buttons": 1,
+    "visibleButtons": 1
+  },
+  {
+    "name": "purchases",
+    "path": "/checkout/purchases",
+    "vpName": "desktop",
+    "status": 200,
+    "errors": 0,
+    "text": "‹ My Purchases View all your purchases All Active Completed اكسترا extra Extrastores Samsu",
+    "scroll": "720/720",
+    "buttons": 6,
+    "visibleButtons": 5
+  },
+  {
+    "name": "dues",
+    "path": "/checkout/dues",
+    "vpName": "desktop",
+    "status": 200,
+    "errors": 0,
+    "text": "‹ 3 Dues Selected 3,000 Remaining 600 اكسترا extra Extra Stores In 2 days · April 20th 1,8",
+    "scroll": "720/720",
+    "buttons": 3,
+    "visibleButtons": 3
+  },
+  {
+    "name": "checkout",
+    "path": "/checkout",
+    "vpName": "mobile",
+    "status": 200,
+    "errors": 0,
+    "text": "Extrastores Complete your purchase 📱 iPhone 16 Pro Max 256GB — Natural Titanium SAR 6,553",
+    "scroll": "844/844",
+    "buttons": 1,
+    "visibleButtons": 1
+  },
+  {
+    "name": "home",
+    "path": "/checkout/home",
+    "vpName": "mobile",
+    "status": 404,
+    "errors": 2,
+    "text": "Route not found This shell exposes four tabs: Home, Loans, BNPL, and Settings. Go to Home",
+    "scroll": "844/844",
+    "buttons": 1,
+    "visibleButtons": 1
+  },
+  {
+    "name": "details",
+    "path": "/checkout/details",
+    "vpName": "mobile",
+    "status": 404,
+    "errors": 2,
+    "text": "Route not found This shell exposes four tabs: Home, Loans, BNPL, and Settings. Go to Home",
+    "scroll": "844/844",
+    "buttons": 1,
+    "visibleButtons": 1
+  },
+  {
+    "name": "insights",
+    "path": "/checkout/insights",
+    "vpName": "mobile",
+    "status": 200,
+    "errors": 0,
+    "text": "‹ Insights ⌄ April Spent in April 4,300 Nov Dec Jan Feb Mar 4.3k Apr Transactions Categori",
+    "scroll": "844/844",
+    "buttons": 1,
+    "visibleButtons": 1
+  },
+  {
+    "name": "purchases",
+    "path": "/checkout/purchases",
+    "vpName": "mobile",
+    "status": 200,
+    "errors": 0,
+    "text": "‹ My Purchases View all your purchases All Active Completed اكسترا extra Extrastores Samsu",
+    "scroll": "844/844",
+    "buttons": 6,
+    "visibleButtons": 6
+  },
+  {
+    "name": "dues",
+    "path": "/checkout/dues",
+    "vpName": "mobile",
+    "status": 200,
+    "errors": 0,
+    "text": "‹ 3 Dues Selected 3,000 Remaining 600 اكسترا extra Extra Stores In 2 days · April 20th 1,8",
+    "scroll": "844/844",
+    "buttons": 3,
+    "visibleButtons": 3
+  },
+  {
+    "name": "checkout",
+    "path": "/checkout",
+    "vpName": "short",
+    "status": 200,
+    "errors": 0,
+    "text": "Extrastores Complete your purchase 📱 iPhone 16 Pro Max 256GB — Natural Titanium SAR 6,553",
+    "scroll": "640/640",
+    "buttons": 1,
+    "visibleButtons": 1
+  },
+  {
+    "name": "home",
+    "path": "/checkout/home",
+    "vpName": "short",
+    "status": 404,
+    "errors": 2,
+    "text": "Route not found This shell exposes four tabs: Home, Loans, BNPL, and Settings. Go to Home",
+    "scroll": "640/640",
+    "buttons": 1,
+    "visibleButtons": 1
+  },
+  {
+    "name": "details",
+    "path": "/checkout/details",
+    "vpName": "short",
+    "status": 404,
+    "errors": 2,
+    "text": "Route not found This shell exposes four tabs: Home, Loans, BNPL, and Settings. Go to Home",
+    "scroll": "640/640",
+    "buttons": 1,
+    "visibleButtons": 1
+  },
+  {
+    "name": "insights",
+    "path": "/checkout/insights",
+    "vpName": "short",
+    "status": 200,
+    "errors": 0,
+    "text": "‹ Insights ⌄ April Spent in April 4,300 Nov Dec Jan Feb Mar 4.3k Apr Transactions Categori",
+    "scroll": "640/640",
+    "buttons": 1,
+    "visibleButtons": 1
+  },
+  {
+    "name": "purchases",
+    "path": "/checkout/purchases",
+    "vpName": "short",
+    "status": 200,
+    "errors": 0,
+    "text": "‹ My Purchases View all your purchases All Active Completed اكسترا extra Extrastores Samsu",
+    "scroll": "640/640",
+    "buttons": 6,
+    "visibleButtons": 5
+  },
+  {
+    "name": "dues",
+    "path": "/checkout/dues",
+    "vpName": "short",
+    "status": 200,
+    "errors": 0,
+    "text": "‹ 3 Dues Selected 3,000 Remaining 600 اكسترا extra Extra Stores In 2 days · April 20th 1,8",
+    "scroll": "640/640",
+    "buttons": 3,
+    "visibleButtons": 2
+  }
+]

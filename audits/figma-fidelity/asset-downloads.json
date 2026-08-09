@@ -1,0 +1,19 @@
+{
+  "extraLogo": "http://localhost:3845/assets/4feda7cec0bdb64f83cb838e6c75e31c0534ecc5.png",
+  "jarirLogo": "http://localhost:3845/assets/0864763f0ee69e79bcafb9811889c81c4c93a059.png",
+  "noonLogo": "http://localhost:3845/assets/23f0338ce646e4bb03034e2a565ec2c64afbe170.png",
+  "levels": "http://localhost:3845/assets/703188eb5a005a91b293a4ce61c3dc207e894204.svg",
+  "checkoutReload": "http://localhost:3845/assets/5792b06c787f165b78367a11c1a0ea112f9ad074.svg",
+  "checkoutSiteSettings": "http://localhost:3845/assets/6a87d0a8ac769cf40def6b28f14d1daee0f6d371.svg",
+  "homeElementA": "http://localhost:3845/assets/200dd4027161dbeaedfcbfc481a383c5155de1c0.svg",
+  "homeElementB": "http://localhost:3845/assets/036af41bf7072602b76cbe1966dc01bb55a1a468.svg",
+  "homeDuesIcon": "http://localhost:3845/assets/5f6a9f6fde8468c7a0db57b6acf21825c960206b.png",
+  "homePurchasesIcon": "http://localhost:3845/assets/bc5bfefaf50e1f09d4dd142c2d9a766e66bc09f6.png",
+  "homeInsightsIcon": "http://localhost:3845/assets/16f27ba386defda1228a56aeb8d1337ac06c170e.png",
+  "duesTrack": "http://localhost:3845/assets/f891757e210ef107e7614a84ab3bd88967215563.svg",
+  "duesFilled": "http://localhost:3845/assets/d4e11464ee001174d07a767f8882df3345d38a49.png",
+  "duesDot": "http://localhost:3845/assets/e9c33e9084bd8c56dac3f4346ebb28db6c4f0d51.svg",
+  "progressThumb": "http://localhost:3845/assets/820f49730100a85a5719e80d8bc37786cab07b7b.svg",
+  "paymentLineTall": "http://localhost:3845/assets/17b5deb2842736923c91b07766d8011fe7bdbae9.svg",
+  "paymentLineShort": "http://localhost:3845/assets/dc1940b7278829eb1c30fcd74b33faab6028fa1c.svg"
+}

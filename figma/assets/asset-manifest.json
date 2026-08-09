@@ -1,0 +1,20 @@
+{
+  "source": {
+    "figmaUrl": "https://www.figma.com/design/geEFxJ11n2KySAZB6zsjEh/BNPL?node-id=355-48766",
+    "rootNodeId": "355:58228",
+    "capturedAt": "2026-07-22"
+  },
+  "assets": [
+    {"path": "public/figma/wcTasheelLogo.svg", "sha256": "ace3d40d5ae54142d8f7533d27e8644c5f10e55107935e0d3c24568d2ef28307", "role": "checkout brand mark", "source": "existing Figma export"},
+    {"path": "public/figma/wcInfoCircle.svg", "sha256": "db24faab19be3b91ce4aac6a0eb6b25b18532bc60a1d548a70f5746f7f75d67b", "role": "fee help icon", "source": "existing Figma export"},
+    {"path": "public/figma/wcApplePay.svg", "sha256": "efc1a21f95be3392eccde7434b00ba1bf45f45b1d5dcc86381e067e125bc0ebe", "role": "payment method", "source": "existing Figma export"},
+    {"path": "public/figma/extraLogo.png", "sha256": "2b5b49d33df6545cb1416bf4174890a22e2cd91d67ef9afd4f6b22b9b1be0ee8", "role": "merchant logo", "source": "existing Figma export"},
+    {"path": "public/figma/wcSmegFridge.jpg", "sha256": "3aef6d6b7c0e394a0612aef6e4590c1987bae977a826c4f7ccb9b3c5f25ff4ec", "role": "merchant product", "source": "existing Figma export"},
+    {"path": "public/figma/wcCartIcon.svg", "sha256": "7c04fb05d17a3870cb241aab32e297c680dd2769699e4d8a44a8c3486fa034b3", "role": "cart control", "source": "existing Figma export"},
+    {"path": "public/figma/wcRocket.png", "sha256": "e933a120846fc0926b01ea0ba428229ed4bf24f247d26e2c4f03af84b2e3fed8", "role": "processing illustration", "source": "existing Figma export"},
+    {"path": "public/figma/paymentSuccessCelebration.png", "sha256": "d8cef811331a4e453c86e6b1d4edb1c5628392d3a1f55efb17280fbbe0ba30ac", "role": "success illustration", "source": "existing Figma export"},
+    {"path": "public/figma/wcQuickCallArt.png", "sha256": "e7b64ef450bee9010b8ad2b6e596afab8bc09b79151e327723792c6985325878", "role": "IVR illustration", "source": "existing Figma export"}
+  ],
+  "nativeAssets": {"source": "existing Super App asset catalog", "newGeneratedAssets": 0},
+  "rule": "No custom replacement artwork was generated. Existing Figma exports and the native asset catalog were reused."
+}

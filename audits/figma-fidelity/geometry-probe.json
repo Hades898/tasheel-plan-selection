@@ -1,0 +1,2330 @@
+[
+  {
+    "route": "checkout",
+    "viewportName": "mobile",
+    "errors": [],
+    "bodyW": 390,
+    "viewportW": 390,
+    "bodyH": 844,
+    "viewportH": 844,
+    "app": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 844
+    },
+    "overflowX": false,
+    "overflowing": [],
+    "images": [
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/levels.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      }
+    ],
+    "brokenImages": [],
+    "rects": {
+      "Extrastores": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 844,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      "Proceed with Tasheel BNPL": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 844,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      }
+    }
+  },
+  {
+    "route": "checkout/app-home",
+    "viewportName": "mobile",
+    "errors": [],
+    "bodyW": 390,
+    "viewportW": 390,
+    "bodyH": 844,
+    "viewportH": 844,
+    "app": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 844
+    },
+    "overflowX": false,
+    "overflowing": [
+      {
+        "tag": "DIV",
+        "text": "",
+        "sw": 535,
+        "cw": 390
+      },
+      {
+        "tag": "DIV",
+        "text": "",
+        "sw": 114,
+        "cw": 21
+      }
+    ],
+    "images": [
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/homeElementB.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/homeElementA.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/levels.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/tasheelLogoPartA.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/tasheelLogoPartB.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/tasheelLogoPartC.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/homeDuesIcon.png",
+        "complete": true,
+        "naturalWidth": 767,
+        "naturalHeight": 728
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/homePurchasesIcon.png",
+        "complete": true,
+        "naturalWidth": 1254,
+        "naturalHeight": 1254
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/homeInsightsIcon.png",
+        "complete": true,
+        "naturalWidth": 1254,
+        "naturalHeight": 1254
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/extraLogo.png",
+        "complete": true,
+        "naturalWidth": 799,
+        "naturalHeight": 548
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/extraLogo.png",
+        "complete": true,
+        "naturalWidth": 799,
+        "naturalHeight": 548
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/jarirLogo.png",
+        "complete": true,
+        "naturalWidth": 416,
+        "naturalHeight": 203
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/noonLogo.png",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 300
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/tabHome.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/tabFlash.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/tabBnpl.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/tabProfile.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      }
+    ],
+    "brokenImages": [],
+    "rects": {
+      "Your Next Payment": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 844,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      "Active Purchases": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 844,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      "Next up": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 844,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      }
+    }
+  },
+  {
+    "route": "checkout/detail",
+    "viewportName": "mobile",
+    "errors": [],
+    "bodyW": 390,
+    "viewportW": 390,
+    "bodyH": 844,
+    "viewportH": 844,
+    "app": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 844
+    },
+    "overflowX": false,
+    "overflowing": [
+      {
+        "tag": "DIV",
+        "text": "9:41Extrastores25th of April, 2026Active",
+        "sw": 402,
+        "cw": 388
+      }
+    ],
+    "images": [
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/levels.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/extraLogo.png",
+        "complete": true,
+        "naturalWidth": 799,
+        "naturalHeight": 548
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      }
+    ],
+    "brokenImages": [],
+    "rects": {
+      "Payment Schedule": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 844,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      "Purchase Details": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 844,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      "Pay next installment": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 844,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      }
+    }
+  },
+  {
+    "route": "checkout/dues",
+    "viewportName": "mobile",
+    "errors": [],
+    "bodyW": 390,
+    "viewportW": 390,
+    "bodyH": 844,
+    "viewportH": 844,
+    "app": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 844
+    },
+    "overflowX": false,
+    "overflowing": [
+      {
+        "tag": "DIV",
+        "text": "9:411 Due Selected1,800Remaining1,200Ext",
+        "sw": 402,
+        "cw": 388
+      },
+      {
+        "tag": "DIV",
+        "text": "iPhone 16 Pro Max · In 2 days  - April 2",
+        "sw": 219,
+        "cw": 216
+      },
+      {
+        "tag": "DIV",
+        "text": "",
+        "sw": 134,
+        "cw": 25
+      },
+      {
+        "tag": "DIV",
+        "text": "",
+        "sw": 134,
+        "cw": 25
+      }
+    ],
+    "images": [
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/levels.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/extraLogo.png",
+        "complete": true,
+        "naturalWidth": 799,
+        "naturalHeight": 548
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/jarirLogo.png",
+        "complete": true,
+        "naturalWidth": 416,
+        "naturalHeight": 203
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/noonLogo.png",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 300
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/jarirLogo.png",
+        "complete": true,
+        "naturalWidth": 416,
+        "naturalHeight": 203
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalOnPrimary.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      }
+    ],
+    "brokenImages": [],
+    "rects": {
+      "1 Due Selected": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 844,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      "Remaining 1,200": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 844,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      "Pay selected": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 844,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      }
+    }
+  },
+  {
+    "route": "checkout/purchases",
+    "viewportName": "mobile",
+    "errors": [],
+    "bodyW": 390,
+    "viewportW": 390,
+    "bodyH": 844,
+    "viewportH": 844,
+    "app": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 844
+    },
+    "overflowX": false,
+    "overflowing": [
+      {
+        "tag": "DIV",
+        "text": "",
+        "sw": 127,
+        "cw": 24
+      }
+    ],
+    "images": [
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/levels.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/tasheelLogoPartA.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/tasheelLogoPartB.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/tasheelLogoPartC.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/extraLogo.png",
+        "complete": true,
+        "naturalWidth": 799,
+        "naturalHeight": 548
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/jarirLogo.png",
+        "complete": true,
+        "naturalWidth": 416,
+        "naturalHeight": 203
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/noonLogo.png",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 300
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/extraLogo.png",
+        "complete": true,
+        "naturalWidth": 799,
+        "naturalHeight": 548
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      }
+    ],
+    "brokenImages": [],
+    "rects": {
+      "My Purchases": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 844,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      "View all your purchases": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 844,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      "Samsung Galaxy S26": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 844,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      }
+    }
+  },
+  {
+    "route": "checkout/insights",
+    "viewportName": "mobile",
+    "errors": [],
+    "bodyW": 390,
+    "viewportW": 390,
+    "bodyH": 844,
+    "viewportH": 844,
+    "app": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 844
+    },
+    "overflowX": false,
+    "overflowing": [
+      {
+        "tag": "DIV",
+        "text": "",
+        "sw": 127,
+        "cw": 24
+      },
+      {
+        "tag": "DIV",
+        "text": "",
+        "sw": 127,
+        "cw": 24
+      }
+    ],
+    "images": [
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/levels.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/extraLogo.png",
+        "complete": true,
+        "naturalWidth": 799,
+        "naturalHeight": 548
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/jarirLogo.png",
+        "complete": true,
+        "naturalWidth": 416,
+        "naturalHeight": 203
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/jarirLogo.png",
+        "complete": true,
+        "naturalWidth": 416,
+        "naturalHeight": 203
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/noonLogo.png",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 300
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      }
+    ],
+    "brokenImages": [],
+    "rects": {
+      "Spent in April": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 844,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      "Transactions": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 844,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      "Noon": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 844,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      }
+    }
+  },
+  {
+    "route": "checkout",
+    "viewportName": "short",
+    "errors": [],
+    "bodyW": 390,
+    "viewportW": 390,
+    "bodyH": 640,
+    "viewportH": 640,
+    "app": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 640
+    },
+    "overflowX": false,
+    "overflowing": [],
+    "images": [
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/levels.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      }
+    ],
+    "brokenImages": [],
+    "rects": {
+      "Extrastores": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 640,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      "Proceed with Tasheel BNPL": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 640,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      }
+    }
+  },
+  {
+    "route": "checkout/app-home",
+    "viewportName": "short",
+    "errors": [],
+    "bodyW": 390,
+    "viewportW": 390,
+    "bodyH": 640,
+    "viewportH": 640,
+    "app": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 640
+    },
+    "overflowX": false,
+    "overflowing": [
+      {
+        "tag": "DIV",
+        "text": "",
+        "sw": 535,
+        "cw": 390
+      },
+      {
+        "tag": "DIV",
+        "text": "",
+        "sw": 114,
+        "cw": 21
+      }
+    ],
+    "images": [
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/homeElementB.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/homeElementA.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/levels.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/tasheelLogoPartA.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/tasheelLogoPartB.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/tasheelLogoPartC.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/homeDuesIcon.png",
+        "complete": true,
+        "naturalWidth": 767,
+        "naturalHeight": 728
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/homePurchasesIcon.png",
+        "complete": true,
+        "naturalWidth": 1254,
+        "naturalHeight": 1254
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/homeInsightsIcon.png",
+        "complete": true,
+        "naturalWidth": 1254,
+        "naturalHeight": 1254
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/extraLogo.png",
+        "complete": true,
+        "naturalWidth": 799,
+        "naturalHeight": 548
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/extraLogo.png",
+        "complete": true,
+        "naturalWidth": 799,
+        "naturalHeight": 548
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/jarirLogo.png",
+        "complete": true,
+        "naturalWidth": 416,
+        "naturalHeight": 203
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/noonLogo.png",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 300
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/tabHome.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/tabFlash.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/tabBnpl.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/tabProfile.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      }
+    ],
+    "brokenImages": [],
+    "rects": {
+      "Your Next Payment": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 640,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      "Active Purchases": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 640,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      "Next up": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 640,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      }
+    }
+  },
+  {
+    "route": "checkout/detail",
+    "viewportName": "short",
+    "errors": [],
+    "bodyW": 390,
+    "viewportW": 390,
+    "bodyH": 640,
+    "viewportH": 640,
+    "app": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 640
+    },
+    "overflowX": false,
+    "overflowing": [
+      {
+        "tag": "DIV",
+        "text": "9:41Extrastores25th of April, 2026Active",
+        "sw": 402,
+        "cw": 294
+      }
+    ],
+    "images": [
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/levels.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/extraLogo.png",
+        "complete": true,
+        "naturalWidth": 799,
+        "naturalHeight": 548
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      }
+    ],
+    "brokenImages": [],
+    "rects": {
+      "Payment Schedule": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 640,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      "Purchase Details": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 640,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      "Pay next installment": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 640,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      }
+    }
+  },
+  {
+    "route": "checkout/dues",
+    "viewportName": "short",
+    "errors": [],
+    "bodyW": 390,
+    "viewportW": 390,
+    "bodyH": 640,
+    "viewportH": 640,
+    "app": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 640
+    },
+    "overflowX": false,
+    "overflowing": [
+      {
+        "tag": "DIV",
+        "text": "9:411 Due Selected1,800Remaining1,200Ext",
+        "sw": 402,
+        "cw": 294
+      },
+      {
+        "tag": "DIV",
+        "text": "iPhone 16 Pro Max · In 2 days  - April 2",
+        "sw": 219,
+        "cw": 216
+      },
+      {
+        "tag": "DIV",
+        "text": "",
+        "sw": 134,
+        "cw": 25
+      },
+      {
+        "tag": "DIV",
+        "text": "",
+        "sw": 134,
+        "cw": 25
+      }
+    ],
+    "images": [
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/levels.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/extraLogo.png",
+        "complete": true,
+        "naturalWidth": 799,
+        "naturalHeight": 548
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/jarirLogo.png",
+        "complete": true,
+        "naturalWidth": 416,
+        "naturalHeight": 203
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/noonLogo.png",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 300
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/jarirLogo.png",
+        "complete": true,
+        "naturalWidth": 416,
+        "naturalHeight": 203
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalOnPrimary.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      }
+    ],
+    "brokenImages": [],
+    "rects": {
+      "1 Due Selected": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 640,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      "Remaining 1,200": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 640,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      "Pay selected": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 640,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      }
+    }
+  },
+  {
+    "route": "checkout/purchases",
+    "viewportName": "short",
+    "errors": [],
+    "bodyW": 390,
+    "viewportW": 390,
+    "bodyH": 640,
+    "viewportH": 640,
+    "app": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 640
+    },
+    "overflowX": false,
+    "overflowing": [
+      {
+        "tag": "DIV",
+        "text": "",
+        "sw": 127,
+        "cw": 24
+      }
+    ],
+    "images": [
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/levels.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/tasheelLogoPartA.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/tasheelLogoPartB.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/tasheelLogoPartC.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/extraLogo.png",
+        "complete": true,
+        "naturalWidth": 799,
+        "naturalHeight": 548
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/jarirLogo.png",
+        "complete": true,
+        "naturalWidth": 416,
+        "naturalHeight": 203
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/noonLogo.png",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 300
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/extraLogo.png",
+        "complete": true,
+        "naturalWidth": 799,
+        "naturalHeight": 548
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      }
+    ],
+    "brokenImages": [],
+    "rects": {
+      "My Purchases": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 640,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      "View all your purchases": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 640,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      "Samsung Galaxy S26": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 640,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      }
+    }
+  },
+  {
+    "route": "checkout/insights",
+    "viewportName": "short",
+    "errors": [],
+    "bodyW": 390,
+    "viewportW": 390,
+    "bodyH": 640,
+    "viewportH": 640,
+    "app": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 640
+    },
+    "overflowX": false,
+    "overflowing": [
+      {
+        "tag": "DIV",
+        "text": "",
+        "sw": 127,
+        "cw": 24
+      },
+      {
+        "tag": "DIV",
+        "text": "",
+        "sw": 127,
+        "cw": 24
+      }
+    ],
+    "images": [
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/levels.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/extraLogo.png",
+        "complete": true,
+        "naturalWidth": 799,
+        "naturalHeight": 548
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/jarirLogo.png",
+        "complete": true,
+        "naturalWidth": 416,
+        "naturalHeight": 203
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/jarirLogo.png",
+        "complete": true,
+        "naturalWidth": 416,
+        "naturalHeight": 203
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/noonLogo.png",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 300
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      }
+    ],
+    "brokenImages": [],
+    "rects": {
+      "Spent in April": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 640,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      "Transactions": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 640,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      "Noon": {
+        "x": 0,
+        "y": 0,
+        "w": 390,
+        "h": 640,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      }
+    }
+  },
+  {
+    "route": "checkout",
+    "viewportName": "desktop",
+    "errors": [],
+    "bodyW": 1280,
+    "viewportW": 1280,
+    "bodyH": 720,
+    "viewportH": 720,
+    "app": {
+      "x": 0,
+      "y": 0,
+      "w": 1280,
+      "h": 720
+    },
+    "overflowX": false,
+    "overflowing": [],
+    "images": [
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/levels.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      }
+    ],
+    "brokenImages": [],
+    "rects": {
+      "Extrastores": {
+        "x": 0,
+        "y": 0,
+        "w": 1280,
+        "h": 720,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      "Proceed with Tasheel BNPL": {
+        "x": 0,
+        "y": 0,
+        "w": 1280,
+        "h": 720,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      }
+    }
+  },
+  {
+    "route": "checkout/app-home",
+    "viewportName": "desktop",
+    "errors": [],
+    "bodyW": 1280,
+    "viewportW": 1280,
+    "bodyH": 720,
+    "viewportH": 720,
+    "app": {
+      "x": 0,
+      "y": 0,
+      "w": 1280,
+      "h": 720
+    },
+    "overflowX": false,
+    "overflowing": [
+      {
+        "tag": "DIV",
+        "text": "",
+        "sw": 547,
+        "cw": 402
+      },
+      {
+        "tag": "DIV",
+        "text": "",
+        "sw": 114,
+        "cw": 21
+      }
+    ],
+    "images": [
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/homeElementB.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/homeElementA.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/levels.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/tasheelLogoPartA.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/tasheelLogoPartB.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/tasheelLogoPartC.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/homeDuesIcon.png",
+        "complete": true,
+        "naturalWidth": 767,
+        "naturalHeight": 728
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/homePurchasesIcon.png",
+        "complete": true,
+        "naturalWidth": 1254,
+        "naturalHeight": 1254
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/homeInsightsIcon.png",
+        "complete": true,
+        "naturalWidth": 1254,
+        "naturalHeight": 1254
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/extraLogo.png",
+        "complete": true,
+        "naturalWidth": 799,
+        "naturalHeight": 548
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/extraLogo.png",
+        "complete": true,
+        "naturalWidth": 799,
+        "naturalHeight": 548
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/jarirLogo.png",
+        "complete": true,
+        "naturalWidth": 416,
+        "naturalHeight": 203
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/noonLogo.png",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 300
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/tabHome.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/tabFlash.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/tabBnpl.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/tabProfile.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      }
+    ],
+    "brokenImages": [],
+    "rects": {
+      "Your Next Payment": {
+        "x": 0,
+        "y": 0,
+        "w": 1280,
+        "h": 720,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      "Active Purchases": {
+        "x": 0,
+        "y": 0,
+        "w": 1280,
+        "h": 720,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      "Next up": {
+        "x": 0,
+        "y": 0,
+        "w": 1280,
+        "h": 720,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      }
+    }
+  },
+  {
+    "route": "checkout/detail",
+    "viewportName": "desktop",
+    "errors": [],
+    "bodyW": 1280,
+    "viewportW": 1280,
+    "bodyH": 720,
+    "viewportH": 720,
+    "app": {
+      "x": 0,
+      "y": 0,
+      "w": 1280,
+      "h": 720
+    },
+    "overflowX": false,
+    "overflowing": [
+      {
+        "tag": "DIV",
+        "text": "9:41Extrastores25th of April, 2026Active",
+        "sw": 402,
+        "cw": 331
+      }
+    ],
+    "images": [
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/levels.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/extraLogo.png",
+        "complete": true,
+        "naturalWidth": 799,
+        "naturalHeight": 548
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      }
+    ],
+    "brokenImages": [],
+    "rects": {
+      "Payment Schedule": {
+        "x": 0,
+        "y": 0,
+        "w": 1280,
+        "h": 720,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      "Purchase Details": {
+        "x": 0,
+        "y": 0,
+        "w": 1280,
+        "h": 720,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      "Pay next installment": {
+        "x": 0,
+        "y": 0,
+        "w": 1280,
+        "h": 720,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      }
+    }
+  },
+  {
+    "route": "checkout/dues",
+    "viewportName": "desktop",
+    "errors": [],
+    "bodyW": 1280,
+    "viewportW": 1280,
+    "bodyH": 720,
+    "viewportH": 720,
+    "app": {
+      "x": 0,
+      "y": 0,
+      "w": 1280,
+      "h": 720
+    },
+    "overflowX": false,
+    "overflowing": [
+      {
+        "tag": "DIV",
+        "text": "9:411 Due Selected1,800Remaining1,200Ext",
+        "sw": 402,
+        "cw": 331
+      },
+      {
+        "tag": "DIV",
+        "text": "iPhone 16 Pro Max · In 2 days  - April 2",
+        "sw": 219,
+        "cw": 216
+      },
+      {
+        "tag": "DIV",
+        "text": "",
+        "sw": 134,
+        "cw": 25
+      },
+      {
+        "tag": "DIV",
+        "text": "",
+        "sw": 134,
+        "cw": 25
+      }
+    ],
+    "images": [
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/levels.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/extraLogo.png",
+        "complete": true,
+        "naturalWidth": 799,
+        "naturalHeight": 548
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/jarirLogo.png",
+        "complete": true,
+        "naturalWidth": 416,
+        "naturalHeight": 203
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/noonLogo.png",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 300
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/jarirLogo.png",
+        "complete": true,
+        "naturalWidth": 416,
+        "naturalHeight": 203
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalOnPrimary.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      }
+    ],
+    "brokenImages": [],
+    "rects": {
+      "1 Due Selected": {
+        "x": 0,
+        "y": 0,
+        "w": 1280,
+        "h": 720,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      "Remaining 1,200": {
+        "x": 0,
+        "y": 0,
+        "w": 1280,
+        "h": 720,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      "Pay selected": {
+        "x": 0,
+        "y": 0,
+        "w": 1280,
+        "h": 720,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      }
+    }
+  },
+  {
+    "route": "checkout/purchases",
+    "viewportName": "desktop",
+    "errors": [],
+    "bodyW": 1280,
+    "viewportW": 1280,
+    "bodyH": 720,
+    "viewportH": 720,
+    "app": {
+      "x": 0,
+      "y": 0,
+      "w": 1280,
+      "h": 720
+    },
+    "overflowX": false,
+    "overflowing": [
+      {
+        "tag": "DIV",
+        "text": "",
+        "sw": 127,
+        "cw": 24
+      }
+    ],
+    "images": [
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/levels.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/tasheelLogoPartA.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/tasheelLogoPartB.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/tasheelLogoPartC.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/extraLogo.png",
+        "complete": true,
+        "naturalWidth": 799,
+        "naturalHeight": 548
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/jarirLogo.png",
+        "complete": true,
+        "naturalWidth": 416,
+        "naturalHeight": 203
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/noonLogo.png",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 300
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/extraLogo.png",
+        "complete": true,
+        "naturalWidth": 799,
+        "naturalHeight": 548
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      }
+    ],
+    "brokenImages": [],
+    "rects": {
+      "My Purchases": {
+        "x": 0,
+        "y": 0,
+        "w": 1280,
+        "h": 720,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      "View all your purchases": {
+        "x": 0,
+        "y": 0,
+        "w": 1280,
+        "h": 720,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      "Samsung Galaxy S26": {
+        "x": 0,
+        "y": 0,
+        "w": 1280,
+        "h": 720,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      }
+    }
+  },
+  {
+    "route": "checkout/insights",
+    "viewportName": "desktop",
+    "errors": [],
+    "bodyW": 1280,
+    "viewportW": 1280,
+    "bodyH": 720,
+    "viewportH": 720,
+    "app": {
+      "x": 0,
+      "y": 0,
+      "w": 1280,
+      "h": 720
+    },
+    "overflowX": false,
+    "overflowing": [
+      {
+        "tag": "DIV",
+        "text": "",
+        "sw": 127,
+        "cw": 24
+      },
+      {
+        "tag": "DIV",
+        "text": "",
+        "sw": 127,
+        "cw": 24
+      }
+    ],
+    "images": [
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/levels.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/extraLogo.png",
+        "complete": true,
+        "naturalWidth": 799,
+        "naturalHeight": 548
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/jarirLogo.png",
+        "complete": true,
+        "naturalWidth": 416,
+        "naturalHeight": 203
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/jarirLogo.png",
+        "complete": true,
+        "naturalWidth": 416,
+        "naturalHeight": 203
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/noonLogo.png",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 300
+      },
+      {
+        "src": "http://127.0.0.1:4174/tasheel-bnpl-prototype/figma/riyalDark.svg",
+        "complete": true,
+        "naturalWidth": 300,
+        "naturalHeight": 150
+      }
+    ],
+    "brokenImages": [],
+    "rects": {
+      "Spent in April": {
+        "x": 0,
+        "y": 0,
+        "w": 1280,
+        "h": 720,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      "Transactions": {
+        "x": 0,
+        "y": 0,
+        "w": 1280,
+        "h": 720,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      "Noon": {
+        "x": 0,
+        "y": 0,
+        "w": 1280,
+        "h": 720,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      }
+    }
+  }
+]

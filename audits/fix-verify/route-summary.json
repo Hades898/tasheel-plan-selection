@@ -1,0 +1,218 @@
+[
+  {
+    "route": "checkout",
+    "vp": "mobile",
+    "errors": 0,
+    "text": "Extrastores Complete your purchase ▣ iPhone 16 Pro Max 256GB — Natural Titanium ",
+    "scroll": "844/844",
+    "maxBottom": 844,
+    "overflowX": false
+  },
+  {
+    "route": "checkout/app-home",
+    "vp": "mobile",
+    "errors": 0,
+    "text": "9:41 ▮▮▮ ⌁ Your Next Payment ﷼ 4,250 .00 Pay now Jarir Store · due Apr 21 extra ",
+    "scroll": "844/844",
+    "maxBottom": 844,
+    "overflowX": false
+  },
+  {
+    "route": "checkout/home",
+    "vp": "mobile",
+    "errors": 0,
+    "text": "9:41 ▮▮▮ ⌁ Your Next Payment ﷼ 4,250 .00 Pay now Jarir Store · due Apr 21 extra ",
+    "scroll": "844/844",
+    "maxBottom": 844,
+    "overflowX": false
+  },
+  {
+    "route": "checkout/detail",
+    "vp": "mobile",
+    "errors": 0,
+    "text": "9:41 ▮▮▮ ⌁ ‹ extra Extrastores 25th of April, 2026 Active ﷼ 3,666 .00 1 Paid ﷼ 9",
+    "scroll": "844/844",
+    "maxBottom": 978,
+    "overflowX": false
+  },
+  {
+    "route": "checkout/details",
+    "vp": "mobile",
+    "errors": 0,
+    "text": "9:41 ▮▮▮ ⌁ ‹ extra Extrastores 25th of April, 2026 Active ﷼ 3,666 .00 1 Paid ﷼ 9",
+    "scroll": "844/844",
+    "maxBottom": 978,
+    "overflowX": false
+  },
+  {
+    "route": "checkout/insights",
+    "vp": "mobile",
+    "errors": 0,
+    "text": "9:41 ▮▮▮ ⌁ ‹ Insights ⌄ April Spent in April ﷼ 4,300 Nov Dec Jan Feb Mar 4.3k Ap",
+    "scroll": "844/844",
+    "maxBottom": 844,
+    "overflowX": false
+  },
+  {
+    "route": "checkout/purchases",
+    "vp": "mobile",
+    "errors": 0,
+    "text": "9:41 ▮▮▮ ⌁ ‹ × My Purchases View all your purchases All Active Completed extra E",
+    "scroll": "844/844",
+    "maxBottom": 871,
+    "overflowX": false
+  },
+  {
+    "route": "checkout/dues",
+    "vp": "mobile",
+    "errors": 0,
+    "text": "9:41 ▮▮▮ ⌁ ‹ 4 Dues Selected ﷼ 1,800 Remaining 1200 extra Extra Stores In 2 days",
+    "scroll": "844/844",
+    "maxBottom": 844,
+    "overflowX": false
+  },
+  {
+    "route": "checkout",
+    "vp": "short",
+    "errors": 0,
+    "text": "Extrastores Complete your purchase ▣ iPhone 16 Pro Max 256GB — Natural Titanium ",
+    "scroll": "640/640",
+    "maxBottom": 640,
+    "overflowX": false
+  },
+  {
+    "route": "checkout/app-home",
+    "vp": "short",
+    "errors": 0,
+    "text": "9:41 ▮▮▮ ⌁ Your Next Payment ﷼ 4,250 .00 Pay now Jarir Store · due Apr 21 extra ",
+    "scroll": "749/640",
+    "maxBottom": 749,
+    "overflowX": false
+  },
+  {
+    "route": "checkout/home",
+    "vp": "short",
+    "errors": 0,
+    "text": "9:41 ▮▮▮ ⌁ Your Next Payment ﷼ 4,250 .00 Pay now Jarir Store · due Apr 21 extra ",
+    "scroll": "749/640",
+    "maxBottom": 749,
+    "overflowX": false
+  },
+  {
+    "route": "checkout/detail",
+    "vp": "short",
+    "errors": 0,
+    "text": "9:41 ▮▮▮ ⌁ ‹ extra Extrastores 25th of April, 2026 Active ﷼ 3,666 .00 1 Paid ﷼ 9",
+    "scroll": "640/640",
+    "maxBottom": 978,
+    "overflowX": false
+  },
+  {
+    "route": "checkout/details",
+    "vp": "short",
+    "errors": 0,
+    "text": "9:41 ▮▮▮ ⌁ ‹ extra Extrastores 25th of April, 2026 Active ﷼ 3,666 .00 1 Paid ﷼ 9",
+    "scroll": "640/640",
+    "maxBottom": 978,
+    "overflowX": false
+  },
+  {
+    "route": "checkout/insights",
+    "vp": "short",
+    "errors": 0,
+    "text": "9:41 ▮▮▮ ⌁ ‹ Insights ⌄ April Spent in April ﷼ 4,300 Nov Dec Jan Feb Mar 4.3k Ap",
+    "scroll": "683/640",
+    "maxBottom": 683,
+    "overflowX": false
+  },
+  {
+    "route": "checkout/purchases",
+    "vp": "short",
+    "errors": 0,
+    "text": "9:41 ▮▮▮ ⌁ ‹ × My Purchases View all your purchases All Active Completed extra E",
+    "scroll": "640/640",
+    "maxBottom": 871,
+    "overflowX": false
+  },
+  {
+    "route": "checkout/dues",
+    "vp": "short",
+    "errors": 0,
+    "text": "9:41 ▮▮▮ ⌁ ‹ 4 Dues Selected ﷼ 1,800 Remaining 1200 extra Extra Stores In 2 days",
+    "scroll": "640/640",
+    "maxBottom": 693,
+    "overflowX": false
+  },
+  {
+    "route": "checkout",
+    "vp": "desktop",
+    "errors": 0,
+    "text": "Extrastores Complete your purchase ▣ iPhone 16 Pro Max 256GB — Natural Titanium ",
+    "scroll": "720/720",
+    "maxBottom": 720,
+    "overflowX": false
+  },
+  {
+    "route": "checkout/app-home",
+    "vp": "desktop",
+    "errors": 0,
+    "text": "9:41 ▮▮▮ ⌁ Your Next Payment ﷼ 4,250 .00 Pay now Jarir Store · due Apr 21 extra ",
+    "scroll": "749/720",
+    "maxBottom": 749,
+    "overflowX": false
+  },
+  {
+    "route": "checkout/home",
+    "vp": "desktop",
+    "errors": 0,
+    "text": "9:41 ▮▮▮ ⌁ Your Next Payment ﷼ 4,250 .00 Pay now Jarir Store · due Apr 21 extra ",
+    "scroll": "749/720",
+    "maxBottom": 749,
+    "overflowX": false
+  },
+  {
+    "route": "checkout/detail",
+    "vp": "desktop",
+    "errors": 0,
+    "text": "9:41 ▮▮▮ ⌁ ‹ extra Extrastores 25th of April, 2026 Active ﷼ 3,666 .00 1 Paid ﷼ 9",
+    "scroll": "720/720",
+    "maxBottom": 978,
+    "overflowX": false
+  },
+  {
+    "route": "checkout/details",
+    "vp": "desktop",
+    "errors": 0,
+    "text": "9:41 ▮▮▮ ⌁ ‹ extra Extrastores 25th of April, 2026 Active ﷼ 3,666 .00 1 Paid ﷼ 9",
+    "scroll": "720/720",
+    "maxBottom": 978,
+    "overflowX": false
+  },
+  {
+    "route": "checkout/insights",
+    "vp": "desktop",
+    "errors": 0,
+    "text": "9:41 ▮▮▮ ⌁ ‹ Insights ⌄ April Spent in April ﷼ 4,300 Nov Dec Jan Feb Mar 4.3k Ap",
+    "scroll": "720/720",
+    "maxBottom": 720,
+    "overflowX": false
+  },
+  {
+    "route": "checkout/purchases",
+    "vp": "desktop",
+    "errors": 0,
+    "text": "9:41 ▮▮▮ ⌁ ‹ × My Purchases View all your purchases All Active Completed extra E",
+    "scroll": "720/720",
+    "maxBottom": 871,
+    "overflowX": false
+  },
+  {
+    "route": "checkout/dues",
+    "vp": "desktop",
+    "errors": 0,
+    "text": "9:41 ▮▮▮ ⌁ ‹ 4 Dues Selected ﷼ 1,800 Remaining 1200 extra Extra Stores In 2 days",
+    "scroll": "720/720",
+    "maxBottom": 720,
+    "overflowX": false
+  }
+]

@@ -1,0 +1,92 @@
+{
+  "metrics": {
+    "href": "https://hades898.github.io/tasheel-bnpl-prototype/checkout/purchases?audit=purchase-mobile",
+    "title": "",
+    "text": "‹\nMy Purchases\nView all your purchases\nAll\nActive\nCompleted\nاكسترا\nextra\nExtrastores\nSamsung Galaxy S26\nActive\n1 of 3 installments paid\n450.00\n/mo\nاكسترا\nextra\nExtrastores\nSamsung Galaxy S26\nActive\n2 of 3 installments paid\n450.00\n/mo\nج\nJarir Bookstore\nMacBook Air M4\nActive\n1 of 2 installments paid\n720.00\n/mo\nnoon\nNoon\nMultiple products\nActive\n1 of 4 installments paid\n320.00\n/mo\nاكسترا\nextra\nExtrastores\nAirPods Pro 3\nCompleted\n3 of 3 installments paid\n210.00\n/mo",
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "scrollHeight": 844,
+    "clientHeight": 844,
+    "buttons": [
+      {
+        "text": "‹",
+        "rect": {
+          "x": 20,
+          "y": 10,
+          "width": 44,
+          "height": 44,
+          "top": 10,
+          "right": 64,
+          "bottom": 54,
+          "left": 20
+        }
+      },
+      {
+        "text": "اكستراextraExtrastoresSamsung Galaxy S26Active1 of 3 installments paid450.00/mo",
+        "rect": {
+          "x": 20,
+          "y": 208,
+          "width": 350,
+          "height": 124,
+          "top": 208,
+          "right": 370,
+          "bottom": 332,
+          "left": 20
+        }
+      },
+      {
+        "text": "اكستراextraExtrastoresSamsung Galaxy S26Active2 of 3 installments paid450.00/mo",
+        "rect": {
+          "x": 20,
+          "y": 346,
+          "width": 350,
+          "height": 124,
+          "top": 346,
+          "right": 370,
+          "bottom": 470,
+          "left": 20
+        }
+      },
+      {
+        "text": "جJarir BookstoreMacBook Air M4Active1 of 2 installments paid720.00/mo",
+        "rect": {
+          "x": 20,
+          "y": 484,
+          "width": 350,
+          "height": 124,
+          "top": 484,
+          "right": 370,
+          "bottom": 608,
+          "left": 20
+        }
+      },
+      {
+        "text": "noonNoonMultiple productsActive1 of 4 installments paid320.00/mo",
+        "rect": {
+          "x": 20,
+          "y": 622,
+          "width": 350,
+          "height": 124,
+          "top": 622,
+          "right": 370,
+          "bottom": 746,
+          "left": 20
+        }
+      },
+      {
+        "text": "اكستراextraExtrastoresAirPods Pro 3Completed3 of 3 installments paid210.00/mo",
+        "rect": {
+          "x": 20,
+          "y": 760,
+          "width": 350,
+          "height": 124,
+          "top": 760,
+          "right": 370,
+          "bottom": 884,
+          "left": 20
+        }
+      }
+    ]
+  },
+  "errors": []
+}

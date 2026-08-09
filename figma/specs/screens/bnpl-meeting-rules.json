@@ -1,0 +1,48 @@
+{
+  "source": {
+    "figmaUrl": "https://www.figma.com/design/geEFxJ11n2KySAZB6zsjEh/BNPL?node-id=355-48766",
+    "nodeId": "355:58228",
+    "screenName": "bnpl-meeting-rules",
+    "screenshots": [
+      "artifacts/bnpl-meeting-rules/screenshots/figma-payment-1741-78226.png",
+      "artifacts/bnpl-meeting-rules/screenshots/meeting-murabaha-reference.png"
+    ]
+  },
+  "frame": {"width": 390, "height": 844, "platform": "RN Web / GitHub Pages"},
+  "tokens": {"designSystem": "figma/specs/design-system.json", "measuredCheckout": "figma-spec/checkout.json"},
+  "nodes": [
+    {"name": "addToCart", "testId": "wc-add-to-cart", "required": true},
+    {"name": "cartContinue", "testId": "wc-cart-continue", "required": true},
+    {"name": "quickCall", "testId": "wc-quickcall-1628-55884", "required": true},
+    {"name": "tenure", "testId": "wc-tenure-1878-13247", "sourceNodeId": "1878:13247", "required": true},
+    {"name": "discountSummary", "testId": "wc-discount-summary", "required": true},
+    {"name": "productLimits", "testId": "wc-product-limits", "required": true},
+    {"name": "fourMonthHelp", "testId": "wc-four-month-fee-help", "required": true},
+    {"name": "payment", "testId": "wc-payment-1961-27293", "sourceNodeId": "1741:78226", "required": true},
+    {"name": "murabahaSheet", "testId": "wc-murabaha-sheet", "required": true},
+    {"name": "payCta", "testId": "wc-pay-cta", "required": true},
+    {"name": "processing", "testId": "wc-processing-1691-67680", "sourceNodeId": "1691:67680", "required": true},
+    {"name": "success", "testId": "wc-success-1691-67703", "sourceNodeId": "1691:67703", "required": true}
+  ],
+  "interactions": [
+    "Add product to cart before financing selection",
+    "Authenticate with mobile, OTP, and IVR",
+    "Apply 10% discount before financing calculations",
+    "Disable unknown-rate tenures",
+    "Open and inspect three Murabaha documents",
+    "Enable Pay only when a payment method is selected and Murabaha is accepted",
+    "Return successful purchase to the native BNPL landing page"
+  ],
+  "businessRules": {
+    "orderAmountSar": 7000,
+    "discountPercent": 10,
+    "discountedAmountSar": 6300,
+    "availableBnplLimitSar": 5000,
+    "downPaymentSar": 1300,
+    "bnplMaximumSar": 10000,
+    "bnplPlusMaximumSar": 50000,
+    "knownPlans": {"2": "zero fee / zero interest", "3": "zero fee / zero interest", "4": "1% fee / zero interest"},
+    "pendingRatePlans": [6, 9, 12, 24, 36]
+  },
+  "coverageRule": "All checkout stages, calculations, document states, gating states, and native return/application states are runtime-probed or screenshot-verified."
+}

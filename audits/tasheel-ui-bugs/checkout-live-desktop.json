@@ -1,0 +1,27 @@
+{
+  "metrics": {
+    "href": "https://hades898.github.io/tasheel-bnpl-prototype/checkout/?audit=checkout",
+    "title": "",
+    "text": "Extrastores\nComplete your purchase\n📱\niPhone 16 Pro Max\n256GB — Natural Titanium\nSAR 6,553.85\nPayment Method\nCredit / Debit Card\nApple Pay\nCash on Delivery\nTasheel BNPL\nSplit into 3–12 monthly installments\nProceed with Tasheel BNPL",
+    "scrollWidth": 1280,
+    "clientWidth": 1280,
+    "scrollHeight": 720,
+    "clientHeight": 720,
+    "buttons": [
+      {
+        "text": "Proceed with Tasheel BNPL",
+        "rect": {
+          "x": 449,
+          "y": 650,
+          "width": 382,
+          "height": 54,
+          "top": 650,
+          "right": 831,
+          "bottom": 704,
+          "left": 449
+        }
+      }
+    ]
+  },
+  "errors": []
+}
