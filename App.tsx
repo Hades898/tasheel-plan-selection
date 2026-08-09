@@ -1417,23 +1417,29 @@ function WcQuickCall({ setRoute }: { setRoute: (r: RouteKey) => void }) {
 
 // Figma 3529:83319 — cart summary pill shared by both plan-selection variants:
 // item count, the applied merchant discount, struck original and payable total.
-function WcCartPill({ onPress }: { onPress: () => void }) {
+// Every discount in this product lands on the cart total, so the pill is live:
+// pass the selected tenure and the cart amount drops with it, the chip carrying
+// the combined percent off the original 4,350 (merchant + plan tier).
+function WcCartPill({ onPress, months }: { onPress: () => void; months?: number | null }) {
+  const tierSaving = months ? wcPlanSaving(months) : 0;
+  const payable = Math.round((WC_DISCOUNTED_TOTAL - tierSaving) * 100) / 100;
+  const pct = Math.round(((WC_DISCOUNT_AMOUNT + tierSaving) / WC_CART_TOTAL) * 100);
   return (
     <Pressable
       testID="wc-cart-pill"
       style={styles.wcCartPill}
       onPress={onPress}
       accessibilityRole="button"
-      accessibilityLabel={`${WC_CART_ITEMS} items, ${WC_DISCOUNT_PERCENT} percent off, pay ${wcMoney(WC_DISCOUNTED_TOTAL)} instead of ${wcMoney(WC_CART_TOTAL)}. View cart details`}
+      accessibilityLabel={`${WC_CART_ITEMS} items, ${pct} percent off your cart, pay ${wcMoney(payable)} instead of ${wcMoney(WC_CART_TOTAL)}. View cart details`}
     >
       <View style={styles.wcCartLeft}>
         <Image source={figmaImageSource('wcCartIcon')} resizeMode="contain" accessibilityIgnoresInvertColors style={{ width: 16, height: 16 }} />
         <Text style={styles.wcCartItems}>{WC_CART_ITEMS} {WC_CART_ITEMS === 1 ? 'Item' : 'Items'}</Text>
       </View>
       <View style={styles.wcCartRight}>
-        <View style={styles.wcCartDiscountChip}><Text style={styles.wcCartDiscountChipText}>{WC_DISCOUNT_PERCENT}% Off</Text></View>
+        <View style={styles.wcCartDiscountChip}><Text style={styles.wcCartDiscountChipText}>{pct}% Off</Text></View>
         <Text style={styles.wcCartWasPrice}>{formatAmount(WC_CART_TOTAL)}</Text>
-        <Money amount={formatAmount(WC_DISCOUNTED_TOTAL)} size={16} weight="600" />
+        <Money amount={wcSaving(payable)} size={16} weight="600" />
         <Image source={figmaImageSource('wcArrowRight')} resizeMode="contain" accessibilityIgnoresInvertColors style={{ width: 13, height: 13 }} />
       </View>
     </Pressable>
@@ -1454,11 +1460,17 @@ function WcSavingStrip({ months, onViewDiscounts }: { months: number; onViewDisc
           <SaleTag size={16} color={greenMid} />
         )}
         {saving > 0 ? (
-          <>
-            <Text style={styles.wcSavingText}>{Math.round(wcSavingRate(months) * 100)}% Off · Save</Text>
-            <Riyal size={12} color={greenMid} />
-            <Text style={styles.wcSavingText}>{wcSaving(saving)}</Text>
-          </>
+          // On the best plan the chip + live cart pill already carry the story;
+          // repeating "Save 425" here is what made the strip wrap.
+          isBest ? (
+            <Text style={styles.wcSavingText}>{Math.round(wcSavingRate(months) * 100)}% off your cart</Text>
+          ) : (
+            <>
+              <Text style={styles.wcSavingText}>{Math.round(wcSavingRate(months) * 100)}% off cart · Save</Text>
+              <Riyal size={12} color={greenMid} />
+              <Text style={styles.wcSavingText}>{wcSaving(saving)}</Text>
+            </>
+          )
         ) : (
           <Text style={styles.wcSavingText}>No interest. No fees</Text>
         )}
@@ -1519,12 +1531,11 @@ function WcTenureRail({ months, onSelect }: { months: number; onSelect: (m: numb
         <Image source={figmaImageSource('wcMinus')} resizeMode="contain" accessibilityIgnoresInvertColors style={{ width: 23, height: 3 }} />
       </Pressable>
       <View style={styles.wcStepperValues}>
-        {WC_TENURES.map((value, index) => {
+        {WC_TENURES.map((value) => {
           const rate = Math.round(wcSavingRate(value) * 100);
-          // Label only where the tier changes (2% → 5% → 10%): the ladder stays
-          // legible without stamping the same rate under three neighbours.
-          const prevRate = index > 0 ? Math.round(wcSavingRate(WC_TENURES[index - 1]) * 100) : 0;
-          const pct = rate > 0 && rate !== prevRate ? `${rate}%` : ' ';
+          // Every discounted tenure wears its rate: a blank slot next to a
+          // labelled one reads as "no discount", which is wrong for 6 and 9.
+          const pct = rate > 0 ? `${rate}%` : ' ';
           return value === months ? (
             <View key={value} style={styles.wcStepperActiveSlot}>
               <Animated.Text testID="wc-plan-months" style={[styles.wcStepperMain, { transform: [{ scale }] }]}>{value}</Animated.Text>
@@ -1578,7 +1589,7 @@ function WcTenure({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) => 
         <ScreenFade>
           <WcOnboardHeader onClose={() => setRoute('checkout')} />
           <View style={styles.wcTenureContent}>
-            <WcCartPill onPress={() => setSheet('cart')} />
+            <WcCartPill onPress={() => setSheet('cart')} months={months} />
             <View style={styles.wcPlanCard}>
               <View style={{ gap: 6, width: '100%' }}>
                 <Text style={styles.wcPlanTitle}>Choose your plan</Text>
@@ -1592,13 +1603,10 @@ function WcTenure({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) => 
                       <Text style={styles.wcPlanHeroAmount}>{wcMoney(wcPlanMonthly(months))}</Text>
                       <Text style={styles.wcPlanHeroPer}>/mo</Text>
                     </View>
-                    {/* The tier discount applies to the cart total, so the anchor
-                        lives here: Total 4,250 -> 4,165, fee disclosed alongside. */}
+                    {/* Total + fee only — the discount story lives on the cart
+                        pill above, which drops as the tenure grows. */}
                     <View style={styles.wcPlanTotalRow}>
                       <Text style={styles.wcPlanTotalLabel}>Total</Text>
-                      {wcPlanSaving(months) > 0 ? (
-                        <Text style={styles.wcPlanTotalWas}>{formatAmount(WC_DISCOUNTED_TOTAL)}</Text>
-                      ) : null}
                       <Riyal size={11} />
                       <Text style={styles.wcPlanTotalAmount}>{wcSaving(wcPlanPayable(months))}</Text>
                       {fee > 0 ? (
@@ -1715,7 +1723,7 @@ function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) =
         <ScreenFade>
           <WcOnboardHeader onClose={() => setRoute('checkout')} />
           <View style={styles.wcPlansContent}>
-            <WcCartPill onPress={() => setSheet('cart')} />
+            <WcCartPill onPress={() => setSheet('cart')} months={chosen} />
             <View style={styles.wcPlansHead}>
               <Text style={styles.wcPlansEyebrow}>Choose how to split</Text>
               <View style={styles.wcPlansTotalRow}>
@@ -4586,11 +4594,11 @@ const styles = StyleSheet.create({
   wcPlanFees: { fontSize: 12, lineHeight: 16, color: muted, textAlign: 'center' },
   wcPlanFeesRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 },
   // Figma 3529:83365 — saving strip
-  wcSavingStrip: { alignSelf: 'stretch', backgroundColor: '#f0fdf4', borderRadius: 999, paddingHorizontal: 12, paddingVertical: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  wcSavingStripBest: {},
-  wcSavingLeft: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  wcSavingStrip: { alignSelf: 'stretch', backgroundColor: '#f0fdf4', borderRadius: 999, paddingHorizontal: 12, paddingVertical: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
+  wcSavingStripBest: { paddingHorizontal: 10 },
+  wcSavingLeft: { flexDirection: 'row', alignItems: 'center', gap: 5, flexShrink: 1 },
   wcSavingText: { fontSize: 12, lineHeight: 16, fontWeight: '500', color: greenMid, letterSpacing: 0.38 },
-  wcBestChip: { backgroundColor: greenMid, borderRadius: 999, paddingHorizontal: 8, paddingVertical: 3 },
+  wcBestChip: { backgroundColor: greenMid, borderRadius: 999, paddingHorizontal: 7, paddingVertical: 3 },
   wcBestChipText: { fontSize: 10, lineHeight: 13, fontWeight: '700', color: neon, letterSpacing: 0.4 },
   wcNudge: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 12, paddingVertical: 6 },
   wcNudgeText: { fontSize: 12, lineHeight: 16, fontWeight: '600', color: greenBrand, letterSpacing: -0.08 },
