@@ -1695,7 +1695,8 @@ function WcPlanRow({ months, selected, onPress }: { months: number; selected: bo
           </View>
         ) : null}
         <View style={[styles.wcPlanRowAmount, saving > 0 && { paddingRight: 16 }]}>
-          {saving > 0 ? <Text style={styles.wcPlanRowWas}>{wcMoney(wcPlanBaseMonthly(months))}</Text> : null}
+          {/* One discount signal per row: the badge carries rate + saving; the
+              monthly stays a single clean number. */}
           <Riyal size={14} />
           <Text style={styles.wcPlanRowMonthly}>
             {wcSplitAmount(monthly).whole}
@@ -1732,7 +1733,7 @@ function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) =
                 <Text style={styles.wcPlansTotal}>{formatAmount(WC_CART_TOTAL)}</Text>
               </View>
               <Text style={styles.wcPlansSub}>
-                You can split your purchase up to <Text style={styles.wcPlansSubStrong}>{maxTenure} months</Text>
+                Longer plans get bigger discounts, up to <Text style={styles.wcPlansSubStrong}>{Math.round(wcSavingRate(WC_BEST_TENURE) * 100)}% off</Text>
               </Text>
             </View>
             <View style={styles.wcPlansList} accessibilityRole="radiogroup">
@@ -4612,8 +4613,8 @@ const styles = StyleSheet.create({
   wcDiscountRowRight: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   wcDiscountPct: { fontSize: 13, lineHeight: 18, fontWeight: '600', color: greenBrand },
   // ── Experience A — Figma 3615:73832 ───────────────────────────────────────────
-  wcPlansContent: { paddingHorizontal: 16, marginTop: 24, gap: 24 },
-  wcPlansHead: { paddingHorizontal: 16, alignItems: 'center', gap: 12 },
+  wcPlansContent: { paddingHorizontal: 16, marginTop: 16, gap: 16 },
+  wcPlansHead: { paddingHorizontal: 16, paddingTop: 4, alignItems: 'center', gap: 8 },
   wcPlansEyebrow: { fontSize: 14, lineHeight: 18, color: muted, letterSpacing: 0.36 },
   wcPlansTotalRow: { flexDirection: 'row', alignItems: 'center' },
   wcPlansTotal: { fontSize: 34, lineHeight: 42, fontWeight: '700', color: text, letterSpacing: 0.38 },
@@ -4632,7 +4633,9 @@ const styles = StyleSheet.create({
   wcPlanRowFeeLine: { flexDirection: 'row', alignItems: 'center' },
   wcPlanRowFee: { fontSize: 13, lineHeight: 16, color: muted },
   wcPlanRowRight: { alignItems: 'flex-end', justifyContent: 'center' },
-  wcPlanRowRightOffer: { gap: 16, paddingBottom: 16, alignSelf: 'stretch' },
+  // Badge pinned to the card's top corner, amount to the bottom edge — no
+  // floating gap between them inside the fixed-height row.
+  wcPlanRowRightOffer: { alignSelf: 'stretch', justifyContent: 'space-between', paddingBottom: 14 },
   wcPlanRowBadge: { backgroundColor: greenMid, borderBottomLeftRadius: 16, borderTopRightRadius: 16, paddingHorizontal: 12, paddingVertical: 6, flexDirection: 'row', alignItems: 'center', gap: 2 },
   wcPlanRowBadgeText: { fontSize: 11, lineHeight: 14, fontWeight: '500', color: neon, letterSpacing: 0.38 },
   wcPlanRowAmount: { flexDirection: 'row', alignItems: 'baseline' },
