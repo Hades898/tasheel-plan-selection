@@ -134,3 +134,63 @@ decision rather than made silently.
 - P0: 0
 - P1: 0
 - Open: typeface decision above
+
+---
+
+# Round 2 — discount-emphasis audit (2026-08-09)
+
+Brief: discounts are the value proposition; 24 months (10%) is the headline plan.
+Audit both experiences for how legible that is, fix the stepper's weakness first.
+
+## Findings
+
+**B — stepper (the weak one):**
+1. The discount ladder was invisible. The rail read `2 4 6 9 12 24` with no discount
+   information; a tenure's discount only appeared *after* landing on it, so the
+   "longer = bigger discount" story required six interactions to discover.
+2. The saving strip was the smallest element on the card, and only described the
+   tier you were already on — never what you were leaving on the table.
+3. Nothing marked 24 months as best. Position works against it too: the instinct
+   "more months = more debt" pushes users left, and the product's best offer sits
+   at the far right behind five taps.
+4. The hero showed the discounted monthly with no anchor, so the discount was
+   labelled but never *felt*.
+
+**A — list:**
+1. All six badges had identical size, colour, and weight — 10% had no more visual
+   pull than 2%.
+2. No best-value flag; no anchor price per row.
+
+## Fixes (all derived from `WC_BEST_TENURE`, not hard-coded)
+
+**B — stepper:**
+- **Ladder on the rail**: every unselected tenure now wears its rate (`2% … 5% … 10%`)
+  in brand green under the number, 55% opacity with the best tier at full — the
+  climb is visible before any interaction, and slot a11y labels carry the rate.
+- **Anchor price in the hero**: struck base monthly (`177.08` → `159.38/mo` at 24)
+  whenever a tier saving applies, so the discount is a price drop, not a label.
+- **Best-plan nudge**: when NOT on 24, one tappable line under the strip —
+  "24 months saves you ₨N more ›" (N = incremental vs current tier) — jumps
+  straight to 24. Disappears once there.
+- **Best-value state**: on 24 the strip gains a solid `#166534` "Best value" chip
+  and a subtle green border.
+
+**A — list:**
+- Struck anchor monthly on every discounted row.
+- 24-row badge reads "Best value · 10% Off · Save ₨425".
+- Discount-tiers sheet marks 24 with the same "Best value" chip.
+
+## Verification
+
+- `tsc --noEmit` clean; export clean; Playwright run: 0 page errors.
+- Re-captured all 11 screenshots in `screenshots/plan-selection/`; nudge state
+  visible in `B-stepper-4`/`B-stepper-2`, best-value state in `B-stepper-24`,
+  list anchors + badge in `A-list-bottom`, sheet chip in
+  `B-stepper-discounts-sheet`.
+
+## Restraint notes
+
+- One motion idea unchanged (slot pop); the nudge is static text, not animated.
+- The 24 list row keeps the white card — the longer badge and anchor delta carry
+  the emphasis; no tinted-card or ring treatment competing with selection state.
+- Anchor prices are honest: same tenure without its tier discount, not inflated.

@@ -47,7 +47,8 @@ const BASE = 'http://127.0.0.1:4173/tasheel-plan-selection';
   await page.goto(`${BASE}/checkout/onboarding/tenure/`, { waitUntil: 'networkidle' });
   await shot('B-stepper-4');
   for (const [n, label] of [[2, 'B-stepper-2'], [24, 'B-stepper-24']]) {
-    await page.getByRole('button', { name: `${n} months`, exact: true }).click();
+    // Rail slots carry their discount in the label ("24 months, 10 percent off").
+    await page.getByRole('button', { name: new RegExp(`^${n} months`) }).click();
     await shot(label);
   }
   await page.getByTestId('wc-view-discounts').click();

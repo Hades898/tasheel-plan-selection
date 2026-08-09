@@ -1321,6 +1321,11 @@ const wcPlanFinanced = (months: number) => Math.min(wcPlanPayable(months), WC_AV
 const wcPlanDown = (months: number) => Math.max(0, Math.round((wcPlanPayable(months) - wcPlanFinanced(months)) * 100) / 100);
 const wcPlanTotal = (months: number) => Math.round((wcPlanPayable(months) + wcPlanFee(months)) * 100) / 100;
 const wcPlanMonthly = (months: number) => Math.round((wcPlanFinanced(months) / months) * 100) / 100;
+// Anchor price: what the same tenure would cost without its tier discount. Shown
+// struck-through next to the real monthly so the saving is felt, not just labelled.
+const wcPlanBaseMonthly = (months: number) => Math.round((Math.min(WC_DISCOUNTED_TOTAL, WC_AVAILABLE_LIMIT) / months) * 100) / 100;
+// The best plan is the highest saving rate — the product's headline offer (24 mo, 10%).
+const WC_BEST_TENURE = WC_TENURES.reduce((best, m) => (wcSavingRate(m) > wcSavingRate(best) ? m : best), WC_TENURES[0]);
 const wcPlanToday = (months: number) => Math.round((wcPlanDown(months) + wcPlanMonthly(months) + wcPlanFee(months)) * 100) / 100;
 // Deep link into the native Tasheel SwiftUI app. Nothing happens if the app is
 // not installed, so the current web screen remains available as a fallback.
@@ -1439,10 +1444,15 @@ function WcCartPill({ onPress }: { onPress: () => void }) {
 // discount, so it states what it does have rather than showing an empty pill.
 function WcSavingStrip({ months, onViewDiscounts }: { months: number; onViewDiscounts: () => void }) {
   const saving = wcPlanSaving(months);
+  const isBest = months === WC_BEST_TENURE;
   return (
-    <View style={styles.wcSavingStrip}>
+    <View style={[styles.wcSavingStrip, isBest && styles.wcSavingStripBest]}>
       <View style={styles.wcSavingLeft}>
-        <SaleTag size={16} color={greenMid} />
+        {isBest ? (
+          <View style={styles.wcBestChip}><Text style={styles.wcBestChipText}>Best value</Text></View>
+        ) : (
+          <SaleTag size={16} color={greenMid} />
+        )}
         {saving > 0 ? (
           <>
             <Text style={styles.wcSavingText}>{Math.round(wcSavingRate(months) * 100)}% Off · Save</Text>
@@ -1457,6 +1467,29 @@ function WcSavingStrip({ months, onViewDiscounts }: { months: number; onViewDisc
         <Text style={styles.wcSavingLink}>View discounts</Text>
       </Pressable>
     </View>
+  );
+}
+
+// Shown only while the shopper is NOT on the best plan: one tappable line that
+// names the headline offer and jumps straight to it. Disappears once they're on
+// it — the strip's "Best value" chip takes over.
+function WcBestPlanNudge({ months, onSelect }: { months: number; onSelect: (m: number) => void }) {
+  if (months === WC_BEST_TENURE) return null;
+  const extra = wcPlanSaving(WC_BEST_TENURE) - wcPlanSaving(months);
+  return (
+    <Pressable
+      testID="wc-best-plan-nudge"
+      onPress={() => onSelect(WC_BEST_TENURE)}
+      accessibilityRole="button"
+      accessibilityLabel={`Switch to ${WC_BEST_TENURE} months, ${Math.round(wcSavingRate(WC_BEST_TENURE) * 100)} percent off, save ${wcMoney(extra)} more`}
+      style={({ pressed }) => [styles.wcNudge, pressed && { opacity: 0.75 }]}
+    >
+      <SaleTag size={13} color={greenBrand} />
+      <Text style={styles.wcNudgeText}>
+        {WC_BEST_TENURE} months saves you <Riyal size={10} color={greenBrand} /> {wcSaving(extra)} more
+      </Text>
+      <Text style={styles.wcNudgeChevron}>›</Text>
+    </Pressable>
   );
 }
 
@@ -1487,16 +1520,31 @@ function WcTenureRail({ months, onSelect }: { months: number; onSelect: (m: numb
         <Image source={figmaImageSource('wcMinus')} resizeMode="contain" accessibilityIgnoresInvertColors style={{ width: 23, height: 3 }} />
       </Pressable>
       <View style={styles.wcStepperValues}>
-        {WC_TENURES.map((value) => (value === months ? (
-          <View key={value} style={styles.wcStepperActiveSlot}>
-            <Animated.Text testID="wc-plan-months" style={[styles.wcStepperMain, { transform: [{ scale }] }]}>{value}</Animated.Text>
-            <Text style={styles.wcStepperMonthsLabel}>Months</Text>
-          </View>
-        ) : (
-          <Pressable key={value} onPress={() => onSelect(value)} hitSlop={8} accessibilityRole="button" accessibilityLabel={`${value} months`}>
-            <Text style={styles.wcStepperSide}>{value}</Text>
-          </Pressable>
-        )))}
+        {WC_TENURES.map((value) => {
+          const rate = Math.round(wcSavingRate(value) * 100);
+          return value === months ? (
+            <View key={value} style={styles.wcStepperActiveSlot}>
+              <Animated.Text testID="wc-plan-months" style={[styles.wcStepperMain, { transform: [{ scale }] }]}>{value}</Animated.Text>
+              <Text style={styles.wcStepperMonthsLabel}>Months</Text>
+            </View>
+          ) : (
+            // Ladder always in view: every tenure wears its discount, so "longer
+            // = bigger discount" is legible before any interaction.
+            <Pressable
+              key={value}
+              onPress={() => onSelect(value)}
+              hitSlop={8}
+              accessibilityRole="button"
+              accessibilityLabel={rate > 0 ? `${value} months, ${rate} percent off` : `${value} months`}
+              style={styles.wcStepperSlot}
+            >
+              <Text style={styles.wcStepperSide}>{value}</Text>
+              <Text style={[styles.wcStepperPct, value === WC_BEST_TENURE && styles.wcStepperPctBest]}>
+                {rate > 0 ? `${rate}%` : ' '}
+              </Text>
+            </Pressable>
+          );
+        })}
       </View>
       <Pressable
         testID="wc-plan-plus"
@@ -1541,6 +1589,9 @@ function WcTenure({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) => 
                 <FadeSwap swapKey={`plan-${months}`}>
                   <View style={styles.wcPlanHero}>
                     <View style={styles.wcPlanHeroRow}>
+                      {wcPlanSaving(months) > 0 ? (
+                        <Text style={styles.wcPlanHeroWas}>{wcMoney(wcPlanBaseMonthly(months))}</Text>
+                      ) : null}
                       <Riyal size={21} />
                       <Text style={styles.wcPlanHeroAmount}>{wcMoney(wcPlanMonthly(months))}</Text>
                       <Text style={styles.wcPlanHeroPer}>/mo</Text>
@@ -1560,6 +1611,7 @@ function WcTenure({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) => 
                 <View style={{ gap: 8, width: '100%', alignItems: 'center' }}>
                   <WcTenureRail months={months} onSelect={bump} />
                   <WcSavingStrip months={months} onViewDiscounts={() => setSheet('discounts')} />
+                  <WcBestPlanNudge months={months} onSelect={bump} />
                 </View>
               </View>
               <View style={{ gap: 12, width: '100%' }}>
@@ -1617,13 +1669,18 @@ function WcPlanRow({ months, selected, onPress }: { months: number; selected: bo
       <View style={[styles.wcPlanRowRight, saving > 0 && styles.wcPlanRowRightOffer]}>
         {saving > 0 ? (
           <View style={styles.wcPlanRowBadge}>
-            <SaleTag size={12} color={neon} />
+            {months === WC_BEST_TENURE ? (
+              <Text style={styles.wcPlanRowBadgeText}>Best value · </Text>
+            ) : (
+              <SaleTag size={12} color={neon} />
+            )}
             <Text style={styles.wcPlanRowBadgeText}>{Math.round(wcSavingRate(months) * 100)}% Off · Save</Text>
             <Riyal size={11} color={neon} />
             <Text style={styles.wcPlanRowBadgeText}>{wcSaving(saving)}</Text>
           </View>
         ) : null}
         <View style={[styles.wcPlanRowAmount, saving > 0 && { paddingRight: 16 }]}>
+          {saving > 0 ? <Text style={styles.wcPlanRowWas}>{wcMoney(wcPlanBaseMonthly(months))}</Text> : null}
           <Riyal size={14} />
           <Text style={styles.wcPlanRowMonthly}>
             {wcSplitAmount(monthly).whole}
@@ -1727,7 +1784,12 @@ function WcDiscountsSheet({ months, onClose, onSelect }: { months: number | null
               accessibilityLabel={`${tier} payments, ${Math.round(wcSavingRate(tier) * 100)} percent off, save ${wcMoney(wcPlanSaving(tier))}`}
               style={[styles.wcDiscountRow, months === tier && styles.wcDiscountRowActive]}
             >
-              <Text style={styles.wcDetailsStrong}>{tier} payments</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                <Text style={styles.wcDetailsStrong}>{tier} payments</Text>
+                {tier === WC_BEST_TENURE ? (
+                  <View style={styles.wcBestChip}><Text style={styles.wcBestChipText}>Best value</Text></View>
+                ) : null}
+              </View>
               <View style={styles.wcDiscountRowRight}>
                 <Text style={styles.wcDiscountPct}>{Math.round(wcSavingRate(tier) * 100)}% off</Text>
                 <Money amount={wcMoney(wcPlanSaving(tier))} size={15} color={greenMid} weight="700" />
@@ -4500,7 +4562,11 @@ const styles = StyleSheet.create({
   wcStepperPlus: { width: 47, height: 47, borderRadius: 99, backgroundColor: green, alignItems: 'center', justifyContent: 'center' },
   wcStepperValues: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly', paddingHorizontal: 10 },
   wcStepperActiveSlot: { alignItems: 'center', gap: 2 },
+  wcStepperSlot: { alignItems: 'center' },
   wcStepperSide: { fontSize: 24, lineHeight: 41, fontWeight: '500', color: muted, opacity: 0.2, letterSpacing: 0.38, textAlign: 'center', minWidth: 16 },
+  // Discount ladder riding the rail — the rate each tenure unlocks, always visible.
+  wcStepperPct: { fontSize: 10, lineHeight: 12, fontWeight: '600', color: greenBrand, opacity: 0.55, marginTop: -6 },
+  wcStepperPctBest: { opacity: 1 },
   wcStepperMain: { fontSize: 34, lineHeight: 41, fontWeight: '700', color: '#000', letterSpacing: 0.38, textAlign: 'center' },
   wcStepperMonthsLabel: { fontSize: 12, lineHeight: 16, color: muted, marginTop: -6 },
   wcPlanHero: { alignItems: 'center', gap: 12 },
@@ -4513,8 +4579,15 @@ const styles = StyleSheet.create({
   wcPlanFeesRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 },
   // Figma 3529:83365 — saving strip
   wcSavingStrip: { alignSelf: 'stretch', backgroundColor: '#f0fdf4', borderRadius: 999, paddingHorizontal: 12, paddingVertical: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  wcSavingStripBest: { borderWidth: 1, borderColor: 'rgba(22,101,52,0.35)', paddingVertical: 9 },
   wcSavingLeft: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   wcSavingText: { fontSize: 12, lineHeight: 16, fontWeight: '500', color: greenMid, letterSpacing: 0.38 },
+  wcBestChip: { backgroundColor: greenMid, borderRadius: 999, paddingHorizontal: 8, paddingVertical: 3 },
+  wcBestChipText: { fontSize: 10, lineHeight: 13, fontWeight: '700', color: neon, letterSpacing: 0.4 },
+  wcNudge: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 12, paddingVertical: 6 },
+  wcNudgeText: { fontSize: 12, lineHeight: 16, fontWeight: '600', color: greenBrand, letterSpacing: -0.08 },
+  wcNudgeChevron: { fontSize: 14, lineHeight: 16, fontWeight: '600', color: greenBrand, marginTop: -1 },
+  wcPlanHeroWas: { fontSize: 17, lineHeight: 22, color: '#9ca3af', textDecorationLine: 'line-through', marginRight: 4 },
   wcSavingLink: { fontSize: 11, lineHeight: 18, fontWeight: '600', color: greenBrand, letterSpacing: -0.08, textDecorationLine: 'underline' },
   wcCtaDisabled: { backgroundColor: '#e5e7eb' },
   wcCtaDisabledText: { color: '#9ca3af' },
@@ -4550,6 +4623,7 @@ const styles = StyleSheet.create({
   wcPlanRowAmount: { flexDirection: 'row', alignItems: 'baseline' },
   wcPlanRowMonthly: { fontSize: 22, lineHeight: 28, fontWeight: '700', color: text, letterSpacing: 0.38 },
   wcPlanRowDecimals: { fontSize: 15, fontWeight: '600' },
+  wcPlanRowWas: { fontSize: 13, lineHeight: 18, color: '#9ca3af', textDecorationLine: 'line-through', marginRight: 5 },
   wcPlanRowPer: { fontSize: 16, lineHeight: 22, color: muted },
   wcGreyCta: { backgroundColor: '#e5e7eb', borderRadius: 9999, minHeight: 50, maxHeight: 50, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 20, paddingVertical: 14, width: '100%' },
   wcGreyCtaText: { color: text, fontSize: 17, lineHeight: 22, fontWeight: '500', letterSpacing: -0.41 },
