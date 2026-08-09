@@ -1582,30 +1582,35 @@ function WcTenure({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) => 
             <View style={styles.wcPlanCard}>
               <View style={{ gap: 6, width: '100%' }}>
                 <Text style={styles.wcPlanTitle}>Choose your plan</Text>
-                <Text style={styles.wcPlanSub}>You can split your purchase up to <Text style={styles.wcPlanSubStrong}>{maxTenure} months</Text></Text>
+                <Text style={styles.wcPlanSub}>Longer plans get bigger discounts, up to <Text style={styles.wcPlanSubStrong}>{Math.round(wcSavingRate(WC_BEST_TENURE) * 100)}% off</Text></Text>
               </View>
-              <View style={{ gap: 24, width: '100%', alignItems: 'center' }}>
+              <View style={{ gap: 28, width: '100%', alignItems: 'center' }}>
                 <FadeSwap swapKey={`plan-${months}`}>
                   <View style={styles.wcPlanHero}>
-                    {/* Anchor sits above the price, not beside it — one number owns
-                        the row, the old price reads as a quiet footnote. */}
-                    {wcPlanSaving(months) > 0 ? (
-                      <Text style={styles.wcPlanHeroWas}>{wcMoney(wcPlanBaseMonthly(months))}</Text>
-                    ) : null}
                     <View style={styles.wcPlanHeroRow}>
                       <Riyal size={21} />
                       <Text style={styles.wcPlanHeroAmount}>{wcMoney(wcPlanMonthly(months))}</Text>
                       <Text style={styles.wcPlanHeroPer}>/mo</Text>
                     </View>
-                    <View style={styles.wcPlanFeesRow}>
-                      <Text style={styles.wcPlanFees}>
-                        {fee === 0 ? 'No interest, no fees' : <>plus a one-time <Riyal size={11} color={muted} /> {wcMoney(fee)} fee</>}
-                      </Text>
-                      {fee > 0 ? (
-                        <Pressable testID="wc-fee-help" onPress={() => setSheet('fee')} hitSlop={10} accessibilityRole="button" accessibilityLabel={`Explain the ${months} month fee`}>
-                          <Image source={figmaImageSource('wcInfoCircle')} resizeMode="contain" accessibilityIgnoresInvertColors style={{ width: 14, height: 14 }} />
-                        </Pressable>
+                    {/* The tier discount applies to the cart total, so the anchor
+                        lives here: Total 4,250 -> 4,165, fee disclosed alongside. */}
+                    <View style={styles.wcPlanTotalRow}>
+                      <Text style={styles.wcPlanTotalLabel}>Total</Text>
+                      {wcPlanSaving(months) > 0 ? (
+                        <Text style={styles.wcPlanTotalWas}>{formatAmount(WC_DISCOUNTED_TOTAL)}</Text>
                       ) : null}
+                      <Riyal size={11} />
+                      <Text style={styles.wcPlanTotalAmount}>{wcSaving(wcPlanPayable(months))}</Text>
+                      {fee > 0 ? (
+                        <>
+                          <Text style={styles.wcPlanTotalFee}>+ <Riyal size={10} color={muted} /> {wcMoney(fee)} fee</Text>
+                          <Pressable testID="wc-fee-help" onPress={() => setSheet('fee')} hitSlop={10} accessibilityRole="button" accessibilityLabel={`Explain the ${months} month fee`}>
+                            <Image source={figmaImageSource('wcInfoCircle')} resizeMode="contain" accessibilityIgnoresInvertColors style={{ width: 13, height: 13 }} />
+                          </Pressable>
+                        </>
+                      ) : (
+                        <Text style={styles.wcPlanTotalFee}>· No fees</Text>
+                      )}
                     </View>
                   </View>
                 </FadeSwap>
@@ -4553,12 +4558,12 @@ const styles = StyleSheet.create({
   wcCartDiscountChip: { backgroundColor: '#dff5d4', borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2 },
   wcCartDiscountChipText: { fontSize: 11, lineHeight: 15, fontWeight: '700', color: '#16720b' },
   wcCartWasPrice: { fontSize: 13, lineHeight: 18, color: muted, textDecorationLine: 'line-through' },
-  wcPlanCard: { width: '100%', backgroundColor: '#fff', borderRadius: 40, padding: 16, paddingTop: 20, gap: 32, alignItems: 'center', shadowColor: '#000', shadowOpacity: 0.12, shadowRadius: 20, shadowOffset: { width: 0, height: 16 } },
+  wcPlanCard: { width: '100%', backgroundColor: '#fff', borderRadius: 40, padding: 20, paddingTop: 24, gap: 32, alignItems: 'center', shadowColor: '#000', shadowOpacity: 0.12, shadowRadius: 20, shadowOffset: { width: 0, height: 16 } },
   wcPlanTitle: { fontSize: 28, lineHeight: 34, fontWeight: '700', color: text, letterSpacing: 0.36 },
   wcPlanSub: { fontSize: 14, lineHeight: 18, color: muted, letterSpacing: -0.08 },
   wcPlanSubStrong: { fontWeight: '600', color: '#15803d' },
-  // Figma 3529:83469 — the rail bleeds 4px past the card's 16px inset on each side.
-  wcStepperTrack: { alignSelf: 'stretch', marginHorizontal: -4, borderRadius: 999, backgroundColor: '#f3f4f6', paddingHorizontal: 12, paddingVertical: 7, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  // Figma 3529:83469 — the rail bleeds past the card inset to its 334px width.
+  wcStepperTrack: { alignSelf: 'stretch', marginHorizontal: -8, borderRadius: 999, backgroundColor: '#f3f4f6', paddingHorizontal: 12, paddingVertical: 7, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   wcStepperMinus: { width: 47, height: 47, borderRadius: 99, backgroundColor: '#fff', borderWidth: 1, borderColor: borderSubtle, alignItems: 'center', justifyContent: 'center' },
   wcStepperPlus: { width: 47, height: 47, borderRadius: 99, backgroundColor: green, alignItems: 'center', justifyContent: 'center' },
   wcStepperValues: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly', paddingHorizontal: 4 },
@@ -4590,7 +4595,11 @@ const styles = StyleSheet.create({
   wcNudge: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 12, paddingVertical: 6 },
   wcNudgeText: { fontSize: 12, lineHeight: 16, fontWeight: '600', color: greenBrand, letterSpacing: -0.08 },
   wcNudgeChevron: { fontSize: 14, lineHeight: 16, fontWeight: '600', color: greenBrand, marginTop: -1 },
-  wcPlanHeroWas: { fontSize: 14, lineHeight: 16, color: '#9ca3af', textDecorationLine: 'line-through', marginBottom: -4 },
+  wcPlanTotalRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 },
+  wcPlanTotalLabel: { fontSize: 13, lineHeight: 18, color: muted },
+  wcPlanTotalWas: { fontSize: 13, lineHeight: 18, color: '#9ca3af', textDecorationLine: 'line-through' },
+  wcPlanTotalAmount: { fontSize: 13, lineHeight: 18, fontWeight: '600', color: text },
+  wcPlanTotalFee: { fontSize: 13, lineHeight: 18, color: muted },
   wcSavingLink: { fontSize: 11, lineHeight: 18, fontWeight: '600', color: greenBrand, letterSpacing: -0.08, textDecorationLine: 'underline' },
   wcCtaDisabled: { backgroundColor: '#e5e7eb' },
   wcCtaDisabledText: { color: '#9ca3af' },
