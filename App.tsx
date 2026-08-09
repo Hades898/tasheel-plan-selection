@@ -4563,9 +4563,9 @@ const styles = StyleSheet.create({
   wcPlanTitle: { fontSize: 28, lineHeight: 34, fontWeight: '700', color: text, letterSpacing: 0.36 },
   wcPlanSub: { fontSize: 14, lineHeight: 18, color: muted, letterSpacing: -0.08 },
   wcPlanSubStrong: { fontWeight: '600', color: '#15803d' },
-  // The rail escapes the card inset entirely — full 358px of track so six slots
-  // and two 44px buttons sit loose instead of squeezed.
-  wcStepperTrack: { alignSelf: 'stretch', marginHorizontal: -20, borderRadius: 999, backgroundColor: '#f3f4f6', paddingHorizontal: 10, paddingVertical: 9, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  // The rail bleeds past the card inset for room, but keeps a 12px margin to the
+  // card edge — flush-to-edge read as broken, not generous.
+  wcStepperTrack: { alignSelf: 'stretch', marginHorizontal: -8, borderRadius: 999, backgroundColor: '#f3f4f6', paddingHorizontal: 10, paddingVertical: 9, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   wcStepperMinus: { width: 44, height: 44, borderRadius: 99, backgroundColor: '#fff', borderWidth: 1, borderColor: borderSubtle, alignItems: 'center', justifyContent: 'center' },
   wcStepperPlus: { width: 44, height: 44, borderRadius: 99, backgroundColor: green, alignItems: 'center', justifyContent: 'center' },
   wcStepperValues: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly', paddingHorizontal: 4 },
