@@ -1597,7 +1597,7 @@ function WcTenure({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) => 
             <View style={styles.wcPlanCard}>
               <View style={{ gap: 6, width: '100%' }}>
                 <Text style={styles.wcPlanTitle}>Choose your plan</Text>
-                <Text style={styles.wcPlanSub}>Longer plans get bigger discounts, up to <Text style={styles.wcPlanSubStrong}>{Math.round(wcSavingRate(WC_BEST_TENURE) * 100)}% off</Text></Text>
+                <Text style={styles.wcPlanSub}>You can split your purchase up to <Text style={styles.wcPlanSubStrong}>{maxTenure} months</Text></Text>
               </View>
               <View style={{ gap: 28, width: '100%', alignItems: 'center' }}>
                 <FadeSwap swapKey={`plan-${months}`}>
@@ -1733,7 +1733,7 @@ function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) =
                 <Text style={styles.wcPlansTotal}>{formatAmount(WC_CART_TOTAL)}</Text>
               </View>
               <Text style={styles.wcPlansSub}>
-                Longer plans get bigger discounts, up to <Text style={styles.wcPlansSubStrong}>{Math.round(wcSavingRate(WC_BEST_TENURE) * 100)}% off</Text>
+                You can split your purchase up to <Text style={styles.wcPlansSubStrong}>{maxTenure} months</Text>
               </Text>
             </View>
             <View style={styles.wcPlansList} accessibilityRole="radiogroup">
