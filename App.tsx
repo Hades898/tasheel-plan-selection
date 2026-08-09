@@ -26,7 +26,7 @@ import Svg, {
 } from 'react-native-svg';
 
 type RouteKey = 'checkout' | 'saLogin' | 'saOtp' | 'saAddCard' | 'superHome' | 'appHome' | 'detail' | 'insights' | 'insightsCategory' | 'insightsEmpty' | 'purchases' | 'dues' | 'nextUp' | 'paymentMethod' | 'paymentSelected' | 'addCard' | 'cardAdded' | 'otp' | 'processing' | 'insufficient' | 'declined' | 'success'
-  | 'wcMobile' | 'wcOtp' | 'wcIdentity' | 'wcNafath' | 'wcQuickCall' | 'wcTenure' | 'wcPayment' | 'wcProcessing' | 'wcSuccess' | 'wcNotification';
+  | 'wcMobile' | 'wcOtp' | 'wcIdentity' | 'wcNafath' | 'wcQuickCall' | 'wcTenure' | 'wcPlans' | 'wcPayment' | 'wcProcessing' | 'wcSuccess' | 'wcNotification';
 type PayMethod = 'card' | 'apple';
 type Merchant = 'extra' | 'jarir' | 'noon';
 
@@ -148,6 +148,7 @@ const muted = '#4b5563';
 const border = '#e5e7eb';
 const borderSubtle = '#f3f4f6';
 const greenMid = '#166534';
+const greenBrand = '#16720b';
 
 // Two type systems per Figma spec (BNPL_FIGMA_SPEC.md / figma-spec/*.json):
 //  - App screens use SF Pro (Apple system stack; no bundled SF Pro file here).
@@ -353,6 +354,7 @@ const routeFromPath = (path: string): RouteKey => {
   if (path.includes('/checkout/onboarding/nafath')) return 'wcNafath';
   if (path.includes('/checkout/onboarding/quick-call')) return 'wcQuickCall';
   if (path.includes('/checkout/onboarding/tenure')) return 'wcTenure';
+  if (path.includes('/checkout/onboarding/plans')) return 'wcPlans';
   if (path.includes('/checkout/onboarding/payment')) return 'wcPayment';
   if (path.includes('/checkout/onboarding/processing')) return 'wcProcessing';
   if (path.includes('/checkout/onboarding/success')) return 'wcSuccess';
@@ -386,7 +388,7 @@ function currentPath() {
   return window.location.pathname;
 }
 
-const githubPagesBase = '/tasheel-bnpl-prototype';
+const githubPagesBase = '/tasheel-plan-selection';
 
 function withDeployBase(path: string) {
   if (typeof window === 'undefined') return path;
@@ -404,6 +406,17 @@ function pushPath(path: string) {
 function Riyal({ size = 14, color = text, weight = '600' }: { size?: number; color?: string; weight?: '400' | '500' | '600' | '700' }) {
   const asset: FigmaImageKey = color === neon ? 'riyalOnPrimary' : 'riyalDark';
   return <Image source={figmaImageSource(asset)} resizeMode="contain" accessibilityIgnoresInvertColors style={{ width: size, height: size, marginRight: Math.max(3, size * 0.22), opacity: color === muted ? 0.72 : 1, tintColor: color === neon ? undefined : color }} />;
+}
+
+// Figma `sale-03` (node 2145:20527), exported vector. Inlined as SVG so the same
+// glyph can be tinted green on the light strip and neon on the dark corner badge
+// without shipping two rasters.
+function SaleTag({ size = 16, color = greenMid }: { size?: number; color?: string }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 14.6669 14.6668" fill="none">
+      <Path d="M13.3333 9.53341C13.3333 9.46557 13.323 9.39822 13.3034 9.33354L13.2806 9.26974L12.8001 8.10893L12.7324 7.92013C12.5969 7.47414 12.62 6.99288 12.7995 6.55945L13.2813 5.39669C13.351 5.22811 13.351 5.03856 13.2813 4.87C13.2114 4.7013 13.0769 4.56747 12.9082 4.4976L11.7448 4.01518C11.2726 3.81903 10.8946 3.45065 10.6829 2.98719C10.6716 2.96647 10.6609 2.94496 10.6517 2.92273L10.1699 1.75932C10.1 1.59067 9.96552 1.45678 9.79688 1.38693C9.62827 1.31714 9.43878 1.31712 9.27018 1.38693L8.10547 1.8674L8.10482 1.86674C7.61019 2.07143 7.05468 2.07248 6.5599 1.86805L6.55924 1.8674L5.39714 1.38562C5.22846 1.31575 5.03847 1.31575 4.86979 1.38562C4.70113 1.4555 4.56727 1.58998 4.4974 1.75867L4.01563 2.92208L4.01497 2.92273C3.83498 3.35539 3.51124 3.71023 3.10156 3.92924L2.92122 4.01453L1.75846 4.4963C1.67497 4.53086 1.59908 4.58151 1.53516 4.64539C1.47122 4.70931 1.42003 4.78517 1.38542 4.8687C1.35082 4.95221 1.33334 5.04197 1.33333 5.13237C1.33334 5.20019 1.34366 5.26758 1.36328 5.33224L1.38607 5.39604L1.86654 6.5601C2.07194 7.05515 2.07246 7.61161 1.86784 8.10698L1.38607 9.27039C1.31652 9.43892 1.31692 9.628 1.38672 9.79643C1.45662 9.96503 1.59051 10.099 1.75911 10.1688L2.92253 10.6512C3.41735 10.8568 3.81081 11.2505 4.01563 11.7456L4.49805 12.9091C4.56796 13.0775 4.7013 13.2116 4.86979 13.2815C5.0383 13.3513 5.22793 13.3511 5.39648 13.2815L6.55924 12.8003L6.7474 12.7326C7.12885 12.617 7.53635 12.6168 7.91797 12.732L8.10612 12.799L8.10677 12.7997L9.26953 13.2808C9.43817 13.3506 9.6276 13.3507 9.79622 13.2808C9.96483 13.2109 10.0988 13.0771 10.1686 12.9084L10.6504 11.745L10.651 11.7443C10.8565 11.2495 11.2497 10.8561 11.7448 10.6512L12.9076 10.1701C12.9911 10.1355 13.0676 10.0843 13.1315 10.0204C13.1954 9.95648 13.246 9.88057 13.2806 9.79708C13.3152 9.71354 13.3333 9.62384 13.3333 9.53341ZM9.52865 4.19552C9.789 3.93517 10.211 3.93517 10.4714 4.19552C10.7317 4.45587 10.7317 4.87788 10.4714 5.13823L5.13802 10.4716C4.87767 10.7319 4.45566 10.7319 4.19531 10.4716C3.93496 10.2112 3.93496 9.7892 4.19531 9.52885L9.52865 4.19552ZM9.33333 8.33354C9.88562 8.33354 10.3333 8.78126 10.3333 9.33354C10.3333 9.88583 9.88562 10.3335 9.33333 10.3335C8.78105 10.3335 8.33333 9.88583 8.33333 9.33354C8.33333 8.78126 8.78105 8.33354 9.33333 8.33354ZM5.33333 4.33354C5.88562 4.33354 6.33333 4.78126 6.33333 5.33354C6.33333 5.88583 5.88562 6.33354 5.33333 6.33354C4.78105 6.33354 4.33333 5.88583 4.33333 5.33354C4.33333 4.78126 4.78105 4.33354 5.33333 4.33354ZM14.6667 9.53341C14.6667 9.79902 14.614 10.0621 14.5124 10.3075C14.4107 10.5528 14.262 10.776 14.0742 10.9637C13.9334 11.1045 13.7726 11.2231 13.5977 11.3166L13.418 11.4019L12.2552 11.8837C12.1076 11.9447 11.9863 12.0547 11.9115 12.1942L11.8822 12.2554L11.4004 13.4188C11.1952 13.914 10.8018 14.3074 10.3066 14.5126C9.81125 14.7178 9.2545 14.7178 8.75911 14.5126L7.59635 14.0315C7.42786 13.9621 7.23864 13.9623 7.07031 14.0321L5.90625 14.5132C5.41124 14.7179 4.85494 14.7181 4.36003 14.5132C3.86511 14.3082 3.47163 13.9149 3.26628 13.4201L2.78385 12.2554C2.71416 12.0869 2.58048 11.9524 2.41211 11.8824L1.2487 11.4006C0.75363 11.1955 0.360234 10.8025 0.154948 10.3075C-0.0503177 9.81239 -0.0504738 9.25528 0.154297 8.75997L0.635417 7.59721C0.704842 7.4287 0.705255 7.23953 0.635417 7.07117L0.634766 7.07052L0.153646 5.90581L0.154297 5.90516C0.0529581 5.66024 7.97064e-05 5.39807 2.60219e-08 5.13302C-4.2516e-05 4.86751 0.0520779 4.60425 0.153646 4.35893C0.255284 4.11355 0.404615 3.89047 0.592448 3.70268C0.780279 3.5149 1.00329 3.3661 1.2487 3.26453L2.41081 2.78276C2.57926 2.71311 2.71378 2.5793 2.78385 2.41101L3.26563 1.24825C3.4708 0.752955 3.86409 0.359067 4.35938 0.153854C4.85468 -0.0513173 5.41157 -0.0512517 5.9069 0.153854L7.06966 0.635624L7.06901 0.636275C7.23762 0.705894 7.42721 0.704864 7.5957 0.634973L7.59701 0.634322L8.76042 0.155156C9.25568 -0.0498374 9.81208 -0.0499758 10.3073 0.155156C10.8026 0.360319 11.1965 0.753643 11.4017 1.24891L11.8757 2.39474C11.8781 2.40022 11.8812 2.40544 11.8835 2.41101C11.953 2.57931 12.0865 2.71328 12.2546 2.78341L13.4186 3.26583C13.9139 3.47103 14.3078 3.86426 14.513 4.35958C14.7182 4.85492 14.7181 5.41176 14.513 5.90711L14.0313 7.06987C13.97 7.21778 13.9627 7.38117 14.0085 7.53211L14.0313 7.59591L14.0319 7.59786L14.5124 8.75932L14.5794 8.94682C14.637 9.13666 14.6666 9.33431 14.6667 9.53341Z" fill={color} />
+    </Svg>
+  );
 }
 
 function Money({ amount, decimals, size = 16, color = text, weight = '600' }: { amount: string; decimals?: string; size?: number; color?: string; weight?: '400' | '500' | '600' | '700' }) {
@@ -788,7 +801,18 @@ function Checkout({ setRoute }: { setRoute: (r: RouteKey) => void }) {
                 <Text style={styles.xCartProductTitle}>50's Retro Style Refrigerator</Text>
                 <Text style={styles.xCartMeta}>Right Handle · Black · Qty 1</Text>
               </View>
-              <Money amount={wcMoney(WC_CART_TOTAL)} size={16} weight="700" />
+              <Money amount={wcMoney(WC_CART_ITEMS_LIST[0].amount)} size={16} weight="700" />
+            </View>
+            <View style={styles.xCartProduct}>
+              <View style={[styles.xCartProductImage, styles.xCartProductGlyph]}>
+                <Image source={figmaImageSource('wcCartIcon')} resizeMode="contain" accessibilityIgnoresInvertColors style={{ width: 22, height: 22 }} />
+              </View>
+              <View style={{ flex: 1, gap: 3 }}>
+                <Text style={styles.xCartBrand}>SMEG</Text>
+                <Text style={styles.xCartProductTitle}>2-Slice Toaster</Text>
+                <Text style={styles.xCartMeta}>Black · Qty 1</Text>
+              </View>
+              <Money amount={wcMoney(WC_CART_ITEMS_LIST[1].amount)} size={16} weight="700" />
             </View>
             <View style={styles.xCartSummary}>
               <Text style={styles.xCartSummaryLabel}>Order total</Text>
@@ -806,7 +830,7 @@ function Checkout({ setRoute }: { setRoute: (r: RouteKey) => void }) {
             <Pressable
               testID="wc-tasheel-offer"
               accessibilityRole="button"
-              accessibilityLabel={`Continue with Tasheel Finance, instant 10 percent off, pay ${wcMoney(WC_DISCOUNTED_TOTAL)} instead of ${wcMoney(WC_CART_TOTAL)}`}
+              accessibilityLabel={`Continue with Tasheel Finance, instant ${WC_DISCOUNT_PERCENT} percent off, pay ${wcMoney(WC_DISCOUNTED_TOTAL)} instead of ${wcMoney(WC_CART_TOTAL)}`}
               onPress={() => { setCheckoutMethod('tasheel'); setRoute('wcMobile'); }}
               style={[styles.xOfferCard, checkoutMethod === 'tasheel' && styles.xOfferCardSelected]}
             >
@@ -818,7 +842,7 @@ function Checkout({ setRoute }: { setRoute: (r: RouteKey) => void }) {
               </View>
               <Text style={styles.xOfferTitle}>Split your purchases your way!</Text>
               <Text style={styles.xOfferBody}>
-                Instant 10% off your order — pay {wcMoney(WC_DISCOUNTED_TOTAL)} instead of {wcMoney(WC_CART_TOTAL)}, in up to {WC_TENURES[WC_TENURES.length - 1]} payments.
+                Instant {WC_DISCOUNT_PERCENT}% off your order — pay {wcMoney(WC_DISCOUNTED_TOTAL)} instead of {wcMoney(WC_CART_TOTAL)}, in up to {WC_TENURES[WC_TENURES.length - 1]} payments.
               </Text>
               <Pressable onPress={() => setHowOpen((v) => !v)} accessibilityRole="button" accessibilityLabel="How does Tasheel Finance work?" hitSlop={6}>
                 <Text style={styles.xOfferLink}>{howOpen ? 'Hide details' : 'How does it work?'}</Text>
@@ -1266,33 +1290,38 @@ function WcNafath({ setRoute }: { setRoute: (r: RouteKey) => void }) {
 // Harun meeting fixture: discount first, then finance only up to the available
 // BNPL limit. Any excess becomes the down payment; today's charge also includes
 // the first installment. Unknown long-tenure rates stay blocked, never inferred.
-const WC_CART_TOTAL = 7000.00;
-const WC_CART_ITEMS = 1;
+const WC_CART_TOTAL = 4350.00;
+const WC_CART_ITEMS: number = 2;
 const WC_ORDER_REFERENCE = 'EXT-2026-45210';
-const WC_DISCOUNT_RATE = 0.10;
-const WC_DISCOUNT_AMOUNT = Math.round(WC_CART_TOTAL * WC_DISCOUNT_RATE * 100) / 100;
+const WC_DISCOUNT_AMOUNT = 100.00;
 const WC_DISCOUNTED_TOTAL = Math.round((WC_CART_TOTAL - WC_DISCOUNT_AMOUNT) * 100) / 100;
+// Displayed as a whole percent on the cart pill, exactly as the Figma frame does
+// (4,350 → 4,250 reads as "2% Off"). Derived, never hard-coded in copy.
+const WC_DISCOUNT_PERCENT = Math.round((WC_DISCOUNT_AMOUNT / WC_CART_TOTAL) * 100);
 const WC_AVAILABLE_LIMIT = 5000.00;
-const WC_FINANCED_PRINCIPAL = Math.min(WC_DISCOUNTED_TOTAL, WC_AVAILABLE_LIMIT);
-const WC_DOWN_PAYMENT = Math.max(0, Math.round((WC_DISCOUNTED_TOTAL - WC_FINANCED_PRINCIPAL) * 100) / 100);
-const WC_TENURES = [2, 3, 4, 6, 9, 12, 24, 36] as const;
-// 2 and 3 months are free; 4 months and longer carry a 1% Murabaha fee on the
-// financed principal. Every tenure has a rate, so no plan is ever unselectable.
-const WC_FEE_RATES: Record<number, number> = {
+const WC_TENURES = [2, 4, 6, 9, 12, 24] as const;
+// Figma 3615:74055 — 2 payments is the free tier; every longer tenure carries a
+// flat one-time fee and unlocks a tiered saving that grows with the tenure.
+const WC_PLAN_FEE = 55.30;
+const WC_SAVING_RATES: Record<number, number> = {
   2: 0,
-  3: 0,
-  4: 0.01,
-  6: 0.01,
-  9: 0.01,
-  12: 0.01,
-  24: 0.01,
-  36: 0.01,
+  4: 0.02,
+  6: 0.02,
+  9: 0.02,
+  12: 0.05,
+  24: 0.10,
 };
-const wcPlanFeeRate = (months: number) => WC_FEE_RATES[months] ?? 0;
-const wcPlanFee = (months: number) => Math.round(WC_FINANCED_PRINCIPAL * wcPlanFeeRate(months) * 100) / 100;
-const wcPlanTotal = (months: number) => Math.round((WC_DISCOUNTED_TOTAL + wcPlanFee(months)) * 100) / 100;
-const wcPlanMonthly = (months: number) => Math.round(((WC_FINANCED_PRINCIPAL + wcPlanFee(months)) / months) * 100) / 100;
-const wcPlanToday = (months: number) => Math.round((WC_DOWN_PAYMENT + wcPlanMonthly(months)) * 100) / 100;
+const wcPlanFee = (months: number) => (WC_SAVING_RATES[months] ? WC_PLAN_FEE : 0);
+const wcSavingRate = (months: number) => WC_SAVING_RATES[months] ?? 0;
+const wcPlanSaving = (months: number) => Math.round(WC_DISCOUNTED_TOTAL * wcSavingRate(months) * 100) / 100;
+// The tier saving comes off the amount financed — it is a real discount, not a
+// badge — so a longer tenure lowers both the total and every installment.
+const wcPlanPayable = (months: number) => Math.round((WC_DISCOUNTED_TOTAL - wcPlanSaving(months)) * 100) / 100;
+const wcPlanFinanced = (months: number) => Math.min(wcPlanPayable(months), WC_AVAILABLE_LIMIT);
+const wcPlanDown = (months: number) => Math.max(0, Math.round((wcPlanPayable(months) - wcPlanFinanced(months)) * 100) / 100);
+const wcPlanTotal = (months: number) => Math.round((wcPlanPayable(months) + wcPlanFee(months)) * 100) / 100;
+const wcPlanMonthly = (months: number) => Math.round((wcPlanFinanced(months) / months) * 100) / 100;
+const wcPlanToday = (months: number) => Math.round((wcPlanDown(months) + wcPlanMonthly(months) + wcPlanFee(months)) * 100) / 100;
 // Deep link into the native Tasheel SwiftUI app. Nothing happens if the app is
 // not installed, so the current web screen remains available as a fallback.
 const wcOpenTasheelApp = (destination = 'tasheel://bnpl') => {
@@ -1314,6 +1343,13 @@ const wcAdjacentTenure = (months: number, offset: -1 | 1) => {
   return next >= 0 && next < WC_TENURES.length ? WC_TENURES[next] : null;
 };
 const wcMoney = (v: number) => v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+// Savings land on whole riyals as often as not; printing "85.00" where the source
+// says "85" adds noise to a badge that has to read at 11px.
+const wcSaving = (v: number) => (Number.isInteger(v) ? formatAmount(v) : wcMoney(v));
+const wcSplitAmount = (v: number) => {
+  const [whole, dec] = wcMoney(v).split('.');
+  return { whole, dec };
+};
 const wcPaymentsWord = (n: number) => (n === 1 ? 'payment' : 'payments');
 
 // Figma 1628:55884 / 1933:74219 — Quick call verification after Nafath. The CTA
@@ -1374,84 +1410,161 @@ function WcQuickCall({ setRoute }: { setRoute: (r: RouteKey) => void }) {
   );
 }
 
-// Figma 1878:13093 / 13247 / 1865:3575 — source layout extended to the
-// meeting-approved 2/3/4/6/9/12/24/36-month product set.
-function WcTenure({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) => void; months: number; setMonths: (m: number) => void }) {
-  const [sheet, setSheet] = useState<null | 'details' | 'schedule' | 'cart' | 'fee'>(null);
-  const swap = useRef(new Animated.Value(1)).current;
-  const bump = (next: number) => {
-    if (!WC_TENURES.includes(next as (typeof WC_TENURES)[number]) || next === months) return;
-    swap.setValue(0.3);
-    Animated.spring(swap, { toValue: 1, friction: 7, tension: 180, useNativeDriver: true }).start();
-    setMonths(next);
-  };
+// Figma 3529:83319 — cart summary pill shared by both plan-selection variants:
+// item count, the applied merchant discount, struck original and payable total.
+function WcCartPill({ onPress }: { onPress: () => void }) {
+  return (
+    <Pressable
+      testID="wc-cart-pill"
+      style={styles.wcCartPill}
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={`${WC_CART_ITEMS} items, ${WC_DISCOUNT_PERCENT} percent off, pay ${wcMoney(WC_DISCOUNTED_TOTAL)} instead of ${wcMoney(WC_CART_TOTAL)}. View cart details`}
+    >
+      <View style={styles.wcCartLeft}>
+        <Image source={figmaImageSource('wcCartIcon')} resizeMode="contain" accessibilityIgnoresInvertColors style={{ width: 16, height: 16 }} />
+        <Text style={styles.wcCartItems}>{WC_CART_ITEMS} {WC_CART_ITEMS === 1 ? 'Item' : 'Items'}</Text>
+      </View>
+      <View style={styles.wcCartRight}>
+        <View style={styles.wcCartDiscountChip}><Text style={styles.wcCartDiscountChipText}>{WC_DISCOUNT_PERCENT}% Off</Text></View>
+        <Text style={styles.wcCartWasPrice}>{formatAmount(WC_CART_TOTAL)}</Text>
+        <Money amount={formatAmount(WC_DISCOUNTED_TOTAL)} size={16} weight="600" />
+        <Image source={figmaImageSource('wcArrowRight')} resizeMode="contain" accessibilityIgnoresInvertColors style={{ width: 13, height: 13 }} />
+      </View>
+    </Pressable>
+  );
+}
+
+// Figma 3529:83365 — saving strip under the stepper. The free tier has nothing to
+// discount, so it states what it does have rather than showing an empty pill.
+function WcSavingStrip({ months, onViewDiscounts }: { months: number; onViewDiscounts: () => void }) {
+  const saving = wcPlanSaving(months);
+  return (
+    <View style={styles.wcSavingStrip}>
+      <View style={styles.wcSavingLeft}>
+        <SaleTag size={16} color={greenMid} />
+        {saving > 0 ? (
+          <>
+            <Text style={styles.wcSavingText}>{Math.round(wcSavingRate(months) * 100)}% Off · Save</Text>
+            <Riyal size={12} color={greenMid} />
+            <Text style={styles.wcSavingText}>{wcSaving(saving)}</Text>
+          </>
+        ) : (
+          <Text style={styles.wcSavingText}>No interest. No fees</Text>
+        )}
+      </View>
+      <Pressable testID="wc-view-discounts" onPress={onViewDiscounts} hitSlop={10} accessibilityRole="button" accessibilityLabel="View discount tiers">
+        <Text style={styles.wcSavingLink}>View discounts</Text>
+      </Pressable>
+    </View>
+  );
+}
+
+// Figma 3529:83469 — the tenure rail. Every tenure stays on screen: the selected
+// one is set large with its unit label, the rest sit back at 20% and stay tappable,
+// so − / ＋ and direct selection are both available without a hidden scroll.
+function WcTenureRail({ months, onSelect }: { months: number; onSelect: (m: number) => void }) {
   const previous = wcAdjacentTenure(months, -1);
   const next = wcAdjacentTenure(months, 1);
+  // The selected slot is keyed by its value, so it remounts on every change. Drive
+  // the pop from an effect (after the new node mounts) and off the native driver,
+  // which would otherwise stay bound to the node that just unmounted.
+  const scale = useRef(new Animated.Value(1)).current;
+  useEffect(() => {
+    scale.setValue(0.4);
+    Animated.spring(scale, { toValue: 1, friction: 7, tension: 190, useNativeDriver: false }).start();
+  }, [months, scale]);
+  return (
+    <View style={styles.wcStepperTrack}>
+      <Pressable
+        testID="wc-plan-minus"
+        disabled={previous === null}
+        onPress={() => previous !== null && onSelect(previous)}
+        style={[styles.wcStepperMinus, previous === null && { opacity: 0.45 }]}
+        accessibilityRole="button"
+        accessibilityLabel="Fewer months"
+      >
+        <Image source={figmaImageSource('wcMinus')} resizeMode="contain" accessibilityIgnoresInvertColors style={{ width: 23, height: 3 }} />
+      </Pressable>
+      <View style={styles.wcStepperValues}>
+        {WC_TENURES.map((value) => (value === months ? (
+          <View key={value} style={styles.wcStepperActiveSlot}>
+            <Animated.Text testID="wc-plan-months" style={[styles.wcStepperMain, { transform: [{ scale }] }]}>{value}</Animated.Text>
+            <Text style={styles.wcStepperMonthsLabel}>Months</Text>
+          </View>
+        ) : (
+          <Pressable key={value} onPress={() => onSelect(value)} hitSlop={8} accessibilityRole="button" accessibilityLabel={`${value} months`}>
+            <Text style={styles.wcStepperSide}>{value}</Text>
+          </Pressable>
+        )))}
+      </View>
+      <Pressable
+        testID="wc-plan-plus"
+        disabled={next === null}
+        onPress={() => next !== null && onSelect(next)}
+        style={[styles.wcStepperPlus, next === null && { opacity: 0.45 }]}
+        accessibilityRole="button"
+        accessibilityLabel="More months"
+      >
+        <Image source={figmaImageSource('wcPlus')} resizeMode="contain" accessibilityIgnoresInvertColors style={{ width: 22, height: 22 }} />
+      </Pressable>
+    </View>
+  );
+}
+
+/**
+ * Experience B — Figma 3529:83312 "4 Month".
+ * One plan in view at a time: the monthly amount is the hero, the rail changes it
+ * in place. Optimised for deciding *how long*, not for scanning every option.
+ */
+function WcTenure({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) => void; months: number; setMonths: (m: number) => void }) {
+  const [sheet, setSheet] = useState<null | 'details' | 'schedule' | 'cart' | 'fee' | 'discounts'>(null);
+  const bump = (next: number) => {
+    if (!WC_TENURES.includes(next as (typeof WC_TENURES)[number]) || next === months) return;
+    setMonths(next);
+  };
   const fee = wcPlanFee(months);
+  const maxTenure = WC_TENURES[WC_TENURES.length - 1];
   return (
     <AppShell>
-      <View testID="wc-tenure-1878-13247" style={styles.wcObScreen}>
+      <View testID="wc-tenure-3529-83312" style={styles.wcObScreen}>
         <ScreenFade>
           <WcOnboardHeader onClose={() => setRoute('checkout')} />
           <View style={styles.wcTenureContent}>
-            <Pressable testID="wc-cart-pill" style={styles.wcCartPill} onPress={() => setSheet('cart')} accessibilityRole="button" accessibilityLabel="View cart details">
-              <View style={styles.wcCartLeft}>
-                <Image source={figmaImageSource('wcCartIcon')} resizeMode="contain" accessibilityIgnoresInvertColors style={{ width: 16, height: 16 }} />
-                <Text style={styles.wcCartItems}>{WC_CART_ITEMS} {WC_CART_ITEMS === 1 ? 'Item' : 'Items'}</Text>
-              </View>
-              <View style={styles.wcCartRight}>
-                <View style={styles.wcCartDiscountChip}><Text style={styles.wcCartDiscountChipText}>10% off</Text></View>
-                <Text style={styles.wcCartWasPrice}>{formatAmount(Math.round(WC_CART_TOTAL))}</Text>
-                <Money amount={wcMoney(WC_DISCOUNTED_TOTAL)} size={16} weight="700" />
-                <Image source={figmaImageSource('wcArrowRight')} resizeMode="contain" accessibilityIgnoresInvertColors style={{ width: 13, height: 13 }} />
-              </View>
-            </Pressable>
+            <WcCartPill onPress={() => setSheet('cart')} />
             <View style={styles.wcPlanCard}>
               <View style={{ gap: 6, width: '100%' }}>
                 <Text style={styles.wcPlanTitle}>Choose your plan</Text>
-                <Text style={styles.wcPlanSub}>You can split your purchase up to <Text style={{ fontWeight: '600' }}>36 months</Text></Text>
+                <Text style={styles.wcPlanSub}>You can split your purchase up to <Text style={styles.wcPlanSubStrong}>{maxTenure} months</Text></Text>
               </View>
-              <View style={styles.wcStepperTrack}>
-                <Pressable testID="wc-plan-minus" disabled={previous === null} onPress={() => previous !== null && bump(previous)} style={[styles.wcStepperMinus, previous === null && { opacity: 0.45 }]} accessibilityRole="button" accessibilityLabel="Previous plan">
-                  <Image source={figmaImageSource('wcMinus')} resizeMode="contain" accessibilityIgnoresInvertColors style={{ width: 23, height: 3 }} />
-                </Pressable>
-                <View style={styles.wcStepperCenter}>
-                  <Pressable onPress={() => previous !== null && bump(previous)} disabled={previous === null} accessibilityRole="button" accessibilityLabel={previous === null ? 'No previous plan' : `${previous} months`}>
-                    <Text style={styles.wcStepperSide}>{previous ?? ' '}</Text>
-                  </Pressable>
-                  <View style={{ alignItems: 'center', gap: 2 }}>
-                    <Animated.Text testID="wc-plan-months" style={[styles.wcStepperMain, { transform: [{ scale: swap }] }]}>{months}</Animated.Text>
-                    <Text style={styles.wcStepperMonthsLabel}>Months</Text>
+              <View style={{ gap: 24, width: '100%', alignItems: 'center' }}>
+                <FadeSwap swapKey={`plan-${months}`}>
+                  <View style={styles.wcPlanHero}>
+                    <View style={styles.wcPlanHeroRow}>
+                      <Riyal size={21} />
+                      <Text style={styles.wcPlanHeroAmount}>{wcMoney(wcPlanMonthly(months))}</Text>
+                      <Text style={styles.wcPlanHeroPer}>/mo</Text>
+                    </View>
+                    <View style={styles.wcPlanFeesRow}>
+                      <Text style={styles.wcPlanFees}>
+                        {fee === 0 ? 'No interest, no fees' : <>plus a one-time <Riyal size={11} color={muted} /> {wcMoney(fee)} fee</>}
+                      </Text>
+                      {fee > 0 ? (
+                        <Pressable testID="wc-fee-help" onPress={() => setSheet('fee')} hitSlop={10} accessibilityRole="button" accessibilityLabel={`Explain the ${months} month fee`}>
+                          <Image source={figmaImageSource('wcInfoCircle')} resizeMode="contain" accessibilityIgnoresInvertColors style={{ width: 14, height: 14 }} />
+                        </Pressable>
+                      ) : null}
+                    </View>
                   </View>
-                  <Pressable onPress={() => next !== null && bump(next)} disabled={next === null} accessibilityRole="button" accessibilityLabel={next === null ? 'No next plan' : `${next} months`}>
-                    <Text style={styles.wcStepperSide}>{next ?? ' '}</Text>
-                  </Pressable>
+                </FadeSwap>
+                <View style={{ gap: 8, width: '100%', alignItems: 'center' }}>
+                  <WcTenureRail months={months} onSelect={bump} />
+                  <WcSavingStrip months={months} onViewDiscounts={() => setSheet('discounts')} />
                 </View>
-                <Pressable testID="wc-plan-plus" disabled={next === null} onPress={() => next !== null && bump(next)} style={[styles.wcStepperPlus, next === null && { opacity: 0.45 }]} accessibilityRole="button" accessibilityLabel="Next plan">
-                  <Image source={figmaImageSource('wcPlus')} resizeMode="contain" accessibilityIgnoresInvertColors style={{ width: 22, height: 22 }} />
-                </Pressable>
               </View>
-              <FadeSwap swapKey={`plan-${months}`}>
-                <View style={styles.wcPlanHero}>
-                  <View style={styles.wcPlanHeroRow}>
-                    <Riyal size={20} />
-                    <Text style={styles.wcPlanHeroAmount}>{wcMoney(wcPlanToday(months))}</Text>
-                    <Text style={styles.wcPlanHeroToday}> today</Text>
-                  </View>
-                  <Text style={styles.wcPlanThen}>Then <Riyal size={12} color={muted} /> {wcMoney(wcPlanMonthly(months))} / Month</Text>
-                  <View style={styles.wcPlanFeesRow}>
-                    <Text style={styles.wcPlanFees}>{fee === 0 ? 'No fees' : <>Fees <Riyal size={11} color={muted} /> {wcMoney(fee)}</>}</Text>
-                    {fee > 0 ? (
-                      <Pressable testID="wc-four-month-fee-help" onPress={() => setSheet('fee')} hitSlop={10} accessibilityRole="button" accessibilityLabel={`Explain the ${months} month fee`}>
-                        <Image source={figmaImageSource('wcInfoCircle')} resizeMode="contain" accessibilityIgnoresInvertColors style={{ width: 14, height: 14 }} />
-                      </Pressable>
-                    ) : null}
-                  </View>
-                </View>
-              </FadeSwap>
               <View style={{ gap: 12, width: '100%' }}>
                 <Pressable testID="wc-plan-continue" style={styles.wcGreenCta} onPress={() => setRoute('wcPayment')} accessibilityRole="button">
-                  <Text style={styles.wcGreenCtaText}>Continue with plan</Text>
+                  <Text style={styles.wcGreenCtaText}>Continue</Text>
                 </Pressable>
                 <Pressable testID="wc-plan-details" style={styles.wcGreyCta} onPress={() => setSheet('details')} accessibilityRole="button">
                   <Text style={styles.wcGreyCtaText}>View plan details</Text>
@@ -1467,9 +1580,167 @@ function WcTenure({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) => 
         {sheet === 'schedule' ? <WcFullScheduleSheet months={months} onClose={() => setSheet(null)} /> : null}
         {sheet === 'cart' ? <WcCartSheet onClose={() => setSheet(null)} /> : null}
         {sheet === 'fee' ? <WcFourMonthFeeSheet onClose={() => setSheet(null)} /> : null}
+        {sheet === 'discounts' ? <WcDiscountsSheet months={months} onClose={() => setSheet(null)} onSelect={(m) => { bump(m); setSheet(null); }} /> : null}
         <View style={styles.wcStatusOverlay} pointerEvents="none"><StatusStrip pointerEvents="none" /></View>
       </View>
     </AppShell>
+  );
+}
+
+// Figma 3593:43369 — one plan card in the list variant. The discount badge is
+// tucked into the card's own top-right corner (bottom-left + top-right radius),
+// which is why the card clips its children rather than padding them.
+function WcPlanRow({ months, selected, onPress }: { months: number; selected: boolean; onPress: () => void }) {
+  const fee = wcPlanFee(months);
+  const saving = wcPlanSaving(months);
+  const monthly = wcPlanMonthly(months);
+  return (
+    <Pressable
+      testID={`wc-plan-row-${months}`}
+      onPress={onPress}
+      accessibilityRole="radio"
+      accessibilityState={{ selected }}
+      accessibilityLabel={`${months} payments of ${wcMoney(monthly)} per month${fee === 0 ? ', no interest and no fees' : `, ${wcMoney(fee)} one-time fee`}${saving > 0 ? `, save ${wcMoney(saving)}` : ''}`}
+      style={[styles.wcPlanRow, saving > 0 ? styles.wcPlanRowOffer : styles.wcPlanRowPlain, selected && styles.wcPlanRowSelected]}
+    >
+      <View style={styles.wcPlanRowLeft}>
+        <Text style={styles.wcPlanRowTitle}>{months} Payments</Text>
+        {fee === 0 ? (
+          <Text style={styles.wcPlanRowFree}>No interest. No fees</Text>
+        ) : (
+          <View style={styles.wcPlanRowFeeLine}>
+            <Riyal size={12} color={muted} />
+            <Text style={styles.wcPlanRowFee}>{wcMoney(fee)} one-time fee</Text>
+          </View>
+        )}
+      </View>
+      <View style={[styles.wcPlanRowRight, saving > 0 && styles.wcPlanRowRightOffer]}>
+        {saving > 0 ? (
+          <View style={styles.wcPlanRowBadge}>
+            <SaleTag size={12} color={neon} />
+            <Text style={styles.wcPlanRowBadgeText}>{Math.round(wcSavingRate(months) * 100)}% Off · Save</Text>
+            <Riyal size={11} color={neon} />
+            <Text style={styles.wcPlanRowBadgeText}>{wcSaving(saving)}</Text>
+          </View>
+        ) : null}
+        <View style={[styles.wcPlanRowAmount, saving > 0 && { paddingRight: 16 }]}>
+          <Riyal size={14} />
+          <Text style={styles.wcPlanRowMonthly}>
+            {wcSplitAmount(monthly).whole}
+            <Text style={styles.wcPlanRowDecimals}>.{wcSplitAmount(monthly).dec}</Text>
+          </Text>
+          <Text style={styles.wcPlanRowPer}>/mo</Text>
+        </View>
+      </View>
+    </Pressable>
+  );
+}
+
+/**
+ * Experience A — Figma 3615:73832 "2 Month".
+ * Every plan is on screen at once and compared side by side; nothing is
+ * pre-selected, so Continue stays inert until the shopper commits. Optimised for
+ * scanning cost against tenure rather than for stepping through a single number.
+ */
+function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) => void; months: number | null; setMonths: (m: number) => void }) {
+  const [sheet, setSheet] = useState<null | 'cart' | 'details' | 'schedule' | 'discounts'>(null);
+  const maxTenure = WC_TENURES[WC_TENURES.length - 1];
+  const chosen = months;
+  return (
+    <AppShell>
+      <View testID="wc-plans-3615-73832" style={styles.wcObScreen}>
+        <ScreenFade>
+          <WcOnboardHeader onClose={() => setRoute('checkout')} />
+          <View style={styles.wcPlansContent}>
+            <WcCartPill onPress={() => setSheet('cart')} />
+            <View style={styles.wcPlansHead}>
+              <Text style={styles.wcPlansEyebrow}>Choose how to split</Text>
+              <View style={styles.wcPlansTotalRow}>
+                <Riyal size={19} />
+                <Text style={styles.wcPlansTotal}>{formatAmount(WC_DISCOUNTED_TOTAL)}</Text>
+              </View>
+              <Text style={styles.wcPlansSub}>
+                You can split your purchase up to <Text style={styles.wcPlansSubStrong}>{maxTenure} months</Text>
+              </Text>
+            </View>
+            <View style={styles.wcPlansList} accessibilityRole="radiogroup">
+              {WC_TENURES.map((value) => (
+                <WcPlanRow key={value} months={value} selected={chosen === value} onPress={() => setMonths(value)} />
+              ))}
+            </View>
+            <Pressable
+              testID="wc-plans-discounts"
+              onPress={() => setSheet('discounts')}
+              hitSlop={8}
+              accessibilityRole="button"
+              accessibilityLabel="View discount tiers"
+              style={{ alignSelf: 'center' }}
+            >
+              <Text style={styles.wcSavingLink}>View discount tiers</Text>
+            </Pressable>
+          </View>
+          <View style={styles.wcPlansFooter}>
+            <Pressable
+              testID="wc-plans-continue"
+              disabled={chosen === null}
+              style={[styles.wcGreenCta, styles.wcPlansCta, chosen === null && styles.wcCtaDisabled]}
+              onPress={() => chosen !== null && setRoute('wcPayment')}
+              accessibilityRole="button"
+              accessibilityState={{ disabled: chosen === null }}
+              accessibilityLabel={chosen === null ? 'Choose a plan to continue' : `Continue with ${chosen} payments`}
+            >
+              <Text style={[styles.wcGreenCtaText, chosen === null && styles.wcCtaDisabledText]}>Continue</Text>
+            </Pressable>
+            <SafariCompactBar url="extrastores.com" onBack={() => setRoute('wcQuickCall')} />
+          </View>
+        </ScreenFade>
+        {sheet === 'cart' ? <WcCartSheet onClose={() => setSheet(null)} /> : null}
+        {sheet === 'discounts' ? <WcDiscountsSheet months={chosen} onClose={() => setSheet(null)} onSelect={(m) => { setMonths(m); setSheet(null); }} /> : null}
+        <View style={styles.wcStatusOverlay} pointerEvents="none"><StatusStrip pointerEvents="none" /></View>
+      </View>
+    </AppShell>
+  );
+}
+
+// The discount ladder behind the "2% / 5% / 10% Off" badges — one row per tier so
+// the shopper can see what a longer tenure is actually worth before committing.
+function WcDiscountsSheet({ months, onClose, onSelect }: { months: number | null; onClose: () => void; onSelect: (m: number) => void }) {
+  const rise = useRef(new Animated.Value(0)).current;
+  useEffect(() => {
+    Animated.timing(rise, { toValue: 1, duration: 280, easing: Easing.bezier(0.32, 0.72, 0, 1), useNativeDriver: true }).start();
+  }, [rise]);
+  const tiers = WC_TENURES.filter((m) => wcSavingRate(m) > 0);
+  return (
+    <ViewportLayer><View style={styles.wcPickerOverlay} pointerEvents="auto">
+      <Pressable style={styles.wcPickerScrim} onPress={onClose} accessibilityRole="button" accessibilityLabel="Close discount tiers" />
+      <Animated.View style={[styles.wcDetailsSheet, { transform: [{ translateY: rise.interpolate({ inputRange: [0, 1], outputRange: [420, 0] }) }] }]}>
+        <View style={styles.sheetGrabber} />
+        <Text style={styles.wcDetailsTitle}>Discount tiers</Text>
+        <Text style={[styles.wcDetailsDim, { marginTop: -8, marginBottom: 2 }]}>The longer you split, the more Tasheel takes off this order.</Text>
+        <View style={[styles.wcDetailsCard, { gap: 12 }]}>
+          {tiers.map((tier) => (
+            <Pressable
+              key={tier}
+              testID={`wc-discount-tier-${tier}`}
+              onPress={() => onSelect(tier)}
+              accessibilityRole="button"
+              accessibilityLabel={`${tier} payments, ${Math.round(wcSavingRate(tier) * 100)} percent off, save ${wcMoney(wcPlanSaving(tier))}`}
+              style={[styles.wcDiscountRow, months === tier && styles.wcDiscountRowActive]}
+            >
+              <Text style={styles.wcDetailsStrong}>{tier} payments</Text>
+              <View style={styles.wcDiscountRowRight}>
+                <Text style={styles.wcDiscountPct}>{Math.round(wcSavingRate(tier) * 100)}% off</Text>
+                <Money amount={wcMoney(wcPlanSaving(tier))} size={15} color={greenMid} weight="700" />
+              </View>
+            </Pressable>
+          ))}
+          <Text style={styles.wcDetailsDim}>2 payments is interest-free with no fee, so it carries no discount.</Text>
+        </View>
+        <Pressable testID="wc-discounts-got-it" style={styles.wcGreenCta} onPress={onClose} accessibilityRole="button">
+          <Text style={styles.wcGreenCtaText}>Got it</Text>
+        </Pressable>
+      </Animated.View>
+    </View></ViewportLayer>
   );
 }
 
@@ -1478,6 +1749,7 @@ function WcPlanDetailsSheet({ months, onClose, onViewSchedule, onContinue }: { m
   const rise = useRef(new Animated.Value(0)).current;
   const [feeTipOpen, setFeeTipOpen] = useState(false);
   const fee = wcPlanFee(months);
+  const saving = wcPlanSaving(months);
   useEffect(() => {
     Animated.timing(rise, { toValue: 1, duration: 280, easing: Easing.bezier(0.32, 0.72, 0, 1), useNativeDriver: true }).start();
   }, [rise]);
@@ -1496,7 +1768,7 @@ function WcPlanDetailsSheet({ months, onClose, onViewSchedule, onContinue }: { m
           </View>
           <Progress value={1 / months} segments={months} />
           <View style={styles.reviewLine}>
-            <Text style={styles.wcDetailsDim}>Down payment today</Text>
+            <Text style={styles.wcDetailsDim}>{wcPlanDown(months) > 0 ? 'Down payment today' : 'First payment today'}</Text>
             <Text style={styles.wcDetailsDim}>Ends 1 {endMonth}</Text>
           </View>
         </View>
@@ -1524,12 +1796,22 @@ function WcPlanDetailsSheet({ months, onClose, onViewSchedule, onContinue }: { m
         <View style={styles.wcDetailsCard}>
           <View style={styles.reviewLine}><Text style={styles.wcDetailsLabel}>Order total</Text><Money amount={wcMoney(WC_CART_TOTAL)} size={17} /></View>
           <View style={styles.reviewDivider} />
-          <View style={styles.reviewLine}><Text style={[styles.wcDetailsLabel, { color: greenMid }]}>Tasheel discount (10%)</Text><Text style={styles.wcFeeFree}>− <Riyal size={10} color={greenMid} /> {wcMoney(WC_DISCOUNT_AMOUNT)}</Text></View>
+          <View style={styles.reviewLine}><Text style={[styles.wcDetailsLabel, { color: greenMid }]}>Tasheel discount ({WC_DISCOUNT_PERCENT}%)</Text><Text style={styles.wcFeeFree}>− <Riyal size={10} color={greenMid} /> {wcMoney(WC_DISCOUNT_AMOUNT)}</Text></View>
           <View style={styles.reviewDivider} />
-          <View style={styles.reviewLine}><Text style={styles.wcDetailsLabel}>Available BNPL limit</Text><Money amount={wcMoney(WC_AVAILABLE_LIMIT)} size={17} /></View>
-          <View style={styles.reviewDivider} />
-          <View style={styles.reviewLine}><Text style={styles.wcDetailsLabel}>Down payment</Text><Money amount={wcMoney(WC_DOWN_PAYMENT)} size={17} /></View>
-          <View style={styles.reviewDivider} />
+          {saving > 0 ? (
+            <>
+              <View style={styles.reviewLine}><Text style={[styles.wcDetailsLabel, { color: greenMid }]}>{months}-month plan saving ({Math.round(wcSavingRate(months) * 100)}%)</Text><Text style={styles.wcFeeFree}>− <Riyal size={10} color={greenMid} /> {wcMoney(saving)}</Text></View>
+              <View style={styles.reviewDivider} />
+            </>
+          ) : null}
+          {wcPlanDown(months) > 0 ? (
+            <>
+              <View style={styles.reviewLine}><Text style={styles.wcDetailsLabel}>Available BNPL limit</Text><Money amount={wcMoney(WC_AVAILABLE_LIMIT)} size={17} /></View>
+              <View style={styles.reviewDivider} />
+              <View style={styles.reviewLine}><Text style={styles.wcDetailsLabel}>Down payment</Text><Money amount={wcMoney(wcPlanDown(months))} size={17} /></View>
+              <View style={styles.reviewDivider} />
+            </>
+          ) : null}
           <View style={[styles.reviewLine, { position: 'relative' }]}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
               <Text style={styles.wcDetailsLabel}>Processing fee</Text>
@@ -1540,7 +1822,7 @@ function WcPlanDetailsSheet({ months, onClose, onViewSchedule, onContinue }: { m
             {fee === 0 ? <Text style={styles.wcDetailsDim}>No fees</Text> : <Money amount={wcMoney(fee)} size={17} />}
             {feeTipOpen ? (
               <View style={styles.wcFeeTip} pointerEvents="none">
-                <Text style={styles.wcFeeTipText}>{fee === 0 ? 'This plan has no fees and no interest.' : `Plans of 4 months and longer carry a 1% Murabaha fee on the financed amount. It is split equally across the ${months} installments.`}</Text>
+                <Text style={styles.wcFeeTipText}>{fee === 0 ? 'This plan has no fees and no interest.' : `Plans of 4 months and longer carry a one-time ${wcMoney(WC_PLAN_FEE)} processing fee, charged with your first payment.`}</Text>
               </View>
             ) : null}
           </View>
@@ -1569,8 +1851,8 @@ function WcFourMonthFeeSheet({ onClose }: { onClose: () => void }) {
         <View style={styles.wcDetailsCard}>
           <Text style={styles.wcWhyText}>This plan has a 1% Murabaha fee and no interest.</Text>
           <View style={styles.reviewDivider} />
-          <View style={styles.reviewLine}><Text style={styles.wcDetailsLabel}>Financed amount</Text><Money amount={wcMoney(WC_FINANCED_PRINCIPAL)} size={16} /></View>
-          <View style={styles.reviewLine}><Text style={styles.wcDetailsLabel}>Total fee</Text><Money amount={wcMoney(wcPlanFee(4) ?? 0)} size={16} /></View>
+          <View style={styles.reviewLine}><Text style={styles.wcDetailsLabel}>Financed amount</Text><Money amount={wcMoney(wcPlanFinanced(4))} size={16} /></View>
+          <View style={styles.reviewLine}><Text style={styles.wcDetailsLabel}>Total fee</Text><Money amount={wcMoney(WC_PLAN_FEE)} size={16} /></View>
           <View style={styles.reviewLine}><Text style={styles.wcDetailsLabel}>Fee treatment</Text><Text style={styles.wcDetailsStrong}>Split across 4 payments</Text></View>
         </View>
         <Pressable testID="wc-four-month-fee-got-it" style={styles.wcGreenCta} onPress={onClose} accessibilityRole="button">
@@ -1588,7 +1870,7 @@ function WcFullScheduleSheet({ months, onClose }: { months: number; onClose: () 
     Animated.timing(rise, { toValue: 1, duration: 280, easing: Easing.bezier(0.32, 0.72, 0, 1), useNativeDriver: true }).start();
   }, [rise]);
   const rows = Array.from({ length: months }, (_, i) => {
-    if (i === 0) return { label: 'Today', sub: 'Down payment', amount: wcPlanToday(months), badge: 'Due today' as const };
+    if (i === 0) return { label: 'Today', sub: wcPlanDown(months) > 0 ? 'Down payment' : 'Payment 1 of ' + months, amount: wcPlanToday(months), badge: 'Due today' as const };
     return { label: `1 ${MONTH_NAMES[(6 + i - 1) % 12].slice(0, 3)}`, sub: `Payment ${i + 1} of ${months}`, amount: wcPlanMonthly(months), badge: i === months - 1 ? ('Final' as const) : null };
   });
   return (
@@ -1649,7 +1931,7 @@ function WcWhyTodaySheet({ months, onClose }: { months: number; onClose: () => v
         <View style={styles.wcDetailsCard}>
           <View style={styles.wcWhyRow}>
             <View style={styles.wcWhyDot} />
-            <Text style={styles.wcWhyText}>Your discounted order is <Riyal size={10} color={muted} /> {wcMoney(WC_DISCOUNTED_TOTAL)}. Your available limit finances <Riyal size={10} color={muted} /> {wcMoney(WC_FINANCED_PRINCIPAL)}, so the required down payment is <Riyal size={10} color={muted} /> {wcMoney(WC_DOWN_PAYMENT)}.</Text>
+            <Text style={styles.wcWhyText}>{wcPlanDown(months) > 0 ? <>Your discounted order is <Riyal size={10} color={muted} /> {wcMoney(wcPlanPayable(months))}. Your available limit finances <Riyal size={10} color={muted} /> {wcMoney(wcPlanFinanced(months))}, so the required down payment is <Riyal size={10} color={muted} /> {wcMoney(wcPlanDown(months))}.</> : <>Your order after discounts is <Riyal size={10} color={muted} /> {wcMoney(wcPlanPayable(months))}, fully covered by your available limit — no down payment is required.</>}</Text>
           </View>
           <View style={styles.wcWhyRow}>
             <View style={styles.wcWhyDot} />
@@ -1670,7 +1952,8 @@ function WcWhyTodaySheet({ months, onClose }: { months: number; onClose: () => v
 
 // Figma 1885:12758 — Cart details sheet (items sum to the cart total).
 const WC_CART_ITEMS_LIST = [
-  { name: "SMEG 50's Retro Refrigerator", sub: 'Right Handle · Black', amount: 7000.00 },
+  { name: "SMEG 50's Retro Refrigerator", sub: 'Right Handle · Black', amount: 3899.00 },
+  { name: 'SMEG 2-Slice Toaster', sub: 'Black', amount: 451.00 },
 ];
 
 function WcCartSheet({ onClose }: { onClose: () => void }) {
@@ -1701,7 +1984,7 @@ function WcCartSheet({ onClose }: { onClose: () => void }) {
             <Money amount={wcMoney(WC_CART_TOTAL)} size={15} color={muted} />
           </View>
           <View style={styles.wcCartTotalRow}>
-            <Text style={styles.wcCartDiscountLabel}>Tasheel discount (10%)</Text>
+            <Text style={styles.wcCartDiscountLabel}>Tasheel discount ({WC_DISCOUNT_PERCENT}%)</Text>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Text style={styles.wcCartDiscountLabel}>− </Text>
               <Money amount={wcMoney(WC_DISCOUNT_AMOUNT)} size={15} color={greenMid} weight="700" />
@@ -3993,7 +4276,10 @@ export default function App() {
   const [selectedDueIds, setSelectedDueIds] = useState<Set<string>>(() => defaultDueIds(initial));
   const [payMethod, setPayMethod] = useState<PayMethod>('card');
   const [wcPhone, setWcPhone] = useState('581723467');
-  const [wcMonths, setWcMonths] = useState(3);
+  const [wcMonths, setWcMonths] = useState(4);
+  // Experience A starts with nothing selected, so its Continue can stay inert
+  // until the shopper commits; Experience B always has a tenure in hand.
+  const [wcChosen, setWcChosen] = useState<number | null>(null);
   const [payCardLast4, setPayCardLast4] = useState('4521');
   const submitNewCard = (last4: string) => {
     setPayMethod('card');
@@ -4012,7 +4298,7 @@ export default function App() {
     setRouteState(r);
     const map: Record<RouteKey, string> = {
       checkout: '/checkout', appHome: '/checkout/app-home', detail: '/checkout/detail', insights: '/checkout/insights', insightsCategory: '/checkout/insights/category', insightsEmpty: '/checkout/insights/empty', purchases: '/checkout/purchases', dues: '/checkout/dues', nextUp: '/checkout/next-up', paymentMethod: '/checkout/payment-method', paymentSelected: '/checkout/payment-method/selected', addCard: '/checkout/payment-method/add-card', cardAdded: '/checkout/payment-method/added', otp: '/checkout/otp', processing: '/checkout/processing', insufficient: '/checkout/insufficient', declined: '/checkout/declined', success: '/checkout/success',
-      wcMobile: '/checkout/onboarding/mobile', wcOtp: '/checkout/onboarding/otp', wcIdentity: '/checkout/onboarding/identity', wcNafath: '/checkout/onboarding/nafath', wcQuickCall: '/checkout/onboarding/quick-call', wcTenure: '/checkout/onboarding/tenure', wcPayment: '/checkout/onboarding/payment', wcProcessing: '/checkout/onboarding/processing', wcSuccess: '/checkout/onboarding/success', wcNotification: '/checkout/notification', saLogin: '/checkout/login', saOtp: '/checkout/otp-login', saAddCard: '/checkout/add-card-home', superHome: '/checkout/superhome'
+      wcMobile: '/checkout/onboarding/mobile', wcOtp: '/checkout/onboarding/otp', wcIdentity: '/checkout/onboarding/identity', wcNafath: '/checkout/onboarding/nafath', wcQuickCall: '/checkout/onboarding/quick-call', wcTenure: '/checkout/onboarding/tenure', wcPlans: '/checkout/onboarding/plans', wcPayment: '/checkout/onboarding/payment', wcProcessing: '/checkout/onboarding/processing', wcSuccess: '/checkout/onboarding/success', wcNotification: '/checkout/notification', saLogin: '/checkout/login', saOtp: '/checkout/otp-login', saAddCard: '/checkout/add-card-home', superHome: '/checkout/superhome'
     };
     pushPath(map[r]);
   };
@@ -4022,6 +4308,7 @@ export default function App() {
   if (route === 'wcNafath') return <WcNafath setRoute={setRoute} />;
   if (route === 'wcQuickCall') return <WcQuickCall setRoute={setRoute} />;
   if (route === 'wcTenure') return <WcTenure setRoute={setRoute} months={wcMonths} setMonths={setWcMonths} />;
+  if (route === 'wcPlans') return <WcPlanList setRoute={setRoute} months={wcChosen} setMonths={(m) => { setWcChosen(m); setWcMonths(m); }} />;
   if (route === 'wcPayment') return <WcPayment setRoute={setRoute} months={wcMonths} setMonths={setWcMonths} />;
   if (route === 'wcProcessing') return <WcProcessing setRoute={setRoute} />;
   if (route === 'wcSuccess') return <WcSuccess months={wcMonths} />;
@@ -4196,30 +4483,74 @@ const styles = StyleSheet.create({
   wcCartPill: { height: 49, borderRadius: 9999, backgroundColor: '#fff', paddingHorizontal: 16, paddingVertical: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   wcCartLeft: { flexDirection: 'row', gap: 6, alignItems: 'center' },
   wcCartItems: { fontSize: 15, lineHeight: 20, color: text, letterSpacing: -0.24 },
-  wcCartRight: { flexDirection: 'row', gap: 6, alignItems: 'center' },
+  wcCartRight: { flexDirection: 'row', gap: 7, alignItems: 'center' },
   wcCartTotalRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   wcCartTotalDivider: { height: 1, backgroundColor: '#e8ecea' },
   wcCartDiscountLabel: { fontSize: 13, lineHeight: 18, fontWeight: '700', color: greenMid },
   wcCartDiscountChip: { backgroundColor: '#dff5d4', borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2 },
   wcCartDiscountChipText: { fontSize: 11, lineHeight: 15, fontWeight: '700', color: '#16720b' },
   wcCartWasPrice: { fontSize: 13, lineHeight: 18, color: muted, textDecorationLine: 'line-through' },
-  wcPlanCard: { width: '100%', minHeight: 550, backgroundColor: '#fff', borderRadius: 40, padding: 24, gap: 22, alignItems: 'center', justifyContent: 'space-between', shadowColor: '#000', shadowOpacity: 0.12, shadowRadius: 20, shadowOffset: { width: 0, height: 16 } },
+  wcPlanCard: { width: '100%', backgroundColor: '#fff', borderRadius: 40, padding: 16, paddingTop: 20, gap: 32, alignItems: 'center', shadowColor: '#000', shadowOpacity: 0.12, shadowRadius: 20, shadowOffset: { width: 0, height: 16 } },
   wcPlanTitle: { fontSize: 28, lineHeight: 34, fontWeight: '700', color: text, letterSpacing: 0.36 },
-  wcPlanSub: { fontSize: 13, lineHeight: 18, color: muted, letterSpacing: -0.08 },
-  wcStepperTrack: { width: 310, borderRadius: 999, backgroundColor: '#f3f4f6', paddingHorizontal: 12, paddingVertical: 7, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  wcPlanSub: { fontSize: 14, lineHeight: 18, color: muted, letterSpacing: -0.08 },
+  wcPlanSubStrong: { fontWeight: '600', color: '#15803d' },
+  // Figma 3529:83469 — the rail bleeds 4px past the card's 16px inset on each side.
+  wcStepperTrack: { alignSelf: 'stretch', marginHorizontal: -4, borderRadius: 999, backgroundColor: '#f3f4f6', paddingHorizontal: 12, paddingVertical: 7, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   wcStepperMinus: { width: 47, height: 47, borderRadius: 99, backgroundColor: '#fff', borderWidth: 1, borderColor: borderSubtle, alignItems: 'center', justifyContent: 'center' },
   wcStepperPlus: { width: 47, height: 47, borderRadius: 99, backgroundColor: green, alignItems: 'center', justifyContent: 'center' },
-  wcStepperCenter: { flexDirection: 'row', alignItems: 'center', gap: 14, paddingHorizontal: 6 },
+  wcStepperValues: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly', paddingHorizontal: 10 },
+  wcStepperActiveSlot: { alignItems: 'center', gap: 2 },
   wcStepperSide: { fontSize: 24, lineHeight: 41, fontWeight: '500', color: muted, opacity: 0.2, letterSpacing: 0.38, textAlign: 'center', minWidth: 16 },
   wcStepperMain: { fontSize: 34, lineHeight: 41, fontWeight: '700', color: '#000', letterSpacing: 0.38, textAlign: 'center' },
   wcStepperMonthsLabel: { fontSize: 12, lineHeight: 16, color: muted, marginTop: -6 },
-  wcPlanHero: { alignItems: 'center', gap: 16 },
+  wcPlanHero: { alignItems: 'center', gap: 12 },
   wcPlanHeroRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   wcPlanHeroAmount: { fontSize: 34, lineHeight: 41, fontWeight: '700', color: text, letterSpacing: 0.38 },
   wcPlanHeroToday: { fontSize: 16, lineHeight: 22, color: muted },
+  wcPlanHeroPer: { fontSize: 16, lineHeight: 22, color: muted },
   wcPlanThen: { fontSize: 17, lineHeight: 22, color: muted, letterSpacing: -0.41, textAlign: 'center' },
   wcPlanFees: { fontSize: 12, lineHeight: 16, color: muted, textAlign: 'center' },
-  wcPlanFeesRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5, marginTop: -8 },
+  wcPlanFeesRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 },
+  // Figma 3529:83365 — saving strip
+  wcSavingStrip: { alignSelf: 'stretch', backgroundColor: '#f0fdf4', borderRadius: 999, paddingHorizontal: 12, paddingVertical: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  wcSavingLeft: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  wcSavingText: { fontSize: 12, lineHeight: 16, fontWeight: '500', color: greenMid, letterSpacing: 0.38 },
+  wcSavingLink: { fontSize: 11, lineHeight: 18, fontWeight: '600', color: greenBrand, letterSpacing: -0.08, textDecorationLine: 'underline' },
+  wcCtaDisabled: { backgroundColor: '#e5e7eb' },
+  wcCtaDisabledText: { color: '#9ca3af' },
+  // Figma 3529:83373 — discount ladder rows inside the sheet
+  wcDiscountRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 10, paddingHorizontal: 12, borderRadius: 14, backgroundColor: '#f9fafb' },
+  wcDiscountRowActive: { backgroundColor: '#f0fdf4' },
+  wcDiscountRowRight: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  wcDiscountPct: { fontSize: 13, lineHeight: 18, fontWeight: '600', color: greenBrand },
+  // ── Experience A — Figma 3615:73832 ───────────────────────────────────────────
+  wcPlansContent: { paddingHorizontal: 16, marginTop: 24, gap: 24 },
+  wcPlansHead: { paddingHorizontal: 16, alignItems: 'center', gap: 12 },
+  wcPlansEyebrow: { fontSize: 14, lineHeight: 18, color: muted, letterSpacing: 0.36 },
+  wcPlansTotalRow: { flexDirection: 'row', alignItems: 'center' },
+  wcPlansTotal: { fontSize: 34, lineHeight: 42, fontWeight: '700', color: text, letterSpacing: 0.38 },
+  wcPlansSub: { fontSize: 14, lineHeight: 18, color: muted, letterSpacing: -0.08, textAlign: 'center' },
+  wcPlansSubStrong: { fontWeight: '600', color: '#15803d' },
+  wcPlansList: { gap: 16 },
+  wcPlansFooter: { marginTop: 'auto', paddingTop: 24, gap: 16, alignItems: 'center' },
+  wcPlansCta: { width: '100%', maxWidth: 358, alignSelf: 'center' },
+  wcPlanRow: { backgroundColor: '#fff', borderRadius: 24, overflow: 'hidden', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 16, borderWidth: 2, borderColor: 'transparent', shadowColor: '#000', shadowOpacity: 0.12, shadowRadius: 40, shadowOffset: { width: 0, height: 16 } },
+  wcPlanRowOffer: { height: 87 },
+  wcPlanRowPlain: { minHeight: 82, paddingRight: 16, paddingVertical: 16 },
+  wcPlanRowSelected: { borderColor: green },
+  wcPlanRowLeft: { gap: 6 },
+  wcPlanRowTitle: { fontSize: 15, lineHeight: 20, fontWeight: '600', color: text, letterSpacing: 0.38 },
+  wcPlanRowFree: { fontSize: 13, lineHeight: 16, fontWeight: '500', color: greenBrand },
+  wcPlanRowFeeLine: { flexDirection: 'row', alignItems: 'center' },
+  wcPlanRowFee: { fontSize: 13, lineHeight: 16, color: muted },
+  wcPlanRowRight: { alignItems: 'flex-end', justifyContent: 'center' },
+  wcPlanRowRightOffer: { gap: 16, paddingBottom: 16, alignSelf: 'stretch' },
+  wcPlanRowBadge: { backgroundColor: greenMid, borderBottomLeftRadius: 16, borderTopRightRadius: 16, paddingHorizontal: 12, paddingVertical: 6, flexDirection: 'row', alignItems: 'center', gap: 2 },
+  wcPlanRowBadgeText: { fontSize: 11, lineHeight: 14, fontWeight: '500', color: neon, letterSpacing: 0.38 },
+  wcPlanRowAmount: { flexDirection: 'row', alignItems: 'baseline' },
+  wcPlanRowMonthly: { fontSize: 22, lineHeight: 28, fontWeight: '700', color: text, letterSpacing: 0.38 },
+  wcPlanRowDecimals: { fontSize: 15, fontWeight: '600' },
+  wcPlanRowPer: { fontSize: 16, lineHeight: 22, color: muted },
   wcGreyCta: { backgroundColor: '#e5e7eb', borderRadius: 9999, minHeight: 50, maxHeight: 50, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 20, paddingVertical: 14, width: '100%' },
   wcGreyCtaText: { color: text, fontSize: 17, lineHeight: 22, fontWeight: '500', letterSpacing: -0.41 },
   wcDetailsSheet: { position: 'absolute', left: 0, right: 0, bottom: 0, maxHeight: '94%', backgroundColor: canvas, borderTopLeftRadius: 38, borderTopRightRadius: 38, paddingHorizontal: 16, paddingTop: 6, paddingBottom: 28, gap: 12, shadowColor: '#000', shadowOpacity: 0.18, shadowRadius: 38, shadowOffset: { width: 0, height: -15 } },
@@ -4378,6 +4709,7 @@ const styles = StyleSheet.create({
   xCartTitle: { fontSize: 26, lineHeight: 32, fontWeight: '800', color: '#15191e' },
   xCartProduct: { minHeight: 112, borderRadius: 14, backgroundColor: '#fff', padding: 12, flexDirection: 'row', alignItems: 'center', gap: 12 },
   xCartProductImage: { width: 72, height: 88 },
+  xCartProductGlyph: { alignItems: 'center', justifyContent: 'center', backgroundColor: '#f7f7f7', borderRadius: 8 },
   xCartBrand: { fontSize: 11, lineHeight: 15, fontWeight: '700', color: '#1467b3' },
   xCartProductTitle: { fontSize: 14, lineHeight: 19, fontWeight: '700', color: '#15191e' },
   xCartMeta: { fontSize: 11, lineHeight: 15, color: '#6b7785' },

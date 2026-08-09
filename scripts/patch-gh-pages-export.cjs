@@ -8,7 +8,7 @@ if (!fs.existsSync(index)) {
   console.error(`Missing ${index}. Run npm run export:web first.`);
   process.exit(1);
 }
-const projectBase = '/tasheel-bnpl-prototype';
+const projectBase = process.env.GH_PAGES_BASE || '/tasheel-plan-selection';
 let html = fs.readFileSync(index, 'utf8');
 html = html
   // viewport-fit=cover lets iOS expose safe-area env() insets; maximum-scale=1
@@ -71,7 +71,8 @@ const routeAliases = [
   'checkout/otp', 'checkout/processing', 'checkout/insufficient', 'checkout/declined', 'checkout/success',
   'checkout/onboarding/mobile', 'checkout/onboarding/otp', 'checkout/onboarding/identity', 'checkout/onboarding/nafath',
   'checkout/onboarding/quick-call',
-  'checkout/onboarding/tenure', 'checkout/onboarding/payment', 'checkout/onboarding/processing', 'checkout/onboarding/success',
+  'checkout/onboarding/tenure', 'checkout/onboarding/plans',
+  'checkout/onboarding/payment', 'checkout/onboarding/processing', 'checkout/onboarding/success',
   'checkout/notification'
 ];
 let routeAliasFiles = 0;
