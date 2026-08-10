@@ -1958,7 +1958,7 @@ function WcPlanDetailsSheet({ months, onClose, onViewSchedule, onContinue }: { m
     <ViewportLayer><View style={styles.wcPickerOverlay} pointerEvents="auto">
       <Pressable style={styles.wcPickerScrim} onPress={onClose} accessibilityRole="button" accessibilityLabel="Close plan details" />
       <Animated.View style={[styles.wcDetailsSheet, { transform: [{ translateY: rise.interpolate({ inputRange: [0, 1], outputRange: [420, 0] }) }] }]}>
-        <View style={styles.sheetGrabber} />
+        <Pressable testID="wc-details-close" onPress={onClose} hitSlop={14} accessibilityRole="button" accessibilityLabel="Close plan details" style={styles.sheetGrabberHit}><View style={styles.sheetGrabber} /></Pressable>
         <Text style={styles.wcDetailsTitle}>Plan details</Text>
         <View style={styles.wcDetailsCard}>
           <View style={styles.reviewLine}>
@@ -2074,8 +2074,8 @@ function WcFullScheduleSheet({ months, onClose }: { months: number; onClose: () 
     <ViewportLayer><View style={styles.wcPickerOverlay} pointerEvents="auto">
       <Pressable style={styles.wcPickerScrim} onPress={onClose} accessibilityRole="button" accessibilityLabel="Close schedule" />
       <Animated.View style={[styles.wcDetailsSheet, { transform: [{ translateY: rise.interpolate({ inputRange: [0, 1], outputRange: [460, 0] }) }] }]}>
-        <View style={styles.sheetGrabber} />
-        <Text style={styles.wcDetailsTitle}>Plan details</Text>
+        <Pressable testID="wc-schedule-close" onPress={onClose} hitSlop={14} accessibilityRole="button" accessibilityLabel="Close full schedule" style={styles.sheetGrabberHit}><View style={styles.sheetGrabber} /></Pressable>
+        <Text style={styles.wcDetailsTitle}>Full schedule</Text>
         <View style={{ gap: 2, marginBottom: 6 }}>
           <Text style={styles.wcDetailsStrong}>{months} monthly payments</Text>
           <Text style={styles.wcDetailsDim}>First payment today, then {months - 1} {wcPaymentsWord(months - 1)} monthly</Text>
@@ -2268,7 +2268,9 @@ function WcMurabahaSheet({ accepted, setAccepted, onClose }: { accepted: boolean
 }
 
 // Figma 1961:27293 — payment plan summary + payment method selection.
-function WcPayment({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) => void; months: number; setMonths: (m: number) => void }) {
+// `planRoute` is whichever plan-selection screen the shopper came from, so Back
+// and Change return there instead of always assuming the stepper.
+function WcPayment({ setRoute, months, setMonths, planRoute = 'wcTenure' }: { setRoute: (r: RouteKey) => void; months: number; setMonths: (m: number) => void; planRoute?: RouteKey }) {
   const [method, setMethod] = useState<WcPayKind | null>(null);
   const [agreementAccepted, setAgreementAccepted] = useState(false);
   const [sheet, setSheet] = useState<null | 'details' | 'schedule' | 'why' | 'leave' | 'murabaha'>(null);
@@ -2295,7 +2297,7 @@ function WcPayment({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) =>
         <ScreenFade>
           <View style={styles.wcPaySheet}>
             <View style={[styles.wcObHeaderRow, { marginTop: SHOW_FAKE_CHROME ? 70 : 26 }]}>
-              <Pressable testID="wc-pay-back" onPress={() => setRoute('wcTenure')} hitSlop={10} accessibilityRole="button" accessibilityLabel="Back" style={styles.wcObCloseBox}>
+              <Pressable testID="wc-pay-back" onPress={() => setRoute(planRoute)} hitSlop={10} accessibilityRole="button" accessibilityLabel="Back" style={styles.wcObCloseBox}>
                 <Svg width={24} height={24} viewBox="0 0 24 24"><Path d="M15 5.5L8.5 12L15 18.5" fill="none" stroke={text} strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" /></Svg>
               </Pressable>
               <Image source={figmaImageSource('wcTasheelLogo')} resizeMode="contain" accessibilityIgnoresInvertColors style={styles.wcObLogo} />
@@ -2317,7 +2319,7 @@ function WcPayment({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) =>
               </View>
             </FadeSwap>
             <View style={styles.wcPayActionsRow}>
-              <Pressable testID="wc-pay-change" style={styles.wcPayActionPill} onPress={() => setRoute('wcTenure')} accessibilityRole="button"><Text style={styles.wcPayActionText}>Change</Text></Pressable>
+              <Pressable testID="wc-pay-change" style={styles.wcPayActionPill} onPress={() => setRoute(planRoute)} accessibilityRole="button"><Text style={styles.wcPayActionText}>Change</Text></Pressable>
               <Pressable testID="wc-pay-details" style={styles.wcPayActionPill} onPress={() => setSheet('details')} accessibilityRole="button"><Text style={styles.wcPayActionText}>Details</Text></Pressable>
             </View>
           </View>
@@ -2357,7 +2359,7 @@ function WcPayment({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) =>
           </View>
           <View style={styles.wcObBottom}>
             {SHOW_FAKE_CHROME ? payCta : null}
-            <SafariCompactBar url="extrastores.com" onBack={() => setRoute('wcTenure')} />
+            <SafariCompactBar url="extrastores.com" onBack={() => setRoute(planRoute)} />
           </View>
         </ScreenFade>
         {SHOW_FAKE_CHROME ? null : <ViewportLayer>{payCta}</ViewportLayer>}
@@ -4471,6 +4473,9 @@ export default function App() {
   // Experience A starts with nothing selected, so its Continue can stay inert
   // until the shopper commits; Experience B always has a tenure in hand.
   const [wcChosen, setWcChosen] = useState<number | null>(null);
+  // Remembers which plan-selection experience is in play so downstream screens
+  // return to the demo the shopper actually came from.
+  const [wcPlanRoute, setWcPlanRoute] = useState<RouteKey>(initial === 'wcPlans' ? 'wcPlans' : 'wcTenure');
   const [payCardLast4, setPayCardLast4] = useState('4521');
   const submitNewCard = (last4: string) => {
     setPayMethod('card');
@@ -4486,6 +4491,7 @@ export default function App() {
   }, []);
 
   const setRoute = (r: RouteKey) => {
+    if (r === 'wcPlans' || r === 'wcTenure') setWcPlanRoute(r);
     setRouteState(r);
     const map: Record<RouteKey, string> = {
       checkout: '/checkout', appHome: '/checkout/app-home', detail: '/checkout/detail', insights: '/checkout/insights', insightsCategory: '/checkout/insights/category', insightsEmpty: '/checkout/insights/empty', purchases: '/checkout/purchases', dues: '/checkout/dues', nextUp: '/checkout/next-up', paymentMethod: '/checkout/payment-method', paymentSelected: '/checkout/payment-method/selected', addCard: '/checkout/payment-method/add-card', cardAdded: '/checkout/payment-method/added', otp: '/checkout/otp', processing: '/checkout/processing', insufficient: '/checkout/insufficient', declined: '/checkout/declined', success: '/checkout/success',
@@ -4501,7 +4507,7 @@ export default function App() {
   if (route === 'wcTenure') return <WcTenure setRoute={setRoute} months={wcMonths} setMonths={setWcMonths} />;
   if (route === 'wcPlans') return <WcPlanList setRoute={setRoute} months={wcChosen} setMonths={(m) => { setWcChosen(m); setWcMonths(m); }} />;
   if (route === 'wcDemo') return <WcDemoHub setRoute={setRoute} />;
-  if (route === 'wcPayment') return <WcPayment setRoute={setRoute} months={wcMonths} setMonths={setWcMonths} />;
+  if (route === 'wcPayment') return <WcPayment setRoute={setRoute} months={wcMonths} setMonths={setWcMonths} planRoute={wcPlanRoute} />;
   if (route === 'wcProcessing') return <WcProcessing setRoute={setRoute} />;
   if (route === 'wcSuccess') return <WcSuccess months={wcMonths} />;
   if (route === 'wcNotification') return <WcNotification setRoute={setRoute} months={wcMonths} />;
@@ -5377,6 +5383,7 @@ const styles = StyleSheet.create({
   scrim: { position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.70)' },
   paymentSheet: { position: 'absolute', left: 0, right: 0, bottom: 0, zIndex: 30, backgroundColor: canvas, borderTopLeftRadius: 38, borderTopRightRadius: 38, paddingHorizontal: 16, paddingTop: 5, paddingBottom: 8, shadowColor: '#000', shadowOpacity: 0.18, shadowRadius: 38, shadowOffset: { width: 0, height: -15 } },
   sheetGrabber: { alignSelf: 'center', width: 36, height: 5, borderRadius: 99, backgroundColor: '#cccccc', marginTop: 5, marginBottom: 18 },
+  sheetGrabberHit: { alignSelf: 'stretch', alignItems: 'center' },
   sheetGrabberPressable: { alignSelf: 'center', width: 96, height: 28, alignItems: 'center', justifyContent: 'flex-start' },
   sheetTitle: { fontSize: 28, lineHeight: 34, fontWeight: '700', color: text, letterSpacing: -0.3, marginBottom: 20 },
   paymentRowsCard: { gap: 20, marginBottom: 16 },
