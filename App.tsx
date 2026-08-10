@@ -1630,7 +1630,14 @@ function WcTenure({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) => 
         <ScreenFade>
           <WcOnboardHeader onClose={() => setRoute('checkout')} onBack={() => setRoute('wcDemo')} />
           <View style={styles.wcTenureContent}>
-            <WcCartPill onPress={() => setSheet('cart')} months={months} />
+            {/* Cart, then the discount it earned — the saving belongs next to the
+                amount it comes off, not buried under the tenure rail. */}
+            <View style={{ gap: 8 }}>
+              <WcCartPill onPress={() => setSheet('cart')} months={months} />
+              <View style={styles.wcSavingStripTop}>
+                <WcSavingStrip months={months} onViewDiscounts={() => setSheet('discounts')} />
+              </View>
+            </View>
             <View style={styles.wcPlanCard}>
               <View style={{ gap: 6, width: '100%' }}>
                 <Text style={styles.wcPlanTitle}>Choose your plan</Text>
@@ -1662,7 +1669,6 @@ function WcTenure({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) => 
                 </FadeSwap>
                 <View style={{ gap: 8, width: '100%', alignItems: 'center' }}>
                   <WcTenureRail months={months} onSelect={bump} />
-                  <WcSavingStrip months={months} onViewDiscounts={() => setSheet('discounts')} />
                   <WcBestPlanNudge months={months} onSelect={bump} />
                 </View>
               </View>
@@ -4722,6 +4728,9 @@ const styles = StyleSheet.create({
   wcPlanFeesRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 },
   // Figma 3529:83365 — saving strip
   wcSavingStrip: { alignSelf: 'stretch', backgroundColor: '#f0fdf4', borderRadius: 999, paddingHorizontal: 12, paddingVertical: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
+  // Riding under the cart pill it is page furniture, not card furniture: inset a
+  // little so it reads as attached to the pill above it.
+  wcSavingStripTop: { paddingHorizontal: 8 },
   wcSavingStripBest: { paddingHorizontal: 10 },
   wcSavingLeft: { flexDirection: 'row', alignItems: 'center', gap: 5, flexShrink: 1 },
   wcSavingText: { fontSize: 13, lineHeight: 18, fontWeight: '500', color: greenMid, letterSpacing: -0.08 },
