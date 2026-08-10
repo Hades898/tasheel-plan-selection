@@ -1812,9 +1812,8 @@ function WcPlanRow({ months, selected, onPress }: { months: number; selected: bo
  * pre-selected, so Continue stays inert until the shopper commits. Optimised for
  * scanning cost against tenure rather than for stepping through a single number.
  */
-function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) => void; months: number | null; setMonths: (m: number) => void }) {
+function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) => void; months: number | null; setMonths: (m: number | null) => void }) {
   const [sheet, setSheet] = useState<null | 'cart' | 'details' | 'schedule'>(null);
-  const maxTenure = WC_TENURES[WC_TENURES.length - 1];
   const chosen = months;
   const chosenSaving = chosen ? wcPlanSaving(chosen) : 0;
   const chosenPayable = Math.round((WC_CART_TOTAL - chosenSaving) * 100) / 100;
@@ -1886,12 +1885,12 @@ function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) =
                 <Text style={styles.wcPlansTotal}>{wcSaving(chosenPayable)}</Text>
               </View>
               <Text style={styles.wcPlansSub}>
-                You can split your purchase up to <Text style={styles.wcPlansSubStrong}>{maxTenure} months</Text>
+                Choose {WC_BEST_TENURE} payments and get <Text style={styles.wcPlansSubStrong}>{Math.round(wcSavingRate(WC_BEST_TENURE) * 100)}% off</Text> your whole cart
               </Text>
             </View>
             <View style={styles.wcPlansList} accessibilityRole="radiogroup">
               {WC_TENURES.map((value) => (
-                <WcPlanRow key={value} months={value} selected={chosen === value} onPress={() => setMonths(value)} />
+                <WcPlanRow key={value} months={value} selected={chosen === value} onPress={() => setMonths(chosen === value ? null : value)} />
               ))}
             </View>
     </>
@@ -4517,7 +4516,7 @@ export default function App() {
   if (route === 'wcNafath') return <WcNafath setRoute={setRoute} />;
   if (route === 'wcQuickCall') return <WcQuickCall setRoute={setRoute} />;
   if (route === 'wcTenure') return <WcTenure setRoute={setRoute} months={wcMonths} setMonths={setWcMonths} />;
-  if (route === 'wcPlans') return <WcPlanList setRoute={setRoute} months={wcChosen} setMonths={(m) => { setWcChosen(m); setWcMonths(m); }} />;
+  if (route === 'wcPlans') return <WcPlanList setRoute={setRoute} months={wcChosen} setMonths={(m) => { setWcChosen(m); if (m !== null) setWcMonths(m); }} />;
   if (route === 'wcDemo') return <WcDemoHub setRoute={setRoute} />;
   if (route === 'wcPayment') return <WcPayment setRoute={setRoute} months={wcMonths} setMonths={setWcMonths} planRoute={wcPlanRoute} />;
   if (route === 'wcProcessing') return <WcProcessing setRoute={setRoute} />;
