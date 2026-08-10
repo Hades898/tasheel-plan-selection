@@ -633,7 +633,7 @@ function SegTabs({ value, onChange }: { value: string; onChange: (value: string)
   );
 }
 
-function AppShell({ children, scroll = true, surface = 'app', onScroll }: { children: React.ReactNode; scroll?: boolean; surface?: 'app' | 'checkout'; onScroll?: (y: number) => void }) {
+function AppShell({ children, scroll = true, surface = 'app' }: { children: React.ReactNode; scroll?: boolean; surface?: 'app' | 'checkout' }) {
   const { width, height } = useWindowDimensions();
   const designWidth = 402;
   // Real iOS devices hide the fake 44px status strip, so fixed screens are 830 tall there.
@@ -655,7 +655,7 @@ function AppShell({ children, scroll = true, surface = 'app', onScroll }: { chil
     return (
       <SafeAreaView style={[styles.outer, { backgroundColor: canvas }]}>
         <StatusBar style="dark" />
-        <ScrollView style={{ width: '100%', flex: 1 }} contentContainerStyle={styles.outerScroll} showsVerticalScrollIndicator={false} onScroll={onScroll ? (e) => onScroll(e.nativeEvent.contentOffset.y) : undefined} scrollEventThrottle={16}>
+        <ScrollView style={{ width: '100%', flex: 1 }} contentContainerStyle={styles.outerScroll} showsVerticalScrollIndicator={false}>
           <View {...surfaceProps} style={[styles.phone, { maxWidth: width }]}>
             {createElement('div', { style: { zoom, minHeight: '100%', display: 'flex', flexDirection: 'column', flexGrow: 1, transform: 'translateZ(0)', WebkitTransform: 'translateZ(0)' } }, inner)}
           </View>
@@ -958,39 +958,7 @@ function ActionTile({ label, asset, testID, onPress }: { label: string; asset: F
 
 // Escapes RNW's ScrollView containing-block (its identity transform captures any
 // fixed descendant) by portaling viewport-pinned UI to document.body on device.
-// Pins a bar to the true bottom of the visual viewport on device.
-// Deliberately NOT zoomed like ViewportLayer: that layer scales its own box, so
-// `bottom: 0` inside it resolves to viewportHeight * zoom and the bar floats a
-// scale-dependent distance above Safari's chrome. Full-width bars don't need
-// design-scale fidelity, so real CSS pixels + the safe-area inset is exact.
-function BottomPinned({ children }: { children: React.ReactNode }) {
-  if (SHOW_FAKE_CHROME || typeof document === 'undefined') return <>{children}</>;
-  return createPortal(
-    createElement('div', {
-      style: {
-        position: 'fixed',
-        left: 0,
-        right: 0,
-        bottom: 0,
-        zIndex: 900,
-        paddingBottom: 'env(safe-area-inset-bottom, 0px)',
-      },
-    }, <View pointerEvents="box-none">{children}</View>),
-    document.body,
-  );
-}
 
-// Top-of-viewport sibling of BottomPinned: unzoomed, safe-area aware, for the
-// compact context bar that appears once the in-flow header scrolls away.
-function TopPinned({ children }: { children: React.ReactNode }) {
-  if (SHOW_FAKE_CHROME || typeof document === 'undefined') return <>{children}</>;
-  return createPortal(
-    createElement('div', {
-      style: { position: 'fixed', left: 0, right: 0, top: 0, zIndex: 900, paddingTop: 'env(safe-area-inset-top, 0px)', pointerEvents: 'none' },
-    }, <View pointerEvents="none">{children}</View>),
-    document.body,
-  );
-}
 
 function ViewportLayer({ children }: { children: React.ReactNode }) {
   const { width } = useWindowDimensions();
@@ -1511,7 +1479,6 @@ const WcDiscountBanner = memo(function WcDiscountBanner({ months }: { months: nu
   const rate = months ? Math.round(wcSavingRate(months) * 100) : 0;
   const saving = months ? wcPlanSaving(months) : 0;
   const bestRate = Math.round(wcSavingRate(WC_BEST_TENURE) * 100);
-  const firstDiscounted = WC_TENURES.find((m) => wcSavingRate(m) > 0) ?? WC_BEST_TENURE;
   const isBest = months === WC_BEST_TENURE;
   return (
     <View testID="wc-discount-banner" style={styles.wcBanner}>
@@ -1526,7 +1493,7 @@ const WcDiscountBanner = memo(function WcDiscountBanner({ months }: { months: nu
           ) : (
             <>
               <Text style={styles.wcBannerTitle}>Discounts available</Text>
-              <Text style={styles.wcBannerSub}>Plans from {firstDiscounted} to {WC_BEST_TENURE} months get up to {bestRate}% off your cart</Text>
+              <Text style={styles.wcBannerSub}>Split on {WC_BEST_TENURE} months and get {bestRate}% (<Riyal size={11} color="rgba(255,255,255,0.8)" /> {wcSaving(wcPlanSaving(WC_BEST_TENURE))}) off your cart</Text>
             </>
           )}
         </View>
@@ -1817,125 +1784,90 @@ function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) =
   const chosen = months;
   const chosenSaving = chosen ? wcPlanSaving(chosen) : 0;
   const chosenPayable = Math.round((WC_CART_TOTAL - chosenSaving) * 100) / 100;
-  // Desktop preview runs inside a fixed 874 frame, so the footer can simply sit
-  // at its bottom. A real iPhone viewport is shorter than that frame, which
-  // pushed the CTA below the fold — there the page scrolls naturally and the
-  // footer pins to the visual viewport, the same way the tab bar does.
   const onDevice = !SHOW_FAKE_CHROME;
-  // Compact "Choose how to split · amount" bar once the in-flow header is gone.
-  // Driven entirely through an Animated.Value: scroll events update the value
-  // and the opacity is an interpolation of it, so scrolling never touches React
-  // state and never re-renders this screen.
-  const scrollY = useRef(new Animated.Value(0)).current;
-  const onScrollY = (y: number) => scrollY.setValue(y);
-  const barFade = scrollY.interpolate({ inputRange: [90, 140], outputRange: [0, 1], extrapolate: 'clamp' });
-  const topBar = (
-    <Animated.View pointerEvents="none" style={{ opacity: barFade }}>
-      <View style={styles.wcPlansTopBar}>
-        <Text style={styles.wcPlansTopBarLabel}>Choose how to split</Text>
-        {chosenSaving > 0 ? (
-          <View style={styles.wcCartDiscountChip}><Text style={styles.wcCartDiscountChipText}>{Math.round(wcSavingRate(chosen ?? 0) * 100)}% Off</Text></View>
-        ) : null}
-        <Riyal size={13} />
-        <Text style={styles.wcPlansTopBarAmount}>{wcSaving(chosenPayable)}</Text>
+  const { width } = useWindowDimensions();
+  const zoom = onDevice ? width / 402 : 1;
+
+  // Contained layout: header, amount block and banner stay fixed; only the plan
+  // rows scroll, inside their own container with fade edges; the footer is
+  // always planted. On device the whole screen is sized to the visual viewport
+  // (100dvh corrected for the design zoom), so the page itself never scrolls.
+  const screen = (
+    <View style={{ flex: 1 }}>
+      <WcOnboardHeader onClose={() => setRoute('checkout')} onBack={() => setRoute('wcDemo')} />
+      <View style={styles.wcPlansFixedHead}>
+        <View style={styles.wcPlansHead}>
+          <Text style={styles.wcPlansEyebrow}>Choose how to split</Text>
+          {/* One amount owns the screen — the payable once a discounted plan
+              is chosen, the cart total otherwise. */}
+          <View style={styles.wcPlansTotalRow}>
+            {chosenSaving > 0 ? <Text style={styles.wcPlansTotalWas}>{formatAmount(WC_CART_TOTAL)}</Text> : null}
+            <Riyal size={19} />
+            <Text style={styles.wcPlansTotal}>{wcSaving(chosenPayable)}</Text>
+          </View>
+          <Pressable
+            testID="wc-cart-link"
+            onPress={() => setSheet('cart')}
+            hitSlop={8}
+            accessibilityRole="button"
+            accessibilityLabel={`${WC_CART_ITEMS} items. View cart details`}
+            style={({ pressed }) => [styles.wcPlansCartLink, pressed && { opacity: 0.65 }]}
+          >
+            <Image source={figmaImageSource('wcCartIcon')} resizeMode="contain" accessibilityIgnoresInvertColors style={{ width: 14, height: 14 }} />
+            <Text style={styles.wcPlansCartLinkText}>{WC_CART_ITEMS} {WC_CART_ITEMS === 1 ? 'Item' : 'Items'}</Text>
+            <Text style={styles.wcPlansCartLinkChevron}>›</Text>
+          </Pressable>
+        </View>
+        <WcDiscountBanner months={chosen} />
       </View>
-      <View pointerEvents="none" style={[styles.wcPlansTopBarFade, { backgroundImage: 'linear-gradient(180deg, #f9fafb 20%, rgba(249,250,251,0))' } as object]} />
-    </Animated.View>
-  );
-  const footer = (
-    <View style={[styles.wcPlansFooter, onDevice && styles.wcPlansFooterPinned]}>
-      {/* Cards dissolve into the footer instead of getting razor-cut at
-          its edge — web-only gradient, harmless elsewhere. */}
-      <View pointerEvents="none" style={[styles.wcPlansFade, { backgroundImage: 'linear-gradient(180deg, rgba(249,250,251,0), #f9fafb)' } as object]} />
-      <Pressable
-        testID="wc-plans-continue"
-        disabled={chosen === null}
-        style={[styles.wcGreenCta, styles.wcPlansCta, chosen === null && styles.wcCtaDisabled]}
-        onPress={() => chosen !== null && setRoute('wcPayment')}
-        accessibilityRole="button"
-        accessibilityState={{ disabled: chosen === null }}
-        accessibilityLabel={chosen === null ? 'Choose a plan to continue' : `Continue with ${chosen} payments`}
-      >
-        <Text style={[styles.wcGreenCtaText, chosen === null && styles.wcCtaDisabledText]}>Continue</Text>
-      </Pressable>
-      {/* Parity with the stepper — but only once a plan exists to detail. */}
-      {chosen !== null ? (
+      <View style={{ flex: 1 }}>
+        <ScrollView style={{ flex: 1 }} contentContainerStyle={styles.wcPlansRows} showsVerticalScrollIndicator={false}>
+          <View style={styles.wcPlansList} accessibilityRole="radiogroup">
+            {WC_TENURES.map((value) => (
+              <WcPlanRow key={value} months={value} selected={chosen === value} onPress={() => setMonths(chosen === value ? null : value)} />
+            ))}
+          </View>
+        </ScrollView>
+        {/* Rows dissolve at the container's top edge, mirroring the footer fade. */}
+        <View pointerEvents="none" style={[styles.wcPlansRowsTopFade, { backgroundImage: 'linear-gradient(180deg, #f9fafb, rgba(249,250,251,0))' } as object]} />
+      </View>
+      <View style={styles.wcPlansFooter}>
+        <View pointerEvents="none" style={[styles.wcPlansFade, { backgroundImage: 'linear-gradient(180deg, rgba(249,250,251,0), #f9fafb)' } as object]} />
         <Pressable
-          testID="wc-plans-details"
-          style={[styles.wcGreyCta, styles.wcPlansCta]}
-          onPress={() => setSheet('details')}
+          testID="wc-plans-continue"
+          disabled={chosen === null}
+          style={[styles.wcGreenCta, styles.wcPlansCta, chosen === null && styles.wcCtaDisabled]}
+          onPress={() => chosen !== null && setRoute('wcPayment')}
           accessibilityRole="button"
-          accessibilityLabel={`View details for ${chosen} payments`}
+          accessibilityState={{ disabled: chosen === null }}
+          accessibilityLabel={chosen === null ? 'Choose a plan to continue' : `Continue with ${chosen} payments`}
         >
-          <Text style={styles.wcGreyCtaText}>View plan details</Text>
+          <Text style={[styles.wcGreenCtaText, chosen === null && styles.wcCtaDisabledText]}>Continue</Text>
         </Pressable>
-      ) : null}
-      {/* The fake Safari bar is desktop-only chrome; on device it collapses to an
-          empty spacer that would just push the CTA up off the bottom edge. */}
-      {onDevice ? null : <SafariCompactBar url="extrastores.com" onBack={() => setRoute('wcDemo')} />}
+        {chosen !== null ? (
+          <Pressable
+            testID="wc-plans-details"
+            style={[styles.wcGreyCta, styles.wcPlansCta]}
+            onPress={() => setSheet('details')}
+            accessibilityRole="button"
+            accessibilityLabel={`View details for ${chosen} payments`}
+          >
+            <Text style={styles.wcGreyCtaText}>View plan details</Text>
+          </Pressable>
+        ) : null}
+        {onDevice ? null : <SafariCompactBar url="extrastores.com" onBack={() => setRoute('wcDemo')} />}
+      </View>
     </View>
   );
-  const list = (
-    <>
-      <View style={styles.wcPlansHead}>
-              <Text style={styles.wcPlansEyebrow}>Choose how to split</Text>
-              {/* One amount owns the screen — this IS the cart total (payable
-                  once a discounted plan is chosen), so the old cart pill above
-                  it was saying the same thing twice. */}
-              <View style={styles.wcPlansTotalRow}>
-                {chosenSaving > 0 ? <Text style={styles.wcPlansTotalWas}>{formatAmount(WC_CART_TOTAL)}</Text> : null}
-                <Riyal size={19} />
-                <Text style={styles.wcPlansTotal}>{wcSaving(chosenPayable)}</Text>
-              </View>
-              <Pressable
-                testID="wc-cart-link"
-                onPress={() => setSheet('cart')}
-                hitSlop={8}
-                accessibilityRole="button"
-                accessibilityLabel={`${WC_CART_ITEMS} items. View cart details`}
-                style={({ pressed }) => [styles.wcPlansCartLink, pressed && { opacity: 0.65 }]}
-              >
-                <Image source={figmaImageSource('wcCartIcon')} resizeMode="contain" accessibilityIgnoresInvertColors style={{ width: 14, height: 14 }} />
-                <Text style={styles.wcPlansCartLinkText}>{WC_CART_ITEMS} {WC_CART_ITEMS === 1 ? 'Item' : 'Items'}</Text>
-                <Text style={styles.wcPlansCartLinkChevron}>›</Text>
-              </Pressable>
-              <Text style={styles.wcPlansSub}>
-                Split on {WC_BEST_TENURE} months and get <Text style={styles.wcPlansSubStrong}>{Math.round(wcSavingRate(WC_BEST_TENURE) * 100)}% (<Riyal size={10} color="#15803d" /> {wcSaving(wcPlanSaving(WC_BEST_TENURE))})</Text> off your cart
-              </Text>
-            </View>
-            <WcDiscountBanner months={chosen} />
-            <View style={styles.wcPlansList} accessibilityRole="radiogroup">
-              {WC_TENURES.map((value) => (
-                <WcPlanRow key={value} months={value} selected={chosen === value} onPress={() => setMonths(chosen === value ? null : value)} />
-              ))}
-            </View>
-    </>
-  );
+
   return (
-    <AppShell scroll={onDevice} onScroll={onDevice ? onScrollY : undefined}>
+    <AppShell scroll={onDevice}>
       <View testID="wc-plans-3615-73832" style={styles.wcObScreen}>
         <ScreenFade>
-          <WcOnboardHeader onClose={() => setRoute('checkout')} onBack={() => setRoute('wcDemo')} />
-          {onDevice ? (
-            <View style={[styles.wcPlansContent, styles.wcPlansContentDevice]}>{list}</View>
-          ) : (
-            <View style={{ flex: 1 }}>
-              <ScrollView
-                style={{ flex: 1 }}
-                contentContainerStyle={styles.wcPlansContent}
-                showsVerticalScrollIndicator={false}
-                onScroll={(e) => onScrollY(e.nativeEvent.contentOffset.y)}
-                scrollEventThrottle={16}
-              >
-                {list}
-              </ScrollView>
-              <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 30 }}>{topBar}</View>
-            </View>
-          )}
-          {onDevice ? null : footer}
+          {onDevice
+            ? createElement('div', { style: { height: `calc(100dvh / ${zoom})`, display: 'flex', flexDirection: 'column', paddingBottom: 'env(safe-area-inset-bottom, 0px)', boxSizing: 'border-box' } }, screen)
+            : screen}
         </ScreenFade>
-        {onDevice ? <BottomPinned>{footer}</BottomPinned> : null}
-        {onDevice ? <TopPinned>{topBar}</TopPinned> : null}
         {sheet === 'cart' ? <WcCartSheet onClose={() => setSheet(null)} months={chosen} /> : null}
         {sheet === 'details' && chosen !== null ? <WcPlanDetailsSheet months={chosen} onClose={() => setSheet(null)} onViewSchedule={() => setSheet('schedule')} onContinue={() => setRoute('wcPayment')} /> : null}
         {sheet === 'schedule' && chosen !== null ? <WcFullScheduleSheet months={chosen} onClose={() => setSheet(null)} /> : null}
@@ -4778,15 +4710,10 @@ const styles = StyleSheet.create({
   wcDemoCardSub: { fontSize: 13, lineHeight: 17, color: muted },
   wcDemoChevron: { fontSize: 22, lineHeight: 26, color: '#9ca3af', fontWeight: '400' },
   // ── Experience A — Figma 3615:73832 ───────────────────────────────────────────
-  wcPlansContent: { paddingHorizontal: 16, paddingTop: 16, paddingBottom: 20, gap: 16 },
-  wcPlansHead: { paddingHorizontal: 2, paddingTop: 4, alignItems: 'center', gap: 8 },
-  // Compact context bar that fades in once the header scrolls away. CSS sticky
-  // is unusable here: the phone frame's overflow:hidden sits between any sticky
-  // element and the device scrollport, which disables sticking entirely.
-  wcPlansTopBar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, backgroundColor: canvas, paddingVertical: 10, paddingHorizontal: 16 },
-  wcPlansTopBarLabel: { fontSize: 13, lineHeight: 18, color: muted },
-  wcPlansTopBarAmount: { fontSize: 17, lineHeight: 22, fontWeight: '700', color: text, letterSpacing: -0.2 },
-  wcPlansTopBarFade: { position: 'absolute', bottom: -20, left: 0, right: 0, height: 20 },
+  wcPlansFixedHead: { paddingHorizontal: 16, paddingTop: 12, gap: 12 },
+  wcPlansHead: { paddingHorizontal: 2, alignItems: 'center', gap: 8 },
+  wcPlansRows: { paddingHorizontal: 16, paddingTop: 12, paddingBottom: 24 },
+  wcPlansRowsTopFade: { position: 'absolute', top: 0, left: 0, right: 0, height: 14 },
   wcPlansEyebrow: { fontSize: 14, lineHeight: 18, color: muted, letterSpacing: 0.36 },
   wcPlansTotalRow: { flexDirection: 'row', alignItems: 'center' },
   wcPlansTotal: { fontSize: 34, lineHeight: 42, fontWeight: '700', color: text, letterSpacing: 0.38 },
@@ -4794,16 +4721,9 @@ const styles = StyleSheet.create({
   wcPlansCartLink: { flexDirection: 'row', alignItems: 'center', gap: 5, paddingVertical: 2 },
   wcPlansCartLinkText: { fontSize: 13, lineHeight: 18, color: muted, letterSpacing: -0.08 },
   wcPlansCartLinkChevron: { fontSize: 15, lineHeight: 18, color: '#9ca3af', marginTop: -1 },
-  wcPlansSub: { fontSize: 13, lineHeight: 18, color: muted, letterSpacing: -0.08, textAlign: 'center' },
-  wcPlansSubStrong: { fontWeight: '600', color: '#15803d' },
   wcPlansList: { gap: 16 },
-  wcPlansFooter: { paddingTop: 12, gap: 10, alignItems: 'center', backgroundColor: canvas },
-  // On device the footer is pinned to the visual viewport by ViewportLayer.
-  // BottomPinned owns the anchoring; the footer just needs its own padding.
-  wcPlansFooterPinned: { paddingHorizontal: 16, paddingBottom: 12, gap: 0 },
+  wcPlansFooter: { paddingTop: 12, paddingBottom: 10, paddingHorizontal: 16, gap: 10, alignItems: 'center', backgroundColor: canvas },
   wcPlansFade: { position: 'absolute', top: -28, left: 0, right: 0, height: 28 },
-  // Room for the pinned footer so the last card is never trapped behind it.
-  wcPlansContentDevice: { paddingBottom: 190 },
   wcPlansCta: { width: '100%', maxWidth: 358, alignSelf: 'center' },
   wcPlanRow: { backgroundColor: '#fff', borderRadius: 24, overflow: 'hidden', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 16, borderWidth: 2, borderColor: 'transparent', shadowColor: '#000', shadowOpacity: 0.1, shadowRadius: 22, shadowOffset: { width: 0, height: 10 } },
   wcPlanRowOffer: { height: 87 },
