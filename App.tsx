@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { createElement, useEffect, useMemo, useRef, useState } from 'react';
+import { createElement, memo, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import {
   Animated,
@@ -1467,7 +1467,7 @@ function WcQuickCall({ setRoute }: { setRoute: (r: RouteKey) => void }) {
 // Every discount lands on the cart total, so the pill is live: pick a plan and
 // the cart amount drops with it, the chip showing that plan's rate. With no
 // discounted plan selected there is nothing to claim — no chip, no strikethrough.
-function WcCartPill({ onPress, months }: { onPress: () => void; months?: number | null }) {
+const WcCartPill = memo(function WcCartPill({ onPress, months }: { onPress: () => void; months?: number | null }) {
   const rate = months ? Math.round(wcSavingRate(months) * 100) : 0;
   const saving = months ? wcPlanSaving(months) : 0;
   const payable = Math.round((WC_CART_TOTAL - saving) * 100) / 100;
@@ -1499,7 +1499,7 @@ function WcCartPill({ onPress, months }: { onPress: () => void; months?: number 
       </View>
     </Pressable>
   );
-}
+}, (prev, next) => wcSavingRate(prev.months ?? 0) === wcSavingRate(next.months ?? 0));
 
 // Figma 3529:83365 — saving strip under the stepper. The free tier has nothing to
 // discount, so it states what it does have rather than showing an empty pill.
@@ -1507,7 +1507,7 @@ function WcCartPill({ onPress, months }: { onPress: () => void; months?: number 
 // Two states: on a free tenure it advertises the ladder ("Discounts available");
 // on a discounted tenure it confirms what is being enjoyed right now. Pure
 // display, no call to action.
-function WcDiscountBanner({ months }: { months: number | null }) {
+const WcDiscountBanner = memo(function WcDiscountBanner({ months }: { months: number | null }) {
   const rate = months ? Math.round(wcSavingRate(months) * 100) : 0;
   const saving = months ? wcPlanSaving(months) : 0;
   const bestRate = Math.round(wcSavingRate(WC_BEST_TENURE) * 100);
@@ -1533,7 +1533,7 @@ function WcDiscountBanner({ months }: { months: number | null }) {
       </FadeSwap>
     </View>
   );
-}
+}, (prev, next) => wcSavingRate(prev.months ?? 0) === wcSavingRate(next.months ?? 0) && (prev.months === WC_BEST_TENURE) === (next.months === WC_BEST_TENURE));
 
 // Shown only while the shopper is NOT on the best plan: one tappable line that
 // names the headline offer and jumps straight to it. Disappears once they're on
@@ -3597,9 +3597,13 @@ function FadeSwap({ children, swapKey }: { children: React.ReactNode; swapKey: s
       setShown(prev => (prev.children === children ? prev : { children, swapKey }));
       return;
     }
-    Animated.timing(opacity, { toValue: 0, duration: 110, easing: Easing.in(Easing.quad), useNativeDriver: true }).start(() => {
+    // Honor the finished flag: on rapid stepping the superseded animation's
+    // callback fires immediately, and swapping state from it stacked extra
+    // renders on every tap.
+    Animated.timing(opacity, { toValue: 0, duration: 90, easing: Easing.in(Easing.quad), useNativeDriver: true }).start(({ finished }) => {
+      if (!finished) return;
       setShown({ children, swapKey });
-      Animated.timing(opacity, { toValue: 1, duration: 180, easing: Easing.out(Easing.quad), useNativeDriver: true }).start();
+      Animated.timing(opacity, { toValue: 1, duration: 140, easing: Easing.out(Easing.quad), useNativeDriver: true }).start();
     });
   }, [swapKey, children, shown.swapKey, opacity]);
   return <Animated.View style={{ opacity }}>{shown.children}</Animated.View>;
