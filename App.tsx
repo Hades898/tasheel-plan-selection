@@ -1828,7 +1828,7 @@ function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) =
   // state and never re-renders this screen.
   const scrollY = useRef(new Animated.Value(0)).current;
   const onScrollY = (y: number) => scrollY.setValue(y);
-  const barFade = scrollY.interpolate({ inputRange: [120, 170], outputRange: [0, 1], extrapolate: 'clamp' });
+  const barFade = scrollY.interpolate({ inputRange: [90, 140], outputRange: [0, 1], extrapolate: 'clamp' });
   const topBar = (
     <Animated.View pointerEvents="none" style={{ opacity: barFade }}>
       <View style={styles.wcPlansTopBar}>
@@ -1877,20 +1877,33 @@ function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) =
   );
   const list = (
     <>
-      <WcCartPill onPress={() => setSheet('cart')} months={chosen} />
-            <View style={styles.wcPlansHead}>
+      <View style={styles.wcPlansHead}>
               <Text style={styles.wcPlansEyebrow}>Choose how to split</Text>
-              {/* Lives with the selection: once a discounted plan is chosen this
-                  is the payable amount, matching the cart pill above it. */}
+              {/* One amount owns the screen — this IS the cart total (payable
+                  once a discounted plan is chosen), so the old cart pill above
+                  it was saying the same thing twice. */}
               <View style={styles.wcPlansTotalRow}>
                 {chosenSaving > 0 ? <Text style={styles.wcPlansTotalWas}>{formatAmount(WC_CART_TOTAL)}</Text> : null}
                 <Riyal size={19} />
                 <Text style={styles.wcPlansTotal}>{wcSaving(chosenPayable)}</Text>
               </View>
+              <Pressable
+                testID="wc-cart-link"
+                onPress={() => setSheet('cart')}
+                hitSlop={8}
+                accessibilityRole="button"
+                accessibilityLabel={`${WC_CART_ITEMS} items. View cart details`}
+                style={({ pressed }) => [styles.wcPlansCartLink, pressed && { opacity: 0.65 }]}
+              >
+                <Image source={figmaImageSource('wcCartIcon')} resizeMode="contain" accessibilityIgnoresInvertColors style={{ width: 14, height: 14 }} />
+                <Text style={styles.wcPlansCartLinkText}>{WC_CART_ITEMS} {WC_CART_ITEMS === 1 ? 'Item' : 'Items'}</Text>
+                <Text style={styles.wcPlansCartLinkChevron}>›</Text>
+              </Pressable>
               <Text style={styles.wcPlansSub}>
                 Split on {WC_BEST_TENURE} months and get <Text style={styles.wcPlansSubStrong}>{Math.round(wcSavingRate(WC_BEST_TENURE) * 100)}% (<Riyal size={10} color="#15803d" /> {wcSaving(wcPlanSaving(WC_BEST_TENURE))})</Text> off your cart
               </Text>
             </View>
+            <WcDiscountBanner months={chosen} />
             <View style={styles.wcPlansList} accessibilityRole="radiogroup">
               {WC_TENURES.map((value) => (
                 <WcPlanRow key={value} months={value} selected={chosen === value} onPress={() => setMonths(chosen === value ? null : value)} />
@@ -4778,6 +4791,9 @@ const styles = StyleSheet.create({
   wcPlansTotalRow: { flexDirection: 'row', alignItems: 'center' },
   wcPlansTotal: { fontSize: 34, lineHeight: 42, fontWeight: '700', color: text, letterSpacing: 0.38 },
   wcPlansTotalWas: { fontSize: 16, lineHeight: 22, color: '#9ca3af', textDecorationLine: 'line-through', marginRight: 6 },
+  wcPlansCartLink: { flexDirection: 'row', alignItems: 'center', gap: 5, paddingVertical: 2 },
+  wcPlansCartLinkText: { fontSize: 13, lineHeight: 18, color: muted, letterSpacing: -0.08 },
+  wcPlansCartLinkChevron: { fontSize: 15, lineHeight: 18, color: '#9ca3af', marginTop: -1 },
   wcPlansSub: { fontSize: 13, lineHeight: 18, color: muted, letterSpacing: -0.08, textAlign: 'center' },
   wcPlansSubStrong: { fontWeight: '600', color: '#15803d' },
   wcPlansList: { gap: 16 },
