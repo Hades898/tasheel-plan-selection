@@ -657,7 +657,7 @@ function AppShell({ children, scroll = true, surface = 'app', onScroll }: { chil
         <StatusBar style="dark" />
         <ScrollView style={{ width: '100%', flex: 1 }} contentContainerStyle={styles.outerScroll} showsVerticalScrollIndicator={false} onScroll={onScroll ? (e) => onScroll(e.nativeEvent.contentOffset.y) : undefined} scrollEventThrottle={16}>
           <View {...surfaceProps} style={[styles.phone, { maxWidth: width }]}>
-            {createElement('div', { style: { zoom, minHeight: '100%', display: 'flex', flexDirection: 'column', flexGrow: 1 } }, inner)}
+            {createElement('div', { style: { zoom, minHeight: '100%', display: 'flex', flexDirection: 'column', flexGrow: 1, transform: 'translateZ(0)', WebkitTransform: 'translateZ(0)' } }, inner)}
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -713,13 +713,14 @@ function Header({ title, subtitle, showLogo, rightClose, onBack, onClose }: { ti
 function ScreenFade({ children }: { children: React.ReactNode }) {
   const a = useRef(new Animated.Value(0)).current;
   useEffect(() => {
-    Animated.timing(a, { toValue: 1, duration: 300, easing: Easing.bezier(0.32, 0.72, 0, 1), useNativeDriver: true }).start();
+    Animated.timing(a, { toValue: 1, duration: SHOW_FAKE_CHROME ? 300 : 220, easing: Easing.bezier(0.32, 0.72, 0, 1), useNativeDriver: true }).start();
   }, [a]);
-  return (
-    <Animated.View style={{ flex: 1, opacity: a, transform: [{ translateX: a.interpolate({ inputRange: [0, 1], outputRange: [24, 0] }) }] }}>
-      {children}
-    </Animated.View>
-  );
+  // On device the whole tree sits inside a fractional CSS zoom; animating a
+  // translate forces it to re-rasterize every frame. Fade alone is smooth.
+  const style = SHOW_FAKE_CHROME
+    ? { flex: 1, opacity: a, transform: [{ translateX: a.interpolate({ inputRange: [0, 1], outputRange: [24, 0] }) }] }
+    : { flex: 1, opacity: a };
+  return <Animated.View style={style}>{children}</Animated.View>;
 }
 
 // Safari compact tab bar (Figma 1613:21847) — system UI, so it re-scopes to SF Pro.
@@ -1821,15 +1822,12 @@ function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) =
   // footer pins to the visual viewport, the same way the tab bar does.
   const onDevice = !SHOW_FAKE_CHROME;
   // Compact "Choose how to split · amount" bar once the in-flow header is gone.
-  const [barShown, setBarShown] = useState(false);
-  const barFade = useRef(new Animated.Value(0)).current;
-  const onScrollY = (y: number) => {
-    const next = y > 150;
-    if (next !== barShown) {
-      setBarShown(next);
-      Animated.timing(barFade, { toValue: next ? 1 : 0, duration: 140, easing: Easing.out(Easing.quad), useNativeDriver: false }).start();
-    }
-  };
+  // Driven entirely through an Animated.Value: scroll events update the value
+  // and the opacity is an interpolation of it, so scrolling never touches React
+  // state and never re-renders this screen.
+  const scrollY = useRef(new Animated.Value(0)).current;
+  const onScrollY = (y: number) => scrollY.setValue(y);
+  const barFade = scrollY.interpolate({ inputRange: [120, 170], outputRange: [0, 1], extrapolate: 'clamp' });
   const topBar = (
     <Animated.View pointerEvents="none" style={{ opacity: barFade }}>
       <View style={styles.wcPlansTopBar}>
@@ -4779,7 +4777,7 @@ const styles = StyleSheet.create({
   // Room for the pinned footer so the last card is never trapped behind it.
   wcPlansContentDevice: { paddingBottom: 190 },
   wcPlansCta: { width: '100%', maxWidth: 358, alignSelf: 'center' },
-  wcPlanRow: { backgroundColor: '#fff', borderRadius: 24, overflow: 'hidden', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 16, borderWidth: 2, borderColor: 'transparent', shadowColor: '#000', shadowOpacity: 0.12, shadowRadius: 40, shadowOffset: { width: 0, height: 16 } },
+  wcPlanRow: { backgroundColor: '#fff', borderRadius: 24, overflow: 'hidden', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 16, borderWidth: 2, borderColor: 'transparent', shadowColor: '#000', shadowOpacity: 0.1, shadowRadius: 22, shadowOffset: { width: 0, height: 10 } },
   wcPlanRowOffer: { height: 87 },
   wcPlanRowPlain: { minHeight: 82, paddingRight: 16, paddingVertical: 16 },
   // Selection ring per the provided reference: clean #23A107 border on white.
