@@ -633,7 +633,7 @@ function SegTabs({ value, onChange }: { value: string; onChange: (value: string)
   );
 }
 
-function AppShell({ children, scroll = true, surface = 'app' }: { children: React.ReactNode; scroll?: boolean; surface?: 'app' | 'checkout' }) {
+function AppShell({ children, scroll = true, surface = 'app', onScroll }: { children: React.ReactNode; scroll?: boolean; surface?: 'app' | 'checkout'; onScroll?: (y: number) => void }) {
   const { width, height } = useWindowDimensions();
   const designWidth = 402;
   // Real iOS devices hide the fake 44px status strip, so fixed screens are 830 tall there.
@@ -655,7 +655,7 @@ function AppShell({ children, scroll = true, surface = 'app' }: { children: Reac
     return (
       <SafeAreaView style={[styles.outer, { backgroundColor: canvas }]}>
         <StatusBar style="dark" />
-        <ScrollView style={{ width: '100%', flex: 1 }} contentContainerStyle={styles.outerScroll} showsVerticalScrollIndicator={false}>
+        <ScrollView style={{ width: '100%', flex: 1 }} contentContainerStyle={styles.outerScroll} showsVerticalScrollIndicator={false} onScroll={onScroll ? (e) => onScroll(e.nativeEvent.contentOffset.y) : undefined} scrollEventThrottle={16}>
           <View {...surfaceProps} style={[styles.phone, { maxWidth: width }]}>
             {createElement('div', { style: { zoom, minHeight: '100%', display: 'flex', flexDirection: 'column', flexGrow: 1 } }, inner)}
           </View>
@@ -975,6 +975,18 @@ function BottomPinned({ children }: { children: React.ReactNode }) {
         paddingBottom: 'env(safe-area-inset-bottom, 0px)',
       },
     }, <View pointerEvents="box-none">{children}</View>),
+    document.body,
+  );
+}
+
+// Top-of-viewport sibling of BottomPinned: unzoomed, safe-area aware, for the
+// compact context bar that appears once the in-flow header scrolls away.
+function TopPinned({ children }: { children: React.ReactNode }) {
+  if (SHOW_FAKE_CHROME || typeof document === 'undefined') return <>{children}</>;
+  return createPortal(
+    createElement('div', {
+      style: { position: 'fixed', left: 0, right: 0, top: 0, zIndex: 900, paddingTop: 'env(safe-area-inset-top, 0px)', pointerEvents: 'none' },
+    }, <View pointerEvents="none">{children}</View>),
     document.body,
   );
 }
@@ -1492,26 +1504,16 @@ function WcCartPill({ onPress, months }: { onPress: () => void; months?: number 
 // discount, so it states what it does have rather than showing an empty pill.
 // Figma 3710:28479 — dynamic discount banner riding under the cart pill.
 // Two states: on a free tenure it advertises the ladder ("Discounts available");
-// on a discounted tenure it confirms what is being enjoyed right now. No visible
-// CTA per the design — the whole banner quietly opens the tiers sheet.
-function WcDiscountBanner({ months, onPress }: { months: number | null; onPress: () => void }) {
+// on a discounted tenure it confirms what is being enjoyed right now. Pure
+// display, no call to action.
+function WcDiscountBanner({ months }: { months: number | null }) {
   const rate = months ? Math.round(wcSavingRate(months) * 100) : 0;
   const saving = months ? wcPlanSaving(months) : 0;
   const bestRate = Math.round(wcSavingRate(WC_BEST_TENURE) * 100);
   const firstDiscounted = WC_TENURES.find((m) => wcSavingRate(m) > 0) ?? WC_BEST_TENURE;
   const isBest = months === WC_BEST_TENURE;
   return (
-    <Pressable
-      testID="wc-discount-banner"
-      onPress={onPress}
-      accessibilityRole="button"
-      accessibilityLabel={
-        rate > 0
-          ? `${rate} percent discount applied, saving ${wcMoney(saving)}. View discount tiers`
-          : `Discounts available on plans from ${firstDiscounted} to ${WC_BEST_TENURE} months, up to ${bestRate} percent off. View discount tiers`
-      }
-      style={({ pressed }) => [styles.wcBanner, pressed && { opacity: 0.92 }]}
-    >
+    <View testID="wc-discount-banner" style={styles.wcBanner}>
       <SaleTag size={18} color="#ffffff" />
       <FadeSwap swapKey={`banner-${rate}`}>
         <View style={{ gap: 2 }}>
@@ -1528,7 +1530,7 @@ function WcDiscountBanner({ months, onPress }: { months: number | null; onPress:
           )}
         </View>
       </FadeSwap>
-    </Pressable>
+    </View>
   );
 }
 
@@ -1624,7 +1626,7 @@ function WcTenureRail({ months, onSelect }: { months: number; onSelect: (m: numb
  * in place. Optimised for deciding *how long*, not for scanning every option.
  */
 function WcTenure({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) => void; months: number; setMonths: (m: number) => void }) {
-  const [sheet, setSheet] = useState<null | 'details' | 'schedule' | 'cart' | 'fee' | 'discounts'>(null);
+  const [sheet, setSheet] = useState<null | 'details' | 'schedule' | 'cart' | 'fee'>(null);
   const bump = (next: number) => {
     if (!WC_TENURES.includes(next as (typeof WC_TENURES)[number]) || next === months) return;
     setMonths(next);
@@ -1641,7 +1643,7 @@ function WcTenure({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) => 
                 "available" and "applied" as the tenure changes (Figma 3710:28460). */}
             <View style={{ gap: 8 }}>
               <WcCartPill onPress={() => setSheet('cart')} months={months} />
-              <WcDiscountBanner months={months} onPress={() => setSheet('discounts')} />
+              <WcDiscountBanner months={months} />
             </View>
             <View style={styles.wcPlanCard}>
               <View style={{ gap: 6, width: '100%' }}>
@@ -1695,7 +1697,6 @@ function WcTenure({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) => 
         {sheet === 'schedule' ? <WcFullScheduleSheet months={months} onClose={() => setSheet(null)} /> : null}
         {sheet === 'cart' ? <WcCartSheet onClose={() => setSheet(null)} months={months} /> : null}
         {sheet === 'fee' ? <WcFourMonthFeeSheet onClose={() => setSheet(null)} /> : null}
-        {sheet === 'discounts' ? <WcDiscountsSheet months={months} onClose={() => setSheet(null)} onSelect={(m) => { bump(m); setSheet(null); }} /> : null}
         <View style={styles.wcStatusOverlay} pointerEvents="none"><StatusStrip pointerEvents="none" /></View>
       </View>
     </AppShell>
@@ -1811,7 +1812,7 @@ function WcPlanRow({ months, selected, onPress }: { months: number; selected: bo
  * scanning cost against tenure rather than for stepping through a single number.
  */
 function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) => void; months: number | null; setMonths: (m: number) => void }) {
-  const [sheet, setSheet] = useState<null | 'cart' | 'details' | 'schedule' | 'discounts'>(null);
+  const [sheet, setSheet] = useState<null | 'cart' | 'details' | 'schedule'>(null);
   const maxTenure = WC_TENURES[WC_TENURES.length - 1];
   const chosen = months;
   // Desktop preview runs inside a fixed 874 frame, so the footer can simply sit
@@ -1819,6 +1820,26 @@ function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) =
   // pushed the CTA below the fold — there the page scrolls naturally and the
   // footer pins to the visual viewport, the same way the tab bar does.
   const onDevice = !SHOW_FAKE_CHROME;
+  // Compact "Choose how to split · amount" bar once the in-flow header is gone.
+  const [barShown, setBarShown] = useState(false);
+  const barFade = useRef(new Animated.Value(0)).current;
+  const onScrollY = (y: number) => {
+    const next = y > 150;
+    if (next !== barShown) {
+      setBarShown(next);
+      Animated.timing(barFade, { toValue: next ? 1 : 0, duration: 140, easing: Easing.out(Easing.quad), useNativeDriver: false }).start();
+    }
+  };
+  const topBar = (
+    <Animated.View pointerEvents="none" style={{ opacity: barFade }}>
+      <View style={styles.wcPlansTopBar}>
+        <Text style={styles.wcPlansTopBarLabel}>Choose how to split</Text>
+        <Riyal size={13} />
+        <Text style={styles.wcPlansTopBarAmount}>{formatAmount(WC_CART_TOTAL)}</Text>
+      </View>
+      <View pointerEvents="none" style={[styles.wcPlansTopBarFade, { backgroundImage: 'linear-gradient(180deg, #f9fafb 20%, rgba(249,250,251,0))' } as object]} />
+    </Animated.View>
+  );
   const footer = (
     <View style={[styles.wcPlansFooter, onDevice && styles.wcPlansFooterPinned]}>
       {/* Cards dissolve into the footer instead of getting razor-cut at
@@ -1855,18 +1876,12 @@ function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) =
   const list = (
     <>
       <WcCartPill onPress={() => setSheet('cart')} months={chosen} />
-            {/* The title + amount stick to the top of the scroll (position:sticky —
-                web-only cast, this is a web prototype) so the number being split
-                stays in view; the subtitle scrolls away to keep the sticky band
-                short and the plan rows roomy. */}
-            <View style={[styles.wcPlansStickyHead, { position: 'sticky', top: 0 } as any]}>
+            <View style={styles.wcPlansHead}>
               <Text style={styles.wcPlansEyebrow}>Choose how to split</Text>
               <View style={styles.wcPlansTotalRow}>
                 <Riyal size={19} />
                 <Text style={styles.wcPlansTotal}>{formatAmount(WC_CART_TOTAL)}</Text>
               </View>
-            </View>
-            <View style={styles.wcPlansHead}>
               <Text style={styles.wcPlansSub}>
                 You can split your purchase up to <Text style={styles.wcPlansSubStrong}>{maxTenure} months</Text>
               </Text>
@@ -1876,89 +1891,42 @@ function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) =
                 <WcPlanRow key={value} months={value} selected={chosen === value} onPress={() => setMonths(value)} />
               ))}
             </View>
-            <Pressable
-              testID="wc-plans-discounts"
-              onPress={() => setSheet('discounts')}
-              hitSlop={8}
-              accessibilityRole="button"
-              accessibilityLabel="View discount tiers"
-              style={{ alignSelf: 'center' }}
-            >
-              <Text style={styles.wcSavingLink}>View discount tiers ›</Text>
-            </Pressable>
     </>
   );
   return (
-    <AppShell scroll={onDevice}>
+    <AppShell scroll={onDevice} onScroll={onDevice ? onScrollY : undefined}>
       <View testID="wc-plans-3615-73832" style={styles.wcObScreen}>
         <ScreenFade>
           <WcOnboardHeader onClose={() => setRoute('checkout')} onBack={() => setRoute('wcDemo')} />
           {onDevice ? (
             <View style={[styles.wcPlansContent, styles.wcPlansContentDevice]}>{list}</View>
           ) : (
-            <ScrollView style={{ flex: 1 }} contentContainerStyle={styles.wcPlansContent} showsVerticalScrollIndicator={false}>
-              {list}
-            </ScrollView>
+            <View style={{ flex: 1 }}>
+              <ScrollView
+                style={{ flex: 1 }}
+                contentContainerStyle={styles.wcPlansContent}
+                showsVerticalScrollIndicator={false}
+                onScroll={(e) => onScrollY(e.nativeEvent.contentOffset.y)}
+                scrollEventThrottle={16}
+              >
+                {list}
+              </ScrollView>
+              <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 30 }}>{topBar}</View>
+            </View>
           )}
           {onDevice ? null : footer}
         </ScreenFade>
         {onDevice ? <BottomPinned>{footer}</BottomPinned> : null}
+        {onDevice ? <TopPinned>{topBar}</TopPinned> : null}
         {sheet === 'cart' ? <WcCartSheet onClose={() => setSheet(null)} months={chosen} /> : null}
         {sheet === 'details' && chosen !== null ? <WcPlanDetailsSheet months={chosen} onClose={() => setSheet(null)} onViewSchedule={() => setSheet('schedule')} onContinue={() => setRoute('wcPayment')} /> : null}
         {sheet === 'schedule' && chosen !== null ? <WcFullScheduleSheet months={chosen} onClose={() => setSheet(null)} /> : null}
-        {sheet === 'discounts' ? <WcDiscountsSheet months={chosen} onClose={() => setSheet(null)} onSelect={(m) => { setMonths(m); setSheet(null); }} /> : null}
         <View style={styles.wcStatusOverlay} pointerEvents="none"><StatusStrip pointerEvents="none" /></View>
       </View>
     </AppShell>
   );
 }
 
-// The discount ladder behind the "2% / 5% / 10% Off" badges — one row per tier so
-// the shopper can see what a longer tenure is actually worth before committing.
-function WcDiscountsSheet({ months, onClose, onSelect }: { months: number | null; onClose: () => void; onSelect: (m: number) => void }) {
-  const rise = useRef(new Animated.Value(0)).current;
-  useEffect(() => {
-    Animated.timing(rise, { toValue: 1, duration: 280, easing: Easing.bezier(0.32, 0.72, 0, 1), useNativeDriver: true }).start();
-  }, [rise]);
-  const tiers = WC_TENURES.filter((m) => wcSavingRate(m) > 0);
-  return (
-    <ViewportLayer><View style={styles.wcPickerOverlay} pointerEvents="auto">
-      <Pressable style={styles.wcPickerScrim} onPress={onClose} accessibilityRole="button" accessibilityLabel="Close discount tiers" />
-      <Animated.View style={[styles.wcDetailsSheet, { transform: [{ translateY: rise.interpolate({ inputRange: [0, 1], outputRange: [420, 0] }) }] }]}>
-        <View style={styles.sheetGrabber} />
-        <Text style={styles.wcDetailsTitle}>Discount tiers</Text>
-        <Text style={[styles.wcDetailsDim, { marginTop: -8, marginBottom: 2 }]}>The longer you split, the more Tasheel takes off this order.</Text>
-        <View style={[styles.wcDetailsCard, { gap: 12 }]}>
-          {tiers.map((tier) => (
-            <Pressable
-              key={tier}
-              testID={`wc-discount-tier-${tier}`}
-              onPress={() => onSelect(tier)}
-              accessibilityRole="button"
-              accessibilityLabel={`${tier} payments, ${Math.round(wcSavingRate(tier) * 100)} percent off, save ${wcMoney(wcPlanSaving(tier))}`}
-              style={[styles.wcDiscountRow, months === tier && styles.wcDiscountRowActive]}
-            >
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                <Text style={styles.wcDetailsStrong}>{tier} payments</Text>
-                {tier === WC_BEST_TENURE ? (
-                  <View style={styles.wcBestChip}><Text style={styles.wcBestChipText}>Best value</Text></View>
-                ) : null}
-              </View>
-              <View style={styles.wcDiscountRowRight}>
-                <Text style={styles.wcDiscountPct}>{Math.round(wcSavingRate(tier) * 100)}% off</Text>
-                <Money amount={wcMoney(wcPlanSaving(tier))} size={15} color={greenMid} weight="700" />
-              </View>
-            </Pressable>
-          ))}
-          <Text style={styles.wcDetailsDim}>2 payments is interest-free with no fee, so it carries no discount.</Text>
-        </View>
-        <Pressable testID="wc-discounts-got-it" style={styles.wcGreenCta} onPress={onClose} accessibilityRole="button">
-          <Text style={styles.wcGreenCtaText}>Got it</Text>
-        </Pressable>
-      </Animated.View>
-    </View></ViewportLayer>
-  );
-}
 
 // Figma 2003:12123 — Plan details sheet, derived live from the selected tenure.
 function WcPlanDetailsSheet({ months, onClose, onViewSchedule, onContinue }: { months: number; onClose: () => void; onViewSchedule: () => void; onContinue?: () => void }) {
@@ -4789,9 +4757,14 @@ const styles = StyleSheet.create({
   wcDemoChevron: { fontSize: 22, lineHeight: 26, color: '#9ca3af', fontWeight: '400' },
   // ── Experience A — Figma 3615:73832 ───────────────────────────────────────────
   wcPlansContent: { paddingHorizontal: 16, paddingTop: 16, paddingBottom: 20, gap: 16 },
-  wcPlansHead: { paddingHorizontal: 16, alignItems: 'center', marginTop: -8 },
-  // Full-bleed canvas band so rows visibly slide beneath it while stuck.
-  wcPlansStickyHead: { zIndex: 20, alignItems: 'center', gap: 4, backgroundColor: canvas, marginHorizontal: -16, paddingHorizontal: 16, paddingTop: 6, paddingBottom: 8 },
+  wcPlansHead: { paddingHorizontal: 16, paddingTop: 4, alignItems: 'center', gap: 8 },
+  // Compact context bar that fades in once the header scrolls away. CSS sticky
+  // is unusable here: the phone frame's overflow:hidden sits between any sticky
+  // element and the device scrollport, which disables sticking entirely.
+  wcPlansTopBar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, backgroundColor: canvas, paddingVertical: 10, paddingHorizontal: 16 },
+  wcPlansTopBarLabel: { fontSize: 13, lineHeight: 18, color: muted },
+  wcPlansTopBarAmount: { fontSize: 17, lineHeight: 22, fontWeight: '700', color: text, letterSpacing: -0.2 },
+  wcPlansTopBarFade: { position: 'absolute', bottom: -20, left: 0, right: 0, height: 20 },
   wcPlansEyebrow: { fontSize: 14, lineHeight: 18, color: muted, letterSpacing: 0.36 },
   wcPlansTotalRow: { flexDirection: 'row', alignItems: 'center' },
   wcPlansTotal: { fontSize: 34, lineHeight: 42, fontWeight: '700', color: text, letterSpacing: 0.38 },
