@@ -1888,7 +1888,7 @@ function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) =
                 <Text style={styles.wcPlansTotal}>{wcSaving(chosenPayable)}</Text>
               </View>
               <Text style={styles.wcPlansSub}>
-                Choose {WC_BEST_TENURE} payments and get <Text style={styles.wcPlansSubStrong}>{Math.round(wcSavingRate(WC_BEST_TENURE) * 100)}% off</Text> your cart
+                Split on {WC_BEST_TENURE} months and get <Text style={styles.wcPlansSubStrong}>{Math.round(wcSavingRate(WC_BEST_TENURE) * 100)}% (<Riyal size={10} color="#15803d" /> {wcSaving(wcPlanSaving(WC_BEST_TENURE))})</Text> off your cart
               </Text>
             </View>
             <View style={styles.wcPlansList} accessibilityRole="radiogroup">
@@ -4766,7 +4766,7 @@ const styles = StyleSheet.create({
   wcDemoChevron: { fontSize: 22, lineHeight: 26, color: '#9ca3af', fontWeight: '400' },
   // ── Experience A — Figma 3615:73832 ───────────────────────────────────────────
   wcPlansContent: { paddingHorizontal: 16, paddingTop: 16, paddingBottom: 20, gap: 16 },
-  wcPlansHead: { paddingHorizontal: 16, paddingTop: 4, alignItems: 'center', gap: 8 },
+  wcPlansHead: { paddingHorizontal: 2, paddingTop: 4, alignItems: 'center', gap: 8 },
   // Compact context bar that fades in once the header scrolls away. CSS sticky
   // is unusable here: the phone frame's overflow:hidden sits between any sticky
   // element and the device scrollport, which disables sticking entirely.
@@ -4778,7 +4778,7 @@ const styles = StyleSheet.create({
   wcPlansTotalRow: { flexDirection: 'row', alignItems: 'center' },
   wcPlansTotal: { fontSize: 34, lineHeight: 42, fontWeight: '700', color: text, letterSpacing: 0.38 },
   wcPlansTotalWas: { fontSize: 16, lineHeight: 22, color: '#9ca3af', textDecorationLine: 'line-through', marginRight: 6 },
-  wcPlansSub: { fontSize: 14, lineHeight: 18, color: muted, letterSpacing: -0.08, textAlign: 'center' },
+  wcPlansSub: { fontSize: 13, lineHeight: 18, color: muted, letterSpacing: -0.08, textAlign: 'center' },
   wcPlansSubStrong: { fontWeight: '600', color: '#15803d' },
   wcPlansList: { gap: 16 },
   wcPlansFooter: { paddingTop: 12, gap: 10, alignItems: 'center', backgroundColor: canvas },
