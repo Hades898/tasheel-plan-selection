@@ -1492,7 +1492,7 @@ const WcDiscountBanner = memo(function WcDiscountBanner({ months, idle = 'upsell
           {rate > 0 ? (
             <>
               <Text style={styles.wcBannerTitle}>{isBest ? `Best value · ${rate}% discount applied` : `${rate}% discount applied`}</Text>
-              <Text style={styles.wcBannerSub}>You're enjoying <Riyal size={11} color="rgba(255,255,255,0.8)" /> {wcSaving(saving)} off your cart total</Text>
+              <Text style={styles.wcBannerSub}>You're saving <Riyal size={11} color="rgba(255,255,255,0.8)" /> {wcSaving(saving)} off your cart total</Text>
             </>
           ) : (
             <>
