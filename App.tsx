@@ -381,7 +381,12 @@ const routeFromPath = (path: string): RouteKey => {
   if (path.includes('/checkout/declined')) return 'declined';
   if (path.includes('/checkout/success')) return 'success';
   if (path.includes('/checkout/dues')) return 'dues';
-  return 'checkout';
+  // Every deeper /checkout/* route is matched above, so this is the bare
+  // merchant checkout.
+  if (path.includes('/checkout')) return 'checkout';
+  // A bare link (the Pages root) lands on the demo hub — that is what gets
+  // shared for review.
+  return 'wcDemo';
 };
 
 function currentPath() {
