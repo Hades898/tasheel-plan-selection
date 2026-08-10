@@ -1475,7 +1475,7 @@ const WcCartPill = memo(function WcCartPill({ onPress, months }: { onPress: () =
 // Two states: on a free tenure it advertises the ladder ("Discounts available");
 // on a discounted tenure it confirms what is being enjoyed right now. Pure
 // display, no call to action.
-const WcDiscountBanner = memo(function WcDiscountBanner({ months }: { months: number | null }) {
+const WcDiscountBanner = memo(function WcDiscountBanner({ months, idle = 'upsell' }: { months: number | null; idle?: 'upsell' | 'generic' }) {
   const rate = months ? Math.round(wcSavingRate(months) * 100) : 0;
   const saving = months ? wcPlanSaving(months) : 0;
   const bestRate = Math.round(wcSavingRate(WC_BEST_TENURE) * 100);
@@ -1493,7 +1493,11 @@ const WcDiscountBanner = memo(function WcDiscountBanner({ months }: { months: nu
           ) : (
             <>
               <Text style={styles.wcBannerTitle}>Discounts available</Text>
-              <Text style={styles.wcBannerSub}>Split on {WC_BEST_TENURE} months and get {bestRate}% (<Riyal size={11} color="rgba(255,255,255,0.8)" /> {wcSaving(wcPlanSaving(WC_BEST_TENURE))}) off your cart</Text>
+              {idle === 'generic' ? (
+                <Text style={styles.wcBannerSub}>You can split your purchase up to {WC_BEST_TENURE} months</Text>
+              ) : (
+                <Text style={styles.wcBannerSub}>Split on {WC_BEST_TENURE} months and get {bestRate}% (<Riyal size={11} color="rgba(255,255,255,0.8)" /> {wcSaving(wcPlanSaving(WC_BEST_TENURE))}) off your cart</Text>
+              )}
             </>
           )}
         </View>
@@ -1611,7 +1615,7 @@ function WcTenure({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) => 
                 "available" and "applied" as the tenure changes (Figma 3710:28460). */}
             <View style={{ gap: 8 }}>
               <WcCartPill onPress={() => setSheet('cart')} months={months} />
-              <WcDiscountBanner months={months} />
+              <WcDiscountBanner months={months} idle="generic" />
             </View>
             <View style={styles.wcPlanCard}>
               <View style={{ gap: 6, width: '100%' }}>
@@ -1647,7 +1651,7 @@ function WcTenure({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) => 
                   <WcBestPlanNudge months={months} onSelect={bump} />
                 </View>
               </View>
-              <View style={{ gap: 12, width: '100%' }}>
+              <View style={{ gap: 8, width: '100%' }}>
                 <Pressable testID="wc-plan-continue" style={styles.wcGreenCta} onPress={() => setRoute('wcPayment')} accessibilityRole="button">
                   <Text style={styles.wcGreenCtaText}>Continue</Text>
                 </Pressable>
@@ -4722,7 +4726,7 @@ const styles = StyleSheet.create({
   wcPlansCartLinkText: { fontSize: 13, lineHeight: 18, color: muted, letterSpacing: -0.08 },
   wcPlansCartLinkChevron: { fontSize: 15, lineHeight: 18, color: '#9ca3af', marginTop: -1 },
   wcPlansList: { gap: 16 },
-  wcPlansFooter: { paddingTop: 12, paddingBottom: 10, paddingHorizontal: 16, gap: 10, alignItems: 'center', backgroundColor: canvas },
+  wcPlansFooter: { paddingTop: 10, paddingBottom: 8, paddingHorizontal: 16, gap: 8, alignItems: 'center', backgroundColor: canvas },
   wcPlansFade: { position: 'absolute', top: -28, left: 0, right: 0, height: 28 },
   wcPlansCta: { width: '100%', maxWidth: 358, alignSelf: 'center' },
   wcPlanRow: { backgroundColor: '#fff', borderRadius: 24, overflow: 'hidden', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 16, borderWidth: 2, borderColor: 'transparent', shadowColor: '#000', shadowOpacity: 0.1, shadowRadius: 22, shadowOffset: { width: 0, height: 10 } },
