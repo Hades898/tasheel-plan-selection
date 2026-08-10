@@ -1490,31 +1490,45 @@ function WcCartPill({ onPress, months }: { onPress: () => void; months?: number 
 
 // Figma 3529:83365 — saving strip under the stepper. The free tier has nothing to
 // discount, so it states what it does have rather than showing an empty pill.
-function WcSavingStrip({ months, onViewDiscounts }: { months: number; onViewDiscounts: () => void }) {
-  const saving = wcPlanSaving(months);
+// Figma 3710:28479 — dynamic discount banner riding under the cart pill.
+// Two states: on a free tenure it advertises the ladder ("Discounts available");
+// on a discounted tenure it confirms what is being enjoyed right now. No visible
+// CTA per the design — the whole banner quietly opens the tiers sheet.
+function WcDiscountBanner({ months, onPress }: { months: number | null; onPress: () => void }) {
+  const rate = months ? Math.round(wcSavingRate(months) * 100) : 0;
+  const saving = months ? wcPlanSaving(months) : 0;
+  const bestRate = Math.round(wcSavingRate(WC_BEST_TENURE) * 100);
+  const firstDiscounted = WC_TENURES.find((m) => wcSavingRate(m) > 0) ?? WC_BEST_TENURE;
   const isBest = months === WC_BEST_TENURE;
   return (
-    <View style={styles.wcSavingStrip}>
-      <View style={styles.wcSavingLeft}>
-        <SaleTag size={16} color={greenMid} />
-        {saving > 0 ? (
-          isBest ? (
-            <Text style={styles.wcSavingText}>Best value · {Math.round(wcSavingRate(months) * 100)}% off your cart</Text>
+    <Pressable
+      testID="wc-discount-banner"
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={
+        rate > 0
+          ? `${rate} percent discount applied, saving ${wcMoney(saving)}. View discount tiers`
+          : `Discounts available on plans from ${firstDiscounted} to ${WC_BEST_TENURE} months, up to ${bestRate} percent off. View discount tiers`
+      }
+      style={({ pressed }) => [styles.wcBanner, pressed && { opacity: 0.92 }]}
+    >
+      <SaleTag size={18} color="#ffffff" />
+      <FadeSwap swapKey={`banner-${rate}`}>
+        <View style={{ gap: 2 }}>
+          {rate > 0 ? (
+            <>
+              <Text style={styles.wcBannerTitle}>{isBest ? `Best value · ${rate}% discount applied` : `${rate}% discount applied`}</Text>
+              <Text style={styles.wcBannerSub}>You're enjoying <Riyal size={11} color="rgba(255,255,255,0.8)" /> {wcSaving(saving)} off your cart total</Text>
+            </>
           ) : (
             <>
-              <Text style={styles.wcSavingText}>{Math.round(wcSavingRate(months) * 100)}% off cart · Save</Text>
-              <Riyal size={12} color={greenMid} />
-              <Text style={styles.wcSavingText}>{wcSaving(saving)}</Text>
+              <Text style={styles.wcBannerTitle}>Discounts available</Text>
+              <Text style={styles.wcBannerSub}>Plans from {firstDiscounted} to {WC_BEST_TENURE} months get up to {bestRate}% off your cart</Text>
             </>
-          )
-        ) : (
-          <Text style={styles.wcSavingText}>No interest. No fees</Text>
-        )}
-      </View>
-      <Pressable testID="wc-view-discounts" onPress={onViewDiscounts} hitSlop={10} accessibilityRole="button" accessibilityLabel="View discount tiers">
-        <Text style={styles.wcSavingLink}>Discounts ›</Text>
-      </Pressable>
-    </View>
+          )}
+        </View>
+      </FadeSwap>
+    </Pressable>
   );
 }
 
@@ -1569,9 +1583,8 @@ function WcTenureRail({ months, onSelect }: { months: number; onSelect: (m: numb
       <View style={styles.wcStepperValues}>
         {WC_TENURES.map((value) => {
           const rate = Math.round(wcSavingRate(value) * 100);
-          // Every discounted tenure wears its rate: a blank slot next to a
-          // labelled one reads as "no discount", which is wrong for 6 and 9.
-          const pct = rate > 0 ? `${rate}%` : ' ';
+          // Plain numbers (Figma 3710:28712): the banner above now owns the
+          // discount story, so the rail goes back to doing one job.
           return value === months ? (
             <View key={value} style={styles.wcStepperActiveSlot}>
               <Animated.Text testID="wc-plan-months" style={[styles.wcStepperMain, { transform: [{ scale }] }]}>{value}</Animated.Text>
@@ -1587,12 +1600,6 @@ function WcTenureRail({ months, onSelect }: { months: number; onSelect: (m: numb
               style={styles.wcStepperSlot}
             >
               <Text style={styles.wcStepperSide}>{value}</Text>
-              {value === WC_BEST_TENURE && rate > 0 ? (
-                // The headline rate is a jewel, not a fifth text label.
-                <View style={styles.wcStepperBestPill}><Text style={styles.wcStepperBestPillText}>{pct}</Text></View>
-              ) : (
-                <Text style={styles.wcStepperPct}>{pct}</Text>
-              )}
             </Pressable>
           );
         })}
@@ -1630,13 +1637,11 @@ function WcTenure({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) => 
         <ScreenFade>
           <WcOnboardHeader onClose={() => setRoute('checkout')} onBack={() => setRoute('wcDemo')} />
           <View style={styles.wcTenureContent}>
-            {/* Cart, then the discount it earned — the saving belongs next to the
-                amount it comes off, not buried under the tenure rail. */}
+            {/* Cart, then its discount state — the banner switches between
+                "available" and "applied" as the tenure changes (Figma 3710:28460). */}
             <View style={{ gap: 8 }}>
               <WcCartPill onPress={() => setSheet('cart')} months={months} />
-              <View style={styles.wcSavingStripTop}>
-                <WcSavingStrip months={months} onViewDiscounts={() => setSheet('discounts')} />
-              </View>
+              <WcDiscountBanner months={months} onPress={() => setSheet('discounts')} />
             </View>
             <View style={styles.wcPlanCard}>
               <View style={{ gap: 6, width: '100%' }}>
@@ -1688,7 +1693,7 @@ function WcTenure({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) => 
         </ScreenFade>
         {sheet === 'details' ? <WcPlanDetailsSheet months={months} onClose={() => setSheet(null)} onViewSchedule={() => setSheet('schedule')} onContinue={() => setRoute('wcPayment')} /> : null}
         {sheet === 'schedule' ? <WcFullScheduleSheet months={months} onClose={() => setSheet(null)} /> : null}
-        {sheet === 'cart' ? <WcCartSheet onClose={() => setSheet(null)} /> : null}
+        {sheet === 'cart' ? <WcCartSheet onClose={() => setSheet(null)} months={months} /> : null}
         {sheet === 'fee' ? <WcFourMonthFeeSheet onClose={() => setSheet(null)} /> : null}
         {sheet === 'discounts' ? <WcDiscountsSheet months={months} onClose={() => setSheet(null)} onSelect={(m) => { bump(m); setSheet(null); }} /> : null}
         <View style={styles.wcStatusOverlay} pointerEvents="none"><StatusStrip pointerEvents="none" /></View>
@@ -1850,12 +1855,18 @@ function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) =
   const list = (
     <>
       <WcCartPill onPress={() => setSheet('cart')} months={chosen} />
-            <View style={styles.wcPlansHead}>
+            {/* The title + amount stick to the top of the scroll (position:sticky —
+                web-only cast, this is a web prototype) so the number being split
+                stays in view; the subtitle scrolls away to keep the sticky band
+                short and the plan rows roomy. */}
+            <View style={[styles.wcPlansStickyHead, { position: 'sticky', top: 0 } as any]}>
               <Text style={styles.wcPlansEyebrow}>Choose how to split</Text>
               <View style={styles.wcPlansTotalRow}>
                 <Riyal size={19} />
                 <Text style={styles.wcPlansTotal}>{formatAmount(WC_CART_TOTAL)}</Text>
               </View>
+            </View>
+            <View style={styles.wcPlansHead}>
               <Text style={styles.wcPlansSub}>
                 You can split your purchase up to <Text style={styles.wcPlansSubStrong}>{maxTenure} months</Text>
               </Text>
@@ -1892,7 +1903,7 @@ function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) =
           {onDevice ? null : footer}
         </ScreenFade>
         {onDevice ? <BottomPinned>{footer}</BottomPinned> : null}
-        {sheet === 'cart' ? <WcCartSheet onClose={() => setSheet(null)} /> : null}
+        {sheet === 'cart' ? <WcCartSheet onClose={() => setSheet(null)} months={chosen} /> : null}
         {sheet === 'details' && chosen !== null ? <WcPlanDetailsSheet months={chosen} onClose={() => setSheet(null)} onViewSchedule={() => setSheet('schedule')} onContinue={() => setRoute('wcPayment')} /> : null}
         {sheet === 'schedule' && chosen !== null ? <WcFullScheduleSheet months={chosen} onClose={() => setSheet(null)} /> : null}
         {sheet === 'discounts' ? <WcDiscountsSheet months={chosen} onClose={() => setSheet(null)} onSelect={(m) => { setMonths(m); setSheet(null); }} /> : null}
@@ -2159,11 +2170,14 @@ const WC_CART_ITEMS_LIST = [
   { name: 'SMEG 2-Slice Toaster', sub: 'Black', amount: 451.00 },
 ];
 
-function WcCartSheet({ onClose }: { onClose: () => void }) {
+function WcCartSheet({ onClose, months }: { onClose: () => void; months?: number | null }) {
   const rise = useRef(new Animated.Value(0)).current;
   useEffect(() => {
     Animated.timing(rise, { toValue: 1, duration: 280, easing: Easing.bezier(0.32, 0.72, 0, 1), useNativeDriver: true }).start();
   }, [rise]);
+  const rate = months ? wcSavingRate(months) : 0;
+  const saving = months ? wcPlanSaving(months) : 0;
+  const itemAfter = (amount: number) => Math.round(amount * (1 - rate) * 100) / 100;
   return (
     <ViewportLayer><View style={styles.wcPickerOverlay} pointerEvents="auto">
       <Pressable style={styles.wcPickerScrim} onPress={onClose} accessibilityRole="button" accessibilityLabel="Close cart" />
@@ -2178,7 +2192,10 @@ function WcCartSheet({ onClose }: { onClose: () => void }) {
               <Text style={styles.wcDetailsStrong}>{item.name}</Text>
               <Text style={styles.wcDetailsDim}>{item.sub}</Text>
             </View>
-            <Money amount={wcMoney(item.amount)} size={15} />
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+              {rate > 0 ? <Text style={styles.wcCartItemWas}>{wcMoney(item.amount)}</Text> : null}
+              <Money amount={wcMoney(itemAfter(item.amount))} size={15} />
+            </View>
           </View>
         ))}
         <View style={[styles.wcDetailsCard, { gap: 10 }]}>
@@ -2186,12 +2203,26 @@ function WcCartSheet({ onClose }: { onClose: () => void }) {
             <Text style={styles.wcDetailsDim}>Subtotal</Text>
             <Money amount={wcMoney(WC_CART_TOTAL)} size={15} color={muted} />
           </View>
+          {rate > 0 ? (
+            <View style={styles.wcCartTotalRow}>
+              <Text style={styles.wcCartDiscountLabel}>Plan discount ({Math.round(rate * 100)}%)</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={styles.wcCartDiscountLabel}>− </Text>
+                <Money amount={wcMoney(saving)} size={15} color={greenMid} weight="700" />
+              </View>
+            </View>
+          ) : null}
           <View style={styles.wcCartTotalDivider} />
           <View style={styles.wcCartTotalRow}>
             <Text style={styles.wcDetailsLabel}>Total</Text>
-            <Money amount={wcMoney(WC_CART_TOTAL)} size={17} weight="700" />
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+              {rate > 0 ? <Text style={styles.wcCartItemWas}>{wcMoney(WC_CART_TOTAL)}</Text> : null}
+              <Money amount={wcMoney(WC_CART_TOTAL - saving)} size={17} weight="700" />
+            </View>
           </View>
-          <Text style={styles.wcDetailsDim}>Your plan discount comes off this total, up to {Math.round(wcSavingRate(WC_BEST_TENURE) * 100)}% with {WC_BEST_TENURE} months.</Text>
+          {rate > 0 ? null : (
+            <Text style={styles.wcDetailsDim}>Your plan discount comes off this total, up to {Math.round(wcSavingRate(WC_BEST_TENURE) * 100)}% with {WC_BEST_TENURE} months.</Text>
+          )}
         </View>
         <Pressable testID="wc-cart-got-it" style={styles.wcGreenCta} onPress={onClose} accessibilityRole="button">
           <Text style={styles.wcGreenCtaText}>Got it</Text>
@@ -4694,6 +4725,7 @@ const styles = StyleSheet.create({
   wcCartTotalRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   wcCartTotalDivider: { height: 1, backgroundColor: '#e8ecea' },
   wcCartDiscountLabel: { fontSize: 13, lineHeight: 18, fontWeight: '700', color: greenMid },
+  wcCartItemWas: { fontSize: 13, lineHeight: 18, color: '#9ca3af', textDecorationLine: 'line-through' },
   wcCartDiscountChip: { backgroundColor: '#dff5d4', borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2 },
   wcCartDiscountChipText: { fontSize: 11, lineHeight: 15, fontWeight: '700', color: '#16720b' },
   wcCartWasPrice: { fontSize: 13, lineHeight: 18, color: muted, textDecorationLine: 'line-through' },
@@ -4704,18 +4736,14 @@ const styles = StyleSheet.create({
   // The rail bleeds past the card inset for room, but keeps a 12px margin to the
   // card edge — flush-to-edge read as broken, not generous.
   wcStepperTrack: { alignSelf: 'stretch', marginHorizontal: -8, borderRadius: 999, backgroundColor: '#f3f4f6', paddingHorizontal: 10, paddingVertical: 9, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  wcStepperMinus: { width: 44, height: 44, borderRadius: 99, backgroundColor: '#fff', borderWidth: 1, borderColor: borderSubtle, alignItems: 'center', justifyContent: 'center' },
-  wcStepperPlus: { width: 44, height: 44, borderRadius: 99, backgroundColor: green, alignItems: 'center', justifyContent: 'center' },
+  wcStepperMinus: { width: 40, height: 40, borderRadius: 99, backgroundColor: '#fff', borderWidth: 1, borderColor: borderSubtle, alignItems: 'center', justifyContent: 'center' },
+  wcStepperPlus: { width: 40, height: 40, borderRadius: 99, backgroundColor: green, alignItems: 'center', justifyContent: 'center' },
   wcStepperValues: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly', paddingHorizontal: 4 },
   // Every slot shares one anatomy: a 41px number line over a 16px label line, so
   // the whole rail sits on a single baseline grid regardless of selection.
   wcStepperActiveSlot: { alignItems: 'center' },
   wcStepperSlot: { alignItems: 'center' },
-  wcStepperSide: { fontSize: 20, lineHeight: 41, fontWeight: '500', color: muted, opacity: 0.25, letterSpacing: 0.38, textAlign: 'center', minWidth: 15 },
-  // Discount ladder riding the rail — the rate each tenure unlocks, always visible.
-  wcStepperPct: { fontSize: 10, lineHeight: 16, fontWeight: '600', color: greenBrand, opacity: 0.5, marginTop: -4, textAlign: 'center' },
-  wcStepperBestPill: { backgroundColor: greenMid, borderRadius: 999, paddingHorizontal: 6, paddingVertical: 1.5, marginTop: -3 },
-  wcStepperBestPillText: { fontSize: 9, lineHeight: 12, fontWeight: '700', color: neon, letterSpacing: 0.3 },
+  wcStepperSide: { fontSize: 24, lineHeight: 41, fontWeight: '500', color: muted, opacity: 0.2, letterSpacing: 0.38, textAlign: 'center', minWidth: 15 },
   wcStepperMain: { fontSize: 34, lineHeight: 41, fontWeight: '700', color: '#000', letterSpacing: 0.38, textAlign: 'center' },
   wcStepperMonthsLabel: { fontSize: 10, lineHeight: 16, fontWeight: '500', color: muted, marginTop: -4, textAlign: 'center' },
   wcPlanHero: { alignItems: 'center', gap: 10 },
@@ -4727,13 +4755,10 @@ const styles = StyleSheet.create({
   wcPlanFees: { fontSize: 12, lineHeight: 16, color: muted, textAlign: 'center' },
   wcPlanFeesRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 },
   // Figma 3529:83365 — saving strip
-  wcSavingStrip: { alignSelf: 'stretch', backgroundColor: '#f0fdf4', borderRadius: 999, paddingHorizontal: 12, paddingVertical: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
-  // Riding under the cart pill it is page furniture, not card furniture: inset a
-  // little so it reads as attached to the pill above it.
-  wcSavingStripTop: { paddingHorizontal: 8 },
-  wcSavingStripBest: { paddingHorizontal: 10 },
-  wcSavingLeft: { flexDirection: 'row', alignItems: 'center', gap: 5, flexShrink: 1 },
-  wcSavingText: { fontSize: 13, lineHeight: 18, fontWeight: '500', color: greenMid, letterSpacing: -0.08 },
+  // Figma 3710:28479 — solid success-green banner, icon + two text lines.
+  wcBanner: { alignSelf: 'stretch', backgroundColor: '#15803d', borderRadius: 24, paddingHorizontal: 12, paddingVertical: 10, flexDirection: 'row', alignItems: 'center', gap: 8 },
+  wcBannerTitle: { fontSize: 13, lineHeight: 17, fontWeight: '600', color: '#ffffff', letterSpacing: -0.08 },
+  wcBannerSub: { fontSize: 13, lineHeight: 18, fontWeight: '400', color: 'rgba(255,255,255,0.8)', letterSpacing: -0.08 },
   wcBestChip: { backgroundColor: greenMid, borderRadius: 999, paddingHorizontal: 7, paddingVertical: 3 },
   wcBestChipText: { fontSize: 10, lineHeight: 13, fontWeight: '600', color: '#ffffff', letterSpacing: 0.4 },
   wcNudge: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 12, paddingVertical: 6 },
@@ -4764,7 +4789,9 @@ const styles = StyleSheet.create({
   wcDemoChevron: { fontSize: 22, lineHeight: 26, color: '#9ca3af', fontWeight: '400' },
   // ── Experience A — Figma 3615:73832 ───────────────────────────────────────────
   wcPlansContent: { paddingHorizontal: 16, paddingTop: 16, paddingBottom: 20, gap: 16 },
-  wcPlansHead: { paddingHorizontal: 16, paddingTop: 4, alignItems: 'center', gap: 8 },
+  wcPlansHead: { paddingHorizontal: 16, alignItems: 'center', marginTop: -8 },
+  // Full-bleed canvas band so rows visibly slide beneath it while stuck.
+  wcPlansStickyHead: { zIndex: 20, alignItems: 'center', gap: 4, backgroundColor: canvas, marginHorizontal: -16, paddingHorizontal: 16, paddingTop: 6, paddingBottom: 8 },
   wcPlansEyebrow: { fontSize: 14, lineHeight: 18, color: muted, letterSpacing: 0.36 },
   wcPlansTotalRow: { flexDirection: 'row', alignItems: 'center' },
   wcPlansTotal: { fontSize: 34, lineHeight: 42, fontWeight: '700', color: text, letterSpacing: 0.38 },
