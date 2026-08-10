@@ -1500,7 +1500,7 @@ const WcDiscountBanner = memo(function WcDiscountBanner({ months, idle = 'upsell
               {idle === 'ladder' ? (
                 <Text style={styles.wcBannerSub}>Up to {bestRate}% off your cart on {firstDiscounted} to {WC_BEST_TENURE} payments</Text>
               ) : (
-                <Text style={styles.wcBannerSub}>Split on {WC_BEST_TENURE} months and get {bestRate}% (<Riyal size={11} color="rgba(255,255,255,0.8)" /> {wcSaving(wcPlanSaving(WC_BEST_TENURE))}) off your cart</Text>
+                <Text style={styles.wcBannerSub}>Get {bestRate}% (<Riyal size={11} color="rgba(255,255,255,0.8)" /> {wcSaving(wcPlanSaving(WC_BEST_TENURE))}) off your cart on {WC_BEST_TENURE} payments</Text>
               )}
             </>
           )}
@@ -1609,7 +1609,6 @@ function WcTenure({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) => 
     setMonths(next);
   };
   const fee = wcPlanFee(months);
-  const maxTenure = WC_TENURES[WC_TENURES.length - 1];
   return (
     <AppShell>
       <View testID="wc-tenure-3529-83312" style={styles.wcObScreen}>
@@ -1625,7 +1624,7 @@ function WcTenure({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) => 
             <View style={styles.wcPlanCard}>
               <View style={{ gap: 6, width: '100%' }}>
                 <Text style={styles.wcPlanTitle}>Choose your plan</Text>
-                <Text style={styles.wcPlanSub}>You can split your purchase up to <Text style={styles.wcPlanSubStrong}>{maxTenure} months</Text></Text>
+                <Text style={styles.wcPlanSub}>Pick the number of payments that suits you</Text>
               </View>
               <View style={{ gap: 28, width: '100%', alignItems: 'center' }}>
                 <FadeSwap swapKey={`plan-${months}`}>
