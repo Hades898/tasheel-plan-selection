@@ -1475,14 +1475,18 @@ const WcCartPill = memo(function WcCartPill({ onPress, months }: { onPress: () =
 // Two states: on a free tenure it advertises the ladder ("Discounts available");
 // on a discounted tenure it confirms what is being enjoyed right now. Pure
 // display, no call to action.
-const WcDiscountBanner = memo(function WcDiscountBanner({ months, idle = 'upsell' }: { months: number | null; idle?: 'upsell' | 'generic' }) {
+const WcDiscountBanner = memo(function WcDiscountBanner({ months, idle = 'upsell' }: { months: number | null; idle?: 'upsell' | 'ladder' }) {
   const rate = months ? Math.round(wcSavingRate(months) * 100) : 0;
   const saving = months ? wcPlanSaving(months) : 0;
   const bestRate = Math.round(wcSavingRate(WC_BEST_TENURE) * 100);
+  const firstDiscounted = WC_TENURES.find((m) => wcSavingRate(m) > 0) ?? WC_BEST_TENURE;
   const isBest = months === WC_BEST_TENURE;
   return (
     <View testID="wc-discount-banner" style={styles.wcBanner}>
-      <SaleTag size={18} color="#ffffff" />
+      <View style={{ flexShrink: 0 }}><SaleTag size={18} color="#ffffff" /></View>
+      {/* Text owns the leftover width and wraps; without this the long idle
+          line squeezes the icon out of the row instead. */}
+      <View style={{ flex: 1 }}>
       <FadeSwap swapKey={`banner-${rate}`}>
         <View style={{ gap: 2 }}>
           {rate > 0 ? (
@@ -1493,8 +1497,8 @@ const WcDiscountBanner = memo(function WcDiscountBanner({ months, idle = 'upsell
           ) : (
             <>
               <Text style={styles.wcBannerTitle}>Discounts available</Text>
-              {idle === 'generic' ? (
-                <Text style={styles.wcBannerSub}>You can split your purchase up to {WC_BEST_TENURE} months</Text>
+              {idle === 'ladder' ? (
+                <Text style={styles.wcBannerSub}>Up to {bestRate}% off your cart on {firstDiscounted} to {WC_BEST_TENURE} payments</Text>
               ) : (
                 <Text style={styles.wcBannerSub}>Split on {WC_BEST_TENURE} months and get {bestRate}% (<Riyal size={11} color="rgba(255,255,255,0.8)" /> {wcSaving(wcPlanSaving(WC_BEST_TENURE))}) off your cart</Text>
               )}
@@ -1502,6 +1506,7 @@ const WcDiscountBanner = memo(function WcDiscountBanner({ months, idle = 'upsell
           )}
         </View>
       </FadeSwap>
+      </View>
     </View>
   );
 }, (prev, next) => wcSavingRate(prev.months ?? 0) === wcSavingRate(next.months ?? 0) && (prev.months === WC_BEST_TENURE) === (next.months === WC_BEST_TENURE));
@@ -1615,7 +1620,7 @@ function WcTenure({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) => 
                 "available" and "applied" as the tenure changes (Figma 3710:28460). */}
             <View style={{ gap: 8 }}>
               <WcCartPill onPress={() => setSheet('cart')} months={months} />
-              <WcDiscountBanner months={months} idle="generic" />
+              <WcDiscountBanner months={months} idle="ladder" />
             </View>
             <View style={styles.wcPlanCard}>
               <View style={{ gap: 6, width: '100%' }}>
