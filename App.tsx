@@ -1008,15 +1008,24 @@ function WcLeaveSheet({ onStay, onLeave }: { onStay: () => void; onLeave: () => 
 
 // Onboarding header sheet (Figma 1929:11374): white card with x-close, Tasheel wordmark, عربية.
 // The close button opens the leave-confirmation sheet before calling onClose.
-function WcOnboardHeader({ onClose }: { onClose: () => void }) {
+// `onBack` adds a ‹ on the left that navigates directly (no confirmation) — the
+// demo screens use it to return to the hub, since real iOS draws no fake Safari
+// chrome and its back arrow with it.
+function WcOnboardHeader({ onClose, onBack }: { onClose: () => void; onBack?: () => void }) {
   const [confirmOpen, setConfirmOpen] = useState(false);
   return (
     <>
       <View style={[styles.wcObHeader, { paddingTop: SHOW_FAKE_CHROME ? 70 : 26 }]}>
         <View style={styles.wcObHeaderRow}>
+          {onBack ? (
+            <Pressable testID="wc-onboard-back" onPress={onBack} hitSlop={10} accessibilityRole="button" accessibilityLabel="Back to demos" style={styles.wcObCloseBox}>
+              <Image source={figmaImageSource('iconChevronLeft')} resizeMode="contain" accessibilityIgnoresInvertColors style={styles.wcObCloseIcon} />
+            </Pressable>
+          ) : (
           <Pressable testID="wc-onboard-close" onPress={() => setConfirmOpen(true)} hitSlop={10} accessibilityRole="button" accessibilityLabel="Close Tasheel checkout" style={styles.wcObCloseBox}>
             <Image source={figmaImageSource('wcCloseX')} resizeMode="contain" accessibilityIgnoresInvertColors style={styles.wcObCloseIcon} />
           </Pressable>
+          )}
           <Image source={figmaImageSource('wcTasheelLogo')} resizeMode="contain" accessibilityIgnoresInvertColors style={styles.wcObLogo} />
           <Text style={styles.wcObArabic}>العربية</Text>
         </View>
@@ -1592,7 +1601,7 @@ function WcTenure({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) => 
     <AppShell>
       <View testID="wc-tenure-3529-83312" style={styles.wcObScreen}>
         <ScreenFade>
-          <WcOnboardHeader onClose={() => setRoute('checkout')} />
+          <WcOnboardHeader onClose={() => setRoute('checkout')} onBack={() => setRoute('wcDemo')} />
           <View style={styles.wcTenureContent}>
             <WcCartPill onPress={() => setSheet('cart')} months={months} />
             <View style={styles.wcPlanCard}>
@@ -1773,7 +1782,7 @@ function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) =
     <AppShell scroll={false}>
       <View testID="wc-plans-3615-73832" style={styles.wcObScreen}>
         <ScreenFade>
-          <WcOnboardHeader onClose={() => setRoute('checkout')} />
+          <WcOnboardHeader onClose={() => setRoute('checkout')} onBack={() => setRoute('wcDemo')} />
           <ScrollView style={{ flex: 1 }} contentContainerStyle={styles.wcPlansContent} showsVerticalScrollIndicator={false}>
             <WcCartPill onPress={() => setSheet('cart')} months={chosen} />
             <View style={styles.wcPlansHead}>
@@ -1803,6 +1812,9 @@ function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) =
             </Pressable>
           </ScrollView>
           <View style={styles.wcPlansFooter}>
+            {/* Cards dissolve into the footer instead of getting razor-cut at
+                its edge — web-only gradient, harmless elsewhere. */}
+            <View pointerEvents="none" style={[styles.wcPlansFade, { backgroundImage: 'linear-gradient(180deg, rgba(249,250,251,0), #f9fafb)' } as object]} />
             <Pressable
               testID="wc-plans-continue"
               disabled={chosen === null}
@@ -4683,13 +4695,13 @@ const styles = StyleSheet.create({
   wcPlansSubStrong: { fontWeight: '600', color: '#15803d' },
   wcPlansList: { gap: 16 },
   wcPlansFooter: { paddingTop: 12, gap: 14, alignItems: 'center', backgroundColor: canvas },
+  wcPlansFade: { position: 'absolute', top: -28, left: 0, right: 0, height: 28 },
   wcPlansCta: { width: '100%', maxWidth: 358, alignSelf: 'center' },
   wcPlanRow: { backgroundColor: '#fff', borderRadius: 24, overflow: 'hidden', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 16, borderWidth: 2, borderColor: 'transparent', shadowColor: '#000', shadowOpacity: 0.12, shadowRadius: 40, shadowOffset: { width: 0, height: 16 } },
   wcPlanRowOffer: { height: 87 },
   wcPlanRowPlain: { minHeight: 82, paddingRight: 16, paddingVertical: 16 },
-  // Selection reads in the brand's bright green with a whisper of tint — the
-  // dark ring looked like an error state next to the badges.
-  wcPlanRowSelected: { borderColor: '#3eff00', backgroundColor: '#fbfffa' },
+  // Selection ring per the provided reference: clean #23A107 border on white.
+  wcPlanRowSelected: { borderColor: '#23A107' },
   wcPlanRowLeft: { gap: 6 },
   wcPlanRowTitle: { fontSize: 15, lineHeight: 20, fontWeight: '600', color: text, letterSpacing: 0.38 },
   wcPlanRowFree: { fontSize: 13, lineHeight: 16, fontWeight: '500', color: greenBrand },
