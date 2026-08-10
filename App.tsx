@@ -1833,6 +1833,9 @@ function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) =
     <Animated.View pointerEvents="none" style={{ opacity: barFade }}>
       <View style={styles.wcPlansTopBar}>
         <Text style={styles.wcPlansTopBarLabel}>Choose how to split</Text>
+        {chosenSaving > 0 ? (
+          <View style={styles.wcCartDiscountChip}><Text style={styles.wcCartDiscountChipText}>{Math.round(wcSavingRate(chosen ?? 0) * 100)}% Off</Text></View>
+        ) : null}
         <Riyal size={13} />
         <Text style={styles.wcPlansTopBarAmount}>{wcSaving(chosenPayable)}</Text>
       </View>
@@ -1885,7 +1888,7 @@ function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) =
                 <Text style={styles.wcPlansTotal}>{wcSaving(chosenPayable)}</Text>
               </View>
               <Text style={styles.wcPlansSub}>
-                Choose {WC_BEST_TENURE} payments and get <Text style={styles.wcPlansSubStrong}>{Math.round(wcSavingRate(WC_BEST_TENURE) * 100)}% off</Text> your whole cart
+                Choose {WC_BEST_TENURE} payments and get <Text style={styles.wcPlansSubStrong}>{Math.round(wcSavingRate(WC_BEST_TENURE) * 100)}% off</Text> your cart
               </Text>
             </View>
             <View style={styles.wcPlansList} accessibilityRole="radiogroup">
