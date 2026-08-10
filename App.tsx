@@ -957,6 +957,28 @@ function ActionTile({ label, asset, testID, onPress }: { label: string; asset: F
 
 // Escapes RNW's ScrollView containing-block (its identity transform captures any
 // fixed descendant) by portaling viewport-pinned UI to document.body on device.
+// Pins a bar to the true bottom of the visual viewport on device.
+// Deliberately NOT zoomed like ViewportLayer: that layer scales its own box, so
+// `bottom: 0` inside it resolves to viewportHeight * zoom and the bar floats a
+// scale-dependent distance above Safari's chrome. Full-width bars don't need
+// design-scale fidelity, so real CSS pixels + the safe-area inset is exact.
+function BottomPinned({ children }: { children: React.ReactNode }) {
+  if (SHOW_FAKE_CHROME || typeof document === 'undefined') return <>{children}</>;
+  return createPortal(
+    createElement('div', {
+      style: {
+        position: 'fixed',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 900,
+        paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+      },
+    }, <View pointerEvents="box-none">{children}</View>),
+    document.body,
+  );
+}
+
 function ViewportLayer({ children }: { children: React.ReactNode }) {
   const { width } = useWindowDimensions();
   useEffect(() => {
@@ -1802,7 +1824,21 @@ function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) =
       >
         <Text style={[styles.wcGreenCtaText, chosen === null && styles.wcCtaDisabledText]}>Continue</Text>
       </Pressable>
-      <SafariCompactBar url="extrastores.com" onBack={() => setRoute('wcDemo')} />
+      {/* Parity with the stepper — but only once a plan exists to detail. */}
+      {chosen !== null ? (
+        <Pressable
+          testID="wc-plans-details"
+          style={[styles.wcGreyCta, styles.wcPlansCta]}
+          onPress={() => setSheet('details')}
+          accessibilityRole="button"
+          accessibilityLabel={`View details for ${chosen} payments`}
+        >
+          <Text style={styles.wcGreyCtaText}>View plan details</Text>
+        </Pressable>
+      ) : null}
+      {/* The fake Safari bar is desktop-only chrome; on device it collapses to an
+          empty spacer that would just push the CTA up off the bottom edge. */}
+      {onDevice ? null : <SafariCompactBar url="extrastores.com" onBack={() => setRoute('wcDemo')} />}
     </View>
   );
   const list = (
@@ -1849,8 +1885,10 @@ function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) =
           )}
           {onDevice ? null : footer}
         </ScreenFade>
-        {onDevice ? <ViewportLayer>{footer}</ViewportLayer> : null}
+        {onDevice ? <BottomPinned>{footer}</BottomPinned> : null}
         {sheet === 'cart' ? <WcCartSheet onClose={() => setSheet(null)} /> : null}
+        {sheet === 'details' && chosen !== null ? <WcPlanDetailsSheet months={chosen} onClose={() => setSheet(null)} onViewSchedule={() => setSheet('schedule')} onContinue={() => setRoute('wcPayment')} /> : null}
+        {sheet === 'schedule' && chosen !== null ? <WcFullScheduleSheet months={chosen} onClose={() => setSheet(null)} /> : null}
         {sheet === 'discounts' ? <WcDiscountsSheet months={chosen} onClose={() => setSheet(null)} onSelect={(m) => { setMonths(m); setSheet(null); }} /> : null}
         <View style={styles.wcStatusOverlay} pointerEvents="none"><StatusStrip pointerEvents="none" /></View>
       </View>
@@ -4718,12 +4756,13 @@ const styles = StyleSheet.create({
   wcPlansSub: { fontSize: 14, lineHeight: 18, color: muted, letterSpacing: -0.08, textAlign: 'center' },
   wcPlansSubStrong: { fontWeight: '600', color: '#15803d' },
   wcPlansList: { gap: 16 },
-  wcPlansFooter: { paddingTop: 12, gap: 14, alignItems: 'center', backgroundColor: canvas },
+  wcPlansFooter: { paddingTop: 12, gap: 10, alignItems: 'center', backgroundColor: canvas },
   // On device the footer is pinned to the visual viewport by ViewportLayer.
-  wcPlansFooterPinned: { position: 'absolute', left: 0, right: 0, bottom: 0, paddingHorizontal: 16, paddingBottom: 18 },
+  // BottomPinned owns the anchoring; the footer just needs its own padding.
+  wcPlansFooterPinned: { paddingHorizontal: 16, paddingBottom: 12, gap: 0 },
   wcPlansFade: { position: 'absolute', top: -28, left: 0, right: 0, height: 28 },
   // Room for the pinned footer so the last card is never trapped behind it.
-  wcPlansContentDevice: { paddingBottom: 140 },
+  wcPlansContentDevice: { paddingBottom: 190 },
   wcPlansCta: { width: '100%', maxWidth: 358, alignSelf: 'center' },
   wcPlanRow: { backgroundColor: '#fff', borderRadius: 24, overflow: 'hidden', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 16, borderWidth: 2, borderColor: 'transparent', shadowColor: '#000', shadowOpacity: 0.12, shadowRadius: 40, shadowOffset: { width: 0, height: 16 } },
   wcPlanRowOffer: { height: 87 },
