@@ -1024,7 +1024,7 @@ function WcOnboardHeader({ onClose, onBack }: { onClose: () => void; onBack?: ()
         <View style={styles.wcObHeaderRow}>
           {onBack ? (
             <Pressable testID="wc-onboard-back" onPress={onBack} hitSlop={10} accessibilityRole="button" accessibilityLabel="Back to demos" style={styles.wcObCloseBox}>
-              <Image source={figmaImageSource('iconChevronLeft')} resizeMode="contain" accessibilityIgnoresInvertColors style={styles.wcObCloseIcon} />
+              <Image source={figmaImageSource('iconChevronLeft')} resizeMode="contain" accessibilityIgnoresInvertColors style={styles.wcObBackIcon} />
             </Pressable>
           ) : (
           <Pressable testID="wc-onboard-close" onPress={() => setConfirmOpen(true)} hitSlop={10} accessibilityRole="button" accessibilityLabel="Close Tasheel checkout" style={styles.wcObCloseBox}>
@@ -4540,6 +4540,9 @@ const styles = StyleSheet.create({
   wcObArabic: { fontSize: 14, fontWeight: '700', color: '#16720b' },
   wcObCloseBox: { width: 20, height: 20, alignItems: 'center', justifyContent: 'center' },
   wcObCloseIcon: { width: 11.7, height: 11.7 },
+  // The chevron asset is 8x14 and declares preserveAspectRatio="none", so it
+  // stretches to whatever box it is given — a square squashed it flat.
+  wcObBackIcon: { width: 7.4, height: 13 },
   wcObContent: { paddingHorizontal: 16, marginTop: 49, alignItems: 'center' },
   wcObCard: { width: '100%', backgroundColor: '#fff', borderRadius: 40, padding: 24, gap: 24, shadowColor: '#000', shadowOpacity: 0.12, shadowRadius: 20, shadowOffset: { width: 0, height: 16 } },
   wcObTitle: { fontSize: 22, lineHeight: 28, fontWeight: '700', color: '#1b1b1b', letterSpacing: 0.35 },
