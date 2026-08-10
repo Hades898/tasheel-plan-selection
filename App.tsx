@@ -1816,6 +1816,8 @@ function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) =
   const [sheet, setSheet] = useState<null | 'cart' | 'details' | 'schedule'>(null);
   const maxTenure = WC_TENURES[WC_TENURES.length - 1];
   const chosen = months;
+  const chosenSaving = chosen ? wcPlanSaving(chosen) : 0;
+  const chosenPayable = Math.round((WC_CART_TOTAL - chosenSaving) * 100) / 100;
   // Desktop preview runs inside a fixed 874 frame, so the footer can simply sit
   // at its bottom. A real iPhone viewport is shorter than that frame, which
   // pushed the CTA below the fold — there the page scrolls naturally and the
@@ -1833,7 +1835,7 @@ function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) =
       <View style={styles.wcPlansTopBar}>
         <Text style={styles.wcPlansTopBarLabel}>Choose how to split</Text>
         <Riyal size={13} />
-        <Text style={styles.wcPlansTopBarAmount}>{formatAmount(WC_CART_TOTAL)}</Text>
+        <Text style={styles.wcPlansTopBarAmount}>{wcSaving(chosenPayable)}</Text>
       </View>
       <View pointerEvents="none" style={[styles.wcPlansTopBarFade, { backgroundImage: 'linear-gradient(180deg, #f9fafb 20%, rgba(249,250,251,0))' } as object]} />
     </Animated.View>
@@ -1876,9 +1878,12 @@ function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) =
       <WcCartPill onPress={() => setSheet('cart')} months={chosen} />
             <View style={styles.wcPlansHead}>
               <Text style={styles.wcPlansEyebrow}>Choose how to split</Text>
+              {/* Lives with the selection: once a discounted plan is chosen this
+                  is the payable amount, matching the cart pill above it. */}
               <View style={styles.wcPlansTotalRow}>
+                {chosenSaving > 0 ? <Text style={styles.wcPlansTotalWas}>{formatAmount(WC_CART_TOTAL)}</Text> : null}
                 <Riyal size={19} />
-                <Text style={styles.wcPlansTotal}>{formatAmount(WC_CART_TOTAL)}</Text>
+                <Text style={styles.wcPlansTotal}>{wcSaving(chosenPayable)}</Text>
               </View>
               <Text style={styles.wcPlansSub}>
                 You can split your purchase up to <Text style={styles.wcPlansSubStrong}>{maxTenure} months</Text>
@@ -4770,6 +4775,7 @@ const styles = StyleSheet.create({
   wcPlansEyebrow: { fontSize: 14, lineHeight: 18, color: muted, letterSpacing: 0.36 },
   wcPlansTotalRow: { flexDirection: 'row', alignItems: 'center' },
   wcPlansTotal: { fontSize: 34, lineHeight: 42, fontWeight: '700', color: text, letterSpacing: 0.38 },
+  wcPlansTotalWas: { fontSize: 16, lineHeight: 22, color: '#9ca3af', textDecorationLine: 'line-through', marginRight: 6 },
   wcPlansSub: { fontSize: 14, lineHeight: 18, color: muted, letterSpacing: -0.08, textAlign: 'center' },
   wcPlansSubStrong: { fontWeight: '600', color: '#15803d' },
   wcPlansList: { gap: 16 },
