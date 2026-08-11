@@ -4756,8 +4756,10 @@ const styles = StyleSheet.create({
   // Figma 3710:28616 — the plans container card.
   wcPlansContainer: { flex: 1, minHeight: 0, marginHorizontal: 16, marginTop: 12, backgroundColor: '#fff', borderRadius: 40, paddingTop: 20, paddingHorizontal: 16, paddingBottom: 6, gap: 12, shadowColor: '#000', shadowOpacity: 0.1, shadowRadius: 20, shadowOffset: { width: 0, height: 12 } },
   wcPlansRows: { paddingHorizontal: 16, paddingTop: 10, paddingBottom: 16 },
-  wcPlansRowsTopFade: { position: 'absolute', top: 0, left: 0, right: 0, height: 12 },
-  wcPlansRowsBottomFade: { position: 'absolute', bottom: 0, left: 0, right: 0, height: 12 },
+  // Fades span the bled scroll width (±16), otherwise row shadows show as
+  // sharp seams beside the covered middle.
+  wcPlansRowsTopFade: { position: 'absolute', top: 0, left: -16, right: -16, height: 14 },
+  wcPlansRowsBottomFade: { position: 'absolute', bottom: 0, left: -16, right: -16, height: 16 },
   wcPlansList: { gap: 16 },
   wcPlansFooter: { paddingTop: 10, paddingBottom: 8, paddingHorizontal: 16, gap: 8, alignItems: 'center', backgroundColor: canvas },
   wcPlansFade: { position: 'absolute', top: -28, left: 0, right: 0, height: 28 },
