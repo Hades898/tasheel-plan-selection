@@ -1579,6 +1579,14 @@ function WcTenureRail({ months, onSelect }: { months: number; onSelect: (m: numb
               style={styles.wcStepperSlot}
             >
               <Text style={styles.wcStepperSide}>{value}</Text>
+              {rate > 0 ? (
+                <View style={styles.wcStepperPctRow}>
+                  <SaleTag size={9} color={greenBrand} />
+                  <Text style={styles.wcStepperPct}>{rate}%</Text>
+                </View>
+              ) : (
+                <Text style={styles.wcStepperPct}> </Text>
+              )}
             </Pressable>
           );
         })}
@@ -1790,57 +1798,41 @@ function WcPlanRow({ months, selected, onPress }: { months: number; selected: bo
 function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) => void; months: number | null; setMonths: (m: number | null) => void }) {
   const [sheet, setSheet] = useState<null | 'cart' | 'details' | 'schedule'>(null);
   const chosen = months;
-  const chosenSaving = chosen ? wcPlanSaving(chosen) : 0;
-  const chosenPayable = Math.round((WC_CART_TOTAL - chosenSaving) * 100) / 100;
   const onDevice = !SHOW_FAKE_CHROME;
   const { width } = useWindowDimensions();
   const zoom = onDevice ? width / 402 : 1;
 
-  // Contained layout: header, amount block and banner stay fixed; only the plan
-  // rows scroll, inside their own container with fade edges; the footer is
-  // always planted. On device the whole screen is sized to the visual viewport
-  // (100dvh corrected for the design zoom), so the page itself never scrolls.
+  // Figma 3710:28460 — cart pill and banner ride the canvas; the plans live in
+  // one white container card headed "Choose your plan". Rows scroll inside the
+  // container (with white fade edges) so pill, banner, header and CTA all stay
+  // put; on device the screen sizes itself to the visual viewport.
   const screen = (
     <View style={{ flex: 1 }}>
       <WcOnboardHeader onClose={() => setRoute('checkout')} onBack={() => setRoute('wcDemo')} />
       <View style={styles.wcPlansFixedHead}>
-        <View style={styles.wcPlansHead}>
-          <Text style={styles.wcPlansEyebrow}>Choose how to split</Text>
-          {/* One amount owns the screen — the payable once a discounted plan
-              is chosen, the cart total otherwise. */}
-          <View style={styles.wcPlansTotalRow}>
-            {chosenSaving > 0 ? <Text style={styles.wcPlansTotalWas}>{formatAmount(WC_CART_TOTAL)}</Text> : null}
-            <Riyal size={19} />
-            <Text style={styles.wcPlansTotal}>{wcSaving(chosenPayable)}</Text>
-          </View>
-          <Pressable
-            testID="wc-cart-link"
-            onPress={() => setSheet('cart')}
-            hitSlop={8}
-            accessibilityRole="button"
-            accessibilityLabel={`${WC_CART_ITEMS} items. View cart details`}
-            style={({ pressed }) => [styles.wcPlansCartLink, pressed && { opacity: 0.65 }]}
-          >
-            <Image source={figmaImageSource('wcCartIcon')} resizeMode="contain" accessibilityIgnoresInvertColors style={{ width: 14, height: 14 }} />
-            <Text style={styles.wcPlansCartLinkText}>{WC_CART_ITEMS} {WC_CART_ITEMS === 1 ? 'Item' : 'Items'}</Text>
-            <Text style={styles.wcPlansCartLinkChevron}>›</Text>
-          </Pressable>
-        </View>
+        <WcCartPill onPress={() => setSheet('cart')} months={chosen} />
         <WcDiscountBanner months={chosen} />
       </View>
-      <View style={{ flex: 1 }}>
-        <ScrollView style={{ flex: 1 }} contentContainerStyle={styles.wcPlansRows} showsVerticalScrollIndicator={false}>
-          <View style={styles.wcPlansList} accessibilityRole="radiogroup">
-            {WC_TENURES.map((value) => (
-              <WcPlanRow key={value} months={value} selected={chosen === value} onPress={() => setMonths(chosen === value ? null : value)} />
-            ))}
-          </View>
-        </ScrollView>
-        {/* Rows dissolve at the container's top edge, mirroring the footer fade. */}
-        <View pointerEvents="none" style={[styles.wcPlansRowsTopFade, { backgroundImage: 'linear-gradient(180deg, #f9fafb, rgba(249,250,251,0))' } as object]} />
+      <View style={styles.wcPlansContainer}>
+        <View style={{ gap: 6 }}>
+          <Text style={styles.wcPlanTitle}>Choose your plan</Text>
+          <Text style={styles.wcPlanSub}>Pick the number of payments that suits you</Text>
+        </View>
+        <View style={{ flex: 1, minHeight: 0 }}>
+          {/* Scroll region bleeds to the container edges so row shadows have
+              room, while content keeps the 16px inset from the source. */}
+          <ScrollView style={{ flex: 1, marginHorizontal: -16 }} contentContainerStyle={styles.wcPlansRows} showsVerticalScrollIndicator={false}>
+            <View style={styles.wcPlansList} accessibilityRole="radiogroup">
+              {WC_TENURES.map((value) => (
+                <WcPlanRow key={value} months={value} selected={chosen === value} onPress={() => setMonths(chosen === value ? null : value)} />
+              ))}
+            </View>
+          </ScrollView>
+          <View pointerEvents="none" style={[styles.wcPlansRowsTopFade, { backgroundImage: 'linear-gradient(180deg, #ffffff, rgba(255,255,255,0))' } as object]} />
+          <View pointerEvents="none" style={[styles.wcPlansRowsBottomFade, { backgroundImage: 'linear-gradient(0deg, #ffffff, rgba(255,255,255,0))' } as object]} />
+        </View>
       </View>
       <View style={styles.wcPlansFooter}>
-        <View pointerEvents="none" style={[styles.wcPlansFade, { backgroundImage: 'linear-gradient(180deg, rgba(249,250,251,0), #f9fafb)' } as object]} />
         <Pressable
           testID="wc-plans-continue"
           disabled={chosen === null}
@@ -4674,6 +4666,9 @@ const styles = StyleSheet.create({
   wcStepperActiveSlot: { alignItems: 'center' },
   wcStepperSlot: { alignItems: 'center' },
   wcStepperSide: { fontSize: 24, lineHeight: 41, fontWeight: '500', color: muted, opacity: 0.2, letterSpacing: 0.38, textAlign: 'center', minWidth: 15 },
+  // The rate each tenure unlocks, worn with the sale icon under its number.
+  wcStepperPctRow: { flexDirection: 'row', alignItems: 'center', gap: 2, height: 16, marginTop: -4 },
+  wcStepperPct: { fontSize: 10, lineHeight: 16, fontWeight: '600', color: greenBrand },
   wcStepperMain: { fontSize: 34, lineHeight: 41, fontWeight: '700', color: '#000', letterSpacing: 0.38, textAlign: 'center' },
   wcStepperMonthsLabel: { fontSize: 10, lineHeight: 16, fontWeight: '500', color: muted, marginTop: -4, textAlign: 'center' },
   wcPlanHero: { alignItems: 'center', gap: 10 },
@@ -4718,24 +4713,19 @@ const styles = StyleSheet.create({
   wcDemoCardSub: { fontSize: 13, lineHeight: 17, color: muted },
   wcDemoChevron: { fontSize: 22, lineHeight: 26, color: '#9ca3af', fontWeight: '400' },
   // ── Experience A — Figma 3615:73832 ───────────────────────────────────────────
-  wcPlansFixedHead: { paddingHorizontal: 16, paddingTop: 12, gap: 12 },
-  wcPlansHead: { paddingHorizontal: 2, alignItems: 'center', gap: 8 },
-  wcPlansRows: { paddingHorizontal: 16, paddingTop: 12, paddingBottom: 24 },
-  wcPlansRowsTopFade: { position: 'absolute', top: 0, left: 0, right: 0, height: 14 },
-  wcPlansEyebrow: { fontSize: 14, lineHeight: 18, color: muted, letterSpacing: 0.36 },
-  wcPlansTotalRow: { flexDirection: 'row', alignItems: 'center' },
-  wcPlansTotal: { fontSize: 34, lineHeight: 42, fontWeight: '700', color: text, letterSpacing: 0.38 },
-  wcPlansTotalWas: { fontSize: 16, lineHeight: 22, color: '#9ca3af', textDecorationLine: 'line-through', marginRight: 6 },
-  wcPlansCartLink: { flexDirection: 'row', alignItems: 'center', gap: 5, paddingVertical: 2 },
-  wcPlansCartLinkText: { fontSize: 13, lineHeight: 18, color: muted, letterSpacing: -0.08 },
-  wcPlansCartLinkChevron: { fontSize: 15, lineHeight: 18, color: '#9ca3af', marginTop: -1 },
+  wcPlansFixedHead: { paddingHorizontal: 16, paddingTop: 12, gap: 8 },
+  // Figma 3710:28616 — the plans container card.
+  wcPlansContainer: { flex: 1, minHeight: 0, marginHorizontal: 16, marginTop: 12, backgroundColor: '#fff', borderRadius: 40, paddingTop: 20, paddingHorizontal: 16, paddingBottom: 6, gap: 12, shadowColor: '#000', shadowOpacity: 0.1, shadowRadius: 20, shadowOffset: { width: 0, height: 12 } },
+  wcPlansRows: { paddingHorizontal: 16, paddingTop: 10, paddingBottom: 16 },
+  wcPlansRowsTopFade: { position: 'absolute', top: 0, left: 0, right: 0, height: 12 },
+  wcPlansRowsBottomFade: { position: 'absolute', bottom: 0, left: 0, right: 0, height: 12 },
   wcPlansList: { gap: 16 },
   wcPlansFooter: { paddingTop: 10, paddingBottom: 8, paddingHorizontal: 16, gap: 8, alignItems: 'center', backgroundColor: canvas },
   wcPlansFade: { position: 'absolute', top: -28, left: 0, right: 0, height: 28 },
   wcPlansCta: { width: '100%', maxWidth: 358, alignSelf: 'center' },
   wcPlanRow: { backgroundColor: '#fff', borderRadius: 24, overflow: 'hidden', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 16, borderWidth: 2, borderColor: 'transparent', shadowColor: '#000', shadowOpacity: 0.1, shadowRadius: 22, shadowOffset: { width: 0, height: 10 } },
-  wcPlanRowOffer: { height: 87 },
-  wcPlanRowPlain: { minHeight: 82, paddingRight: 16, paddingVertical: 16 },
+  wcPlanRowOffer: { height: 75 },
+  wcPlanRowPlain: { minHeight: 65, paddingRight: 16, paddingVertical: 12 },
   // Selection ring per the provided reference: clean #23A107 border on white.
   wcPlanRowSelected: { borderColor: '#23A107' },
   wcPlanRowLeft: { gap: 6 },
@@ -4746,7 +4736,7 @@ const styles = StyleSheet.create({
   wcPlanRowRight: { alignItems: 'flex-end', justifyContent: 'center' },
   // Badge pinned to the card's top corner, amount to the bottom edge — no
   // floating gap between them inside the fixed-height row.
-  wcPlanRowRightOffer: { alignSelf: 'stretch', justifyContent: 'space-between', paddingBottom: 14 },
+  wcPlanRowRightOffer: { alignSelf: 'stretch', justifyContent: 'space-between', paddingBottom: 10 },
   wcPlanRowBadge: { backgroundColor: greenMid, borderBottomLeftRadius: 16, borderTopRightRadius: 16, paddingHorizontal: 12, paddingVertical: 6, flexDirection: 'row', alignItems: 'center', gap: 2 },
   wcPlanRowBadgeText: { fontSize: 11, lineHeight: 14, fontWeight: '500', color: neon, letterSpacing: 0.38 },
   wcPlanRowAmount: { flexDirection: 'row', alignItems: 'baseline' },

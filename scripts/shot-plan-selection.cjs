@@ -37,7 +37,7 @@ const BASE = 'http://127.0.0.1:4173/tasheel-plan-selection';
   await scrollInner(0);
   await page.getByTestId('wc-plan-row-12').click();
   await shot('A-list-selected-12');
-  await page.getByTestId('wc-cart-link').click();
+  await page.getByTestId('wc-cart-pill').click();
   await shot('A-list-cart-sheet');
 
   // Experience B — stepper
