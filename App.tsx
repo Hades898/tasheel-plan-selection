@@ -4532,7 +4532,10 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  outer: { flex: 1, backgroundColor: '#dfe3e1', alignItems: 'center' },
+  // Canvas-colored backdrop: the desktop preview's phone column blends into
+  // the page instead of sitting in a visible grey frame that cut off right
+  // under the fake Safari chrome.
+  outer: { flex: 1, backgroundColor: canvas, alignItems: 'center' },
   outerScroll: { flexGrow: 1, width: '100%', alignItems: 'center', justifyContent: 'flex-start' },
   phone: { width: '100%', minHeight: '100%', flex: 1, backgroundColor: canvas, overflow: 'hidden' },
 
