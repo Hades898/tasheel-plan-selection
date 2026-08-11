@@ -1763,12 +1763,10 @@ function WcPlanRow({ months, selected, onPress }: { months: number; selected: bo
       </View>
       <View style={[styles.wcPlanRowRight, saving > 0 && styles.wcPlanRowRightOffer]}>
         {saving > 0 ? (
+          // Uniform badges (Figma 3720:28984): the banner announces best value,
+          // and the container width has no room for a prefix on 24.
           <View style={styles.wcPlanRowBadge}>
-            {months === WC_BEST_TENURE ? (
-              <Text style={styles.wcPlanRowBadgeText}>Best value · </Text>
-            ) : (
-              <SaleTag size={12} color={neon} />
-            )}
+            <SaleTag size={12} color={neon} />
             <Text style={styles.wcPlanRowBadgeText}>{Math.round(wcSavingRate(months) * 100)}% Off · Save</Text>
             <Riyal size={11} color={neon} />
             <Text style={styles.wcPlanRowBadgeText}>{wcSaving(saving)}</Text>
@@ -1802,6 +1800,37 @@ function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) =
   const { width } = useWindowDimensions();
   const zoom = onDevice ? width / 402 : 1;
 
+  // Selecting a half-visible row glides it fully into the container. Row
+  // geometry is deterministic (65 free / 75 offer / 16 gap), and the live
+  // scroll offset is tracked in a plain ref so this never re-renders.
+  const rowsScrollRef = useRef<ScrollView>(null);
+  const rowsAreaH = useRef(0);
+  const rowsScrollY = useRef(0);
+  const ROW_FREE = 65, ROW = 75, ROW_GAP = 16, ROWS_PAD_TOP = 10;
+  const rowTop = (i: number) => ROWS_PAD_TOP + (i === 0 ? 0 : ROW_FREE + ROW_GAP + (i - 1) * (ROW + ROW_GAP));
+  const selectPlan = (value: number) => setMonths(chosen === value ? null : value);
+  // Runs after the footer (which only exists once a plan is chosen) has taken
+  // its space, so the glide lands the row clear of it.
+  useEffect(() => {
+    if (chosen === null) return;
+    const i = WC_TENURES.indexOf(chosen as (typeof WC_TENURES)[number]);
+    if (i < 0) return;
+    const t = setTimeout(() => {
+      const top = rowTop(i);
+      const h = i === 0 ? ROW_FREE : ROW;
+      const viewTop = rowsScrollY.current;
+      const viewH = rowsAreaH.current;
+      if (!viewH) return;
+      if (top < viewTop + 8) {
+        rowsScrollRef.current?.scrollTo({ y: Math.max(0, top - 12), animated: true });
+      } else if (top + h > viewTop + viewH - 8) {
+        rowsScrollRef.current?.scrollTo({ y: top + h - viewH + 12, animated: true });
+      }
+    }, 90);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chosen]);
+
   // Figma 3710:28460 — cart pill and banner ride the canvas; the plans live in
   // one white container card headed "Choose your plan". Rows scroll inside the
   // container (with white fade edges) so pill, banner, header and CTA all stay
@@ -1821,10 +1850,18 @@ function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) =
         <View style={{ flex: 1, minHeight: 0 }}>
           {/* Scroll region bleeds to the container edges so row shadows have
               room, while content keeps the 16px inset from the source. */}
-          <ScrollView style={{ flex: 1, marginHorizontal: -16 }} contentContainerStyle={styles.wcPlansRows} showsVerticalScrollIndicator={false}>
+          <ScrollView
+            ref={rowsScrollRef}
+            style={{ flex: 1, marginHorizontal: -16 }}
+            contentContainerStyle={styles.wcPlansRows}
+            showsVerticalScrollIndicator={false}
+            onLayout={(e) => { rowsAreaH.current = e.nativeEvent.layout.height; }}
+            onScroll={(e) => { rowsScrollY.current = e.nativeEvent.contentOffset.y; }}
+            scrollEventThrottle={16}
+          >
             <View style={styles.wcPlansList} accessibilityRole="radiogroup">
               {WC_TENURES.map((value) => (
-                <WcPlanRow key={value} months={value} selected={chosen === value} onPress={() => setMonths(chosen === value ? null : value)} />
+                <WcPlanRow key={value} months={value} selected={chosen === value} onPress={() => selectPlan(value)} />
               ))}
             </View>
           </ScrollView>
@@ -1833,27 +1870,29 @@ function WcPlanList({ setRoute, months, setMonths }: { setRoute: (r: RouteKey) =
         </View>
       </View>
       <View style={styles.wcPlansFooter}>
-        <Pressable
-          testID="wc-plans-continue"
-          disabled={chosen === null}
-          style={[styles.wcGreenCta, styles.wcPlansCta, chosen === null && styles.wcCtaDisabled]}
-          onPress={() => chosen !== null && setRoute('wcPayment')}
-          accessibilityRole="button"
-          accessibilityState={{ disabled: chosen === null }}
-          accessibilityLabel={chosen === null ? 'Choose a plan to continue' : `Continue with ${chosen} payments`}
-        >
-          <Text style={[styles.wcGreenCtaText, chosen === null && styles.wcCtaDisabledText]}>Continue</Text>
-        </Pressable>
+        {/* The CTA earns its place: it appears once a plan is chosen, so no
+            disabled grey bar crops the container while browsing. */}
         {chosen !== null ? (
-          <Pressable
-            testID="wc-plans-details"
-            style={[styles.wcGreyCta, styles.wcPlansCta]}
-            onPress={() => setSheet('details')}
-            accessibilityRole="button"
-            accessibilityLabel={`View details for ${chosen} payments`}
-          >
-            <Text style={styles.wcGreyCtaText}>View plan details</Text>
-          </Pressable>
+          <>
+            <Pressable
+              testID="wc-plans-continue"
+              style={[styles.wcGreenCta, styles.wcPlansCta]}
+              onPress={() => setRoute('wcPayment')}
+              accessibilityRole="button"
+              accessibilityLabel={`Continue with ${chosen} payments`}
+            >
+              <Text style={styles.wcGreenCtaText}>Continue</Text>
+            </Pressable>
+            <Pressable
+              testID="wc-plans-details"
+              style={[styles.wcGreyCta, styles.wcPlansCta]}
+              onPress={() => setSheet('details')}
+              accessibilityRole="button"
+              accessibilityLabel={`View details for ${chosen} payments`}
+            >
+              <Text style={styles.wcGreyCtaText}>View plan details</Text>
+            </Pressable>
+          </>
         ) : null}
         {onDevice ? null : <SafariCompactBar url="extrastores.com" onBack={() => setRoute('wcDemo')} />}
       </View>
