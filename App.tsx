@@ -4754,7 +4754,10 @@ const styles = StyleSheet.create({
   // ── Experience A — Figma 3615:73832 ───────────────────────────────────────────
   wcPlansFixedHead: { paddingHorizontal: 16, paddingTop: 12, gap: 8 },
   // Figma 3710:28616 — the plans container card.
-  wcPlansContainer: { flex: 1, minHeight: 0, marginHorizontal: 16, marginTop: 12, backgroundColor: '#fff', borderRadius: 40, paddingTop: 20, paddingHorizontal: 16, paddingBottom: 6, gap: 12, shadowColor: '#000', shadowOpacity: 0.1, shadowRadius: 20, shadowOffset: { width: 0, height: 12 } },
+  // overflow hidden clips the bled scroll region and fade bands to the card's
+  // rounded shape — without it they drew to the rectangular bounds and poked
+  // past the corners as white squares. The card's own box-shadow is unaffected.
+  wcPlansContainer: { flex: 1, minHeight: 0, marginHorizontal: 16, marginTop: 12, backgroundColor: '#fff', borderRadius: 40, paddingTop: 20, paddingHorizontal: 16, paddingBottom: 6, gap: 12, overflow: 'hidden', shadowColor: '#000', shadowOpacity: 0.1, shadowRadius: 20, shadowOffset: { width: 0, height: 12 } },
   wcPlansRows: { paddingHorizontal: 16, paddingTop: 10, paddingBottom: 16 },
   // Fades span the bled scroll width (±16), otherwise row shadows show as
   // sharp seams beside the covered middle.
